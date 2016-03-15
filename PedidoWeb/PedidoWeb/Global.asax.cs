@@ -6,6 +6,9 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
+using PedidoWeb.Models;
+using System.Data.Entity;
+
 namespace PedidoWeb
 {
     public class MvcApplication : System.Web.HttpApplication
@@ -16,6 +19,9 @@ namespace PedidoWeb
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            // Criar o DB
+            Database.SetInitializer<BancoContexto>(new InicializaBanco());
         }
     }
 }
