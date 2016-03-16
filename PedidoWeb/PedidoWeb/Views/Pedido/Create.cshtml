@@ -1,0 +1,105 @@
+﻿@model PedidoWeb.Models.Pedido
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Pedido</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Status, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Status)
+                @Html.ValidationMessageFor(model => model.Status)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CadastroID, "CadastroID", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CadastroID", String.Empty)
+                @Html.ValidationMessageFor(model => model.CadastroID)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PrazoVencimentoID, "PrazoVencimentoID", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("PrazoVencimentoID", String.Empty)
+                @Html.ValidationMessageFor(model => model.PrazoVencimentoID)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Observacao, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Observacao)
+                @Html.ValidationMessageFor(model => model.Observacao)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.VendedorID, "VendedorID", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("VendedorID", String.Empty)
+                @Html.ValidationMessageFor(model => model.VendedorID)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TipoFrete, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TipoFrete)
+                @Html.ValidationMessageFor(model => model.TipoFrete)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TransportadorID, "TransportadorID", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("TransportadorID", String.Empty)
+                @Html.ValidationMessageFor(model => model.TransportadorID)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.OrdemCompra, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.OrdemCompra)
+                @Html.ValidationMessageFor(model => model.OrdemCompra)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DataEmissao, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DataEmissao)
+                @Html.ValidationMessageFor(model => model.DataEmissao)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

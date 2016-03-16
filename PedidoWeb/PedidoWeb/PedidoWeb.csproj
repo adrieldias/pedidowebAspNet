@@ -159,7 +159,15 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CadastroController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\PedidoController.cs" />
+    <Compile Include="Controllers\PedidoItemController.cs" />
+    <Compile Include="Controllers\PrazoVencimentoController.cs" />
+    <Compile Include="Controllers\ProdutoController.cs" />
+    <Compile Include="Controllers\TransportadorController.cs" />
+    <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Controllers\VendedorController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -167,9 +175,17 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Pedido.cs" />
+    <Compile Include="Models\PrazoVencimento.cs" />
+    <Compile Include="Models\Log.cs" />
+    <Compile Include="Models\PeditoItem.cs" />
+    <Compile Include="Models\Transportador.cs" />
+    <Compile Include="Models\Produto.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\InicializaBanco.cs" />
     <Compile Include="Models\PedidoWebContext.cs" />
+    <Compile Include="Models\Cadastro.cs" />
+    <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\Vendedor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -225,9 +241,33 @@
     <Content Include="Views\Vendedor\Details.cshtml" />
     <Content Include="Views\Vendedor\Edit.cshtml" />
     <Content Include="Views\Vendedor\Index.cshtml" />
+    <Content Include="Views\Usuario\Create.cshtml" />
+    <Content Include="Views\Usuario\Delete.cshtml" />
+    <Content Include="Views\Usuario\Details.cshtml" />
+    <Content Include="Views\Usuario\Edit.cshtml" />
+    <Content Include="Views\Usuario\Index.cshtml" />
+    <Content Include="Views\Log\Create.cshtml" />
+    <Content Include="Views\Log\Delete.cshtml" />
+    <Content Include="Views\Log\Details.cshtml" />
+    <Content Include="Views\Log\Edit.cshtml" />
+    <Content Include="Views\Log\Index.cshtml" />
+    <Content Include="Views\Pedido\Create.cshtml" />
+    <Content Include="Views\Pedido\Delete.cshtml" />
+    <Content Include="Views\Pedido\Details.cshtml" />
+    <Content Include="Views\Pedido\Edit.cshtml" />
+    <Content Include="Views\Pedido\Index.cshtml" />
+    <Content Include="Views\PedidoItem\Create.cshtml" />
+    <Content Include="Views\PedidoItem\Delete.cshtml" />
+    <Content Include="Views\PedidoItem\Details.cshtml" />
+    <Content Include="Views\PedidoItem\Edit.cshtml" />
+    <Content Include="Views\PedidoItem\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Cadastro\" />
+    <Folder Include="Views\PrazoVencimento\" />
+    <Folder Include="Views\Produto\" />
+    <Folder Include="Views\Transportador\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

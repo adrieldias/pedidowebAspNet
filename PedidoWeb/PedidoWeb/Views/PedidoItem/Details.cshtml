@@ -1,0 +1,58 @@
+﻿@model PedidoWeb.Models.PedidoItem
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PedidoItem</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Pedido.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pedido.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Produto.Descricao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Produto.Descricao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantidade)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantidade)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Observacao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Observacao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ValorUnitario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ValorUnitario)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PedidoItemID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

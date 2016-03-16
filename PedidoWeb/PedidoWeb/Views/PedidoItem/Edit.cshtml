@@ -1,0 +1,74 @@
+﻿@model PedidoWeb.Models.PedidoItem
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>PedidoItem</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.PedidoItemID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PedidoID, "PedidoID", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("PedidoID", String.Empty)
+                @Html.ValidationMessageFor(model => model.PedidoID)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProdutoID, "ProdutoID", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("ProdutoID", String.Empty)
+                @Html.ValidationMessageFor(model => model.ProdutoID)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Quantidade, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Quantidade)
+                @Html.ValidationMessageFor(model => model.Quantidade)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Observacao, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Observacao)
+                @Html.ValidationMessageFor(model => model.Observacao)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ValorUnitario, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ValorUnitario)
+                @Html.ValidationMessageFor(model => model.ValorUnitario)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

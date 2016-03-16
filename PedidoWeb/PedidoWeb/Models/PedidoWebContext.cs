@@ -20,6 +20,22 @@ namespace PedidoWeb.Models
         }
 
         public System.Data.Entity.DbSet<PedidoWeb.Models.Vendedor> Vendedors { get; set; }
+
+        public System.Data.Entity.DbSet<PedidoWeb.Models.Transportador> Transportadors { get; set; }
+
+        public System.Data.Entity.DbSet<PedidoWeb.Models.Usuario> Usuarios { get; set; }
+
+        public System.Data.Entity.DbSet<PedidoWeb.Models.Log> Logs { get; set; }
+
+        public System.Data.Entity.DbSet<PedidoWeb.Models.Pedido> Pedidoes { get; set; }
+
+        public System.Data.Entity.DbSet<PedidoWeb.Models.Cadastro> Cadastroes { get; set; }
+
+        public System.Data.Entity.DbSet<PedidoWeb.Models.PrazoVencimento> PrazoVencimentoes { get; set; }
+
+        public System.Data.Entity.DbSet<PedidoWeb.Models.PedidoItem> PedidoItems { get; set; }
+
+        public System.Data.Entity.DbSet<PedidoWeb.Models.Produto> Produtoes { get; set; }
     
     }
 }
