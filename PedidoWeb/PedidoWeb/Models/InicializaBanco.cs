@@ -7,9 +7,9 @@ using System.Data.Entity;
 
 namespace PedidoWeb.Models
 {
-    public class InicializaBanco : DropCreateDatabaseAlways<BancoContexto>
+    public class InicializaBanco : DropCreateDatabaseAlways<PedidoWebContext>
     {
-        protected override void Seed(BancoContexto context)
+        protected override void Seed(PedidoWebContext context)
         {
             // criar alguns dados no banco
 

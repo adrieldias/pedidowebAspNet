@@ -21,7 +21,7 @@ namespace PedidoWeb
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             // Criar o DB
-            Database.SetInitializer<BancoContexto>(new InicializaBanco());
+            Database.SetInitializer<PedidoWebContext>(new InicializaBanco());
         }
     }
 }
