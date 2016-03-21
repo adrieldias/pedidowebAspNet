@@ -6,53 +6,56 @@
     <title>@ViewBag.Title - Cemapa Informática</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
+    
 </head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="Home">
-                    <span class="label label-primary">CEMAPA</span>
-                    <span class="label label-warning">Pedidos Online</span>
-                </a>
-                @*@Html.ActionLink("Cemapa - Pedidos Online", "Index", "Home", null, new { @class = "navbar-brand" })*@
-            </div>
-            @*<div class="navbar-collapse collapse">                
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>*@
-        </div>
-    </div>    		
+<body> 
+    
     <div class="container body-content">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Cemapa", "Index", "Home", null, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Pedidos Online", "Index", "Home")</li>
+                    </ul>
+
+                </div>
+
+                @*<div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                            <li>@Html.ActionLink("About", "About", "Home")</li>
+                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                        </ul>
+                        @Html.Partial("_LoginPartial")
+                    </div>*@
+            </div>
+        </nav>
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p style="text-align:right">&copy; @DateTime.Now.Year - Cemapa Informática</p>
+            <div align="center">
+      
+                <p><h6>2015 CEMAPA - Pedidos Online V 0.2</h6></p>
+                <p><h6>Av. João XXIII, 2150 Medianeira - PR</h6></p>
+                <p>
+                    <h6>
+                        <span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span>
+                        (45) 3264-3773
+                    </h6>
+                </p>
+            </div>
         </footer>
-    </div>
-    <footer>
-        <div align="center">
-            <br>
-            <p><h6>2015 CEMAPA - Pedidos Online V 0.2</h6></p>
-            <p><h6>Av. João XXIII, 2150 Medianeira - PR</h6></p>
-            <p>
-                <h6>
-                    <span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span>
-                    (45) 3264-3773
-                </h6>
-            </p>
-        </div>
-    </footer>
+    </div>    
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using PedidoWeb.Models;
+using PagedList;
 
 namespace PedidoWeb.Controllers
 {
@@ -15,11 +16,56 @@ namespace PedidoWeb.Controllers
         private PedidoWebContext db = new PedidoWebContext();
 
         // GET: /Pedido/
-        public ActionResult Index()
+        public ViewResult Index(string sortOrder, string currentFilter, object search, int? page)
         {
-            var pedidoes = db.Pedidoes.Include(p => p.Cadastro).Include(p => p.PrazoVencimento).Include(p => p.Transportador).Include(p => p.Vendedor);
-            return View(pedidoes.ToList());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.DateParam = sortOrder == "DataEmissao" ? "DataEmissao_desc" : "DataEmissao";
+
+
+            if (search != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                search = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = search;
+
+            var pedidos = from s in db.Pedidoes
+                         select s;
+
+            if (search != null)
+            {
+                if (search is int)
+                    pedidos = pedidos.Where(s => s.PedidoID == (int)search);
+                if(search is string)
+                    pedidos = pedidos.Where(s => s.Cadastro.Nome.ToUpper().Contains(((string)search).ToUpper()));
+            }
+            switch (sortOrder)
+            {
+                case "DataEmissao":
+                    pedidos = pedidos.OrderBy(s => s.DataEmissao);
+                    break;
+                case "DataEmissao_desc":
+                    pedidos = pedidos.OrderByDescending(s => s.DataEmissao);
+                    break;
+                default:
+                    pedidos = pedidos.OrderByDescending(s => s.DataEmissao);
+                    break;
+            }
+
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(pedidos.ToPagedList(pageNumber, pageSize));
         }
+        //public ActionResult Index()
+        //{
+        //    var pedidoes = db.Pedidoes.Include(p => p.Cadastro).Include(p => p.PrazoVencimento).Include(p => p.Transportador).Include(p => p.Vendedor);
+        //    return View(pedidoes.ToList());
+        //}
 
         // GET: /Pedido/Details/5
         public ActionResult Details(int? id)
