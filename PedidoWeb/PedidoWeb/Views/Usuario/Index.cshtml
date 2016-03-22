@@ -4,48 +4,68 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Vendedor.Nome)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Login)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Senha)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TipoUsuario)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Vendedor.Nome)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Login)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Senha)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TipoUsuario)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.UsuarioID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.UsuarioID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.UsuarioID })
-        </td>
-    </tr>
+@using (Html.BeginForm("Index", "Pedido", FormMethod.Get))
+{
+    <div class="input-group" style="padding-left: 0px; padding-right: 0px">
+        @Html.TextBox("Search", null, new
+            {
+                onchange = "$(this.form).submit();",
+                placeholder = "Pesquisar por login de usuário",
+                @class = "form-control"
+            })
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button">
+                Pesquisar
+            </button>
+        </span>
+    </div>
 }
 
-</table>
+<br />
+<div class="principal1coluna">
+
+    <h2>Usuários</h2>
+    
+    <p>
+        @Html.ActionLink("Novo Usuário", "Create", null, new { @class = "btn btn-primary" })
+    </p>
+    <br />
+    <table class="table table-responsive">
+        <tr class="cabecalho-tabela">
+            <th>
+                @Html.DisplayNameFor(model => model.Login)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoUsuario)
+            </th>
+            <th>
+                @Html.Label("Vendedor")
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Login)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoUsuario)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vendedor.Nome)
+                </td>
+                <td>
+                    @Html.ActionLink("Detalhar", "Details", new { id = item.UsuarioID }, new { @class="btn btn-info" }) 
+                    @Html.ActionLink("Editar", "Edit", new { id = item.UsuarioID }, new { @class = "btn btn-primary" })                    
+                    @Html.ActionLink("Excluir", "Delete", new { id = item.UsuarioID }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+
+    </table>
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    <br />
+</div>

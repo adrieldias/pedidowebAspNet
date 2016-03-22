@@ -15,8 +15,11 @@ namespace PedidoWeb.Controllers
         private PedidoWebContext db = new PedidoWebContext();
 
         // GET: /Usuario/
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string currentFilter, object search, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.DateParam = sortOrder == "DataEmissao" ? "DataEmissao_desc" : "DataEmissao";
+
             var usuarios = db.Usuarios.Include(u => u.Vendedor);
             return View(usuarios.ToList());
         }

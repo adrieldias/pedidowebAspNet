@@ -316,7 +316,7 @@ namespace PedidoWeb.Models
                     Login = "vendedor",
                     Senha = "1234",
                     TipoUsuario = "VENDEDOR",
-                    VendedorID = 1
+                    VendedorID = 2
                 }
             }.ForEach(u => context.Usuarios.Add(u));
 
