@@ -16,7 +16,7 @@ namespace PedidoWeb.Controllers
         private PedidoWebContext db = new PedidoWebContext();
 
         // GET: /Cadastro/
-        public ViewResult Index(string sortOrder, string currentFilter, object search, int? page)
+        public ViewResult Index(string sortOrder, string currentFilter, string search, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NomeParam = sortOrder == "Nome" ? "Nome_desc" : "Nome";
@@ -35,13 +35,9 @@ namespace PedidoWeb.Controllers
             var cadastros = from s in db.Cadastroes
                           select s;
 
-            if (search != null)
-            {
-                if (search is int)
-                    cadastros = cadastros.Where(s => s.CadastroID == (int)search);
-                if (search is string)
-                    cadastros = cadastros.Where(s => s.Nome.ToUpper().Contains(((string)search).ToUpper()));
-            }
+            if (!String.IsNullOrEmpty(search))
+                cadastros = cadastros.Where(s => s.Nome.ToUpper().Contains(search.ToUpper()));
+            
             switch (sortOrder)
             {
                 case "Nome":

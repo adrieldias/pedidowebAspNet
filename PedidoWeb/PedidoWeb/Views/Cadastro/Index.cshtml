@@ -36,7 +36,6 @@
         <div class="input-group" style="padding-left: 0px; padding-right: 0px">
             @Html.TextBox("Search", null, new
             {
-                onchange = "$(this.form).submit();",
                 placeholder = "Pesquisar por Nome",
                 @class = "form-control"
             })
@@ -48,7 +47,6 @@
         </div>
 
     }
-
     <br />
 </div>
 
@@ -58,7 +56,7 @@
     <h1>Cadastros</h1>
     <br>
     <p>
-        <a href="Create" class="btn btn-primary">Novo Cadastro</a>
+        @Html.ActionLink("Novo Cadastro", "Create", null, new { @class = "btn btn-primary" })
     </p>
 
     <div class="table-responsive">
