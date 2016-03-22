@@ -13,6 +13,11 @@ footer{
 	background-color: #FFFFFF;
 }
 
+.principal1coluna{
+    background-color: #FFFFFF;
+    padding: 15px 15px 15px 15px;
+}
+
 .menulateral{
 	color: white;
 	background-color: #CCCCCC;
@@ -57,5 +62,9 @@ input[type="checkbox"].input-validation-error {
 
 .label-pesquisa{
     color:white;
+}
+
+.cabecalho-tabela{
+    background-color: #669999;
 }
 
