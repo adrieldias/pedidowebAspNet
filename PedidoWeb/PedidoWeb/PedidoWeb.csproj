@@ -268,10 +268,14 @@
     <Content Include="Views\PedidoItem\Details.cshtml" />
     <Content Include="Views\PedidoItem\Edit.cshtml" />
     <Content Include="Views\PedidoItem\Index.cshtml" />
+    <Content Include="Views\Cadastro\Create.cshtml" />
+    <Content Include="Views\Cadastro\Delete.cshtml" />
+    <Content Include="Views\Cadastro\Details.cshtml" />
+    <Content Include="Views\Cadastro\Edit.cshtml" />
+    <Content Include="Views\Cadastro\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Cadastro\" />
     <Folder Include="Views\PrazoVencimento\" />
     <Folder Include="Views\Produto\" />
     <Folder Include="Views\Transportador\" />

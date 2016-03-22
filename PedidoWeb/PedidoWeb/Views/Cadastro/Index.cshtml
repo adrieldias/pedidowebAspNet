@@ -1,0 +1,121 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<PedidoWeb.Models.Cadastro>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<!-- Elementos da página devem estar dentro de um container -->
+<!-- Barra lateral esquerda -->
+<aside role="complementary" class="col-md-2">
+    <ul class="nav nav-pills nav-stacked">
+        <li role="presentation" class="menulateral">
+            <a href="Home">
+                <span class="glyphicon glyphicon-star-empty" aria-hidden="false"></span>
+                Home
+            </a>
+        </li>
+        <li role="presentation" class="menulateral">
+            <a href="Home">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                Profile
+            </a>
+        </li>
+        <li role="presentation" class="menulateral">
+            <a href="Home">
+                <span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span>
+                Messages
+            </a>
+        </li>
+    </ul>
+    <br />
+</aside>
+<div class="col-md-10" style="padding-left: 0px; padding-right: 0px">
+    @using (Html.BeginForm("Index", "Cadastro", FormMethod.Get))
+    {
+        <div class="input-group" style="padding-left: 0px; padding-right: 0px">
+            @Html.TextBox("Search", null, new
+            {
+                onchange = "$(this.form).submit();",
+                placeholder = "Pesquisar por Nome",
+                @class = "form-control"
+            })
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button">
+                    Pesquisar
+                </button>
+            </span>
+        </div>
+
+    }
+
+    <br />
+</div>
+
+
+<div role="main" class="col-md-10 principal">
+
+    <h1>Cadastros</h1>
+    <br>
+    <p>
+        <a href="Create" class="btn btn-primary">Novo Cadastro</a>
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Fantasia)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].PercDescontoMaximo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].CpfCnpj)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Situacao)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fantasia)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PercDescontoMaximo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CpfCnpj)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Situacao)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.CadastroID }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.CadastroID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.CadastroID })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+</div>

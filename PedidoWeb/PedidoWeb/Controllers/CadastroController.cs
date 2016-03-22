@@ -1,97 +1,168 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using PedidoWeb.Models;
+using PagedList;
 
 namespace PedidoWeb.Controllers
 {
     public class CadastroController : Controller
     {
-        //
+        private PedidoWebContext db = new PedidoWebContext();
+
         // GET: /Cadastro/
-        public ActionResult Index()
+        public ViewResult Index(string sortOrder, string currentFilter, object search, int? page)
         {
-            return View();
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NomeParam = sortOrder == "Nome" ? "Nome_desc" : "Nome";
+
+            if (search != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                search = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = search;
+
+            var cadastros = from s in db.Cadastroes
+                          select s;
+
+            if (search != null)
+            {
+                if (search is int)
+                    cadastros = cadastros.Where(s => s.CadastroID == (int)search);
+                if (search is string)
+                    cadastros = cadastros.Where(s => s.Nome.ToUpper().Contains(((string)search).ToUpper()));
+            }
+            switch (sortOrder)
+            {
+                case "Nome":
+                    cadastros = cadastros.OrderBy(s => s.Nome);
+                    break;
+                case "Nome_desc":
+                    cadastros = cadastros.OrderByDescending(s => s.Nome);
+                    break;
+                default:
+                    cadastros = cadastros.OrderByDescending(s => s.Nome);
+                    break;
+            }
+
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(cadastros.ToPagedList(pageNumber, pageSize));
         }
 
-        //
         // GET: /Cadastro/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Cadastro cadastro = db.Cadastroes.Find(id);
+            if (cadastro == null)
+            {
+                return HttpNotFound();
+            }
+            return View(cadastro);
         }
 
-        //
         // GET: /Cadastro/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        //
         // POST: /Cadastro/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include="CadastroID,Nome,Fantasia,PercDescontoMaximo,CpfCnpj,Email,Situacao")] Cadastro cadastro)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-
+                db.Cadastroes.Add(cadastro);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+
+            return View(cadastro);
         }
 
-        //
         // GET: /Cadastro/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Cadastro cadastro = db.Cadastroes.Find(id);
+            if (cadastro == null)
+            {
+                return HttpNotFound();
+            }
+            return View(cadastro);
         }
 
-        //
         // POST: /Cadastro/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include="CadastroID,Nome,Fantasia,PercDescontoMaximo,CpfCnpj,Email,Situacao")] Cadastro cadastro)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-
+                db.Entry(cadastro).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            return View(cadastro);
         }
 
-        //
         // GET: /Cadastro/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Cadastro cadastro = db.Cadastroes.Find(id);
+            if (cadastro == null)
+            {
+                return HttpNotFound();
+            }
+            return View(cadastro);
         }
 
-        //
         // POST: /Cadastro/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            Cadastro cadastro = db.Cadastroes.Find(id);
+            db.Cadastroes.Remove(cadastro);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
-                return RedirectToAction("Index");
-            }
-            catch
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                return View();
+                db.Dispose();
             }
+            base.Dispose(disposing);
         }
     }
 }

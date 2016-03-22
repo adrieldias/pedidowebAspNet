@@ -1,0 +1,66 @@
+﻿@model PedidoWeb.Models.Cadastro
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Cadastro</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fantasia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fantasia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PercDescontoMaximo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PercDescontoMaximo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CpfCnpj)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CpfCnpj)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Situacao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Situacao)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CadastroID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
