@@ -1,81 +1,144 @@
-﻿@model IEnumerable<PedidoWeb.Models.Pedido>
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<PedidoWeb.Models.Pedido>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<!-- Elementos da página devem estar dentro de um container -->
+<!-- Barra lateral esquerda -->
+<aside role="complementary" class="col-md-2">
+    <ul class="nav nav-pills nav-stacked">
+        <li role="presentation" class="menulateral">
+            <a href="Home">
+                <span class="glyphicon glyphicon-star-empty" aria-hidden="false"></span>
+                Home
+            </a>
+        </li>
+        <li role="presentation" class="menulateral">
+            <a href="Home">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                Profile
+            </a>
+        </li>
+        <li role="presentation" class="menulateral">
+            <a href="Home">
+                <span class="glyphicon glyphicon-phone-alt" aria-hidden="true"></span>
+                Messages
+            </a>
+        </li>
+    </ul>
+    <br />
+</aside>
+<div class="col-md-10" style="padding-left: 0px; padding-right: 0px">
+    @using (Html.BeginForm("Index", "Pedido", FormMethod.Get))
+    {
+        <div class="input-group" style="padding-left: 0px; padding-right: 0px">
+            @Html.TextBox("Search", null, new
+            {
+                onchange = "$(this.form).submit();",
+                placeholder = "Pesquisar por Cliente ou nº do Pedido",
+                @class = "form-control"
+            })
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button">
+                    Pesquisar
+                </button>
+            </span>
+        </div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Cadastro.Nome)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PrazoVencimento.Descricao)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Transportador.Nome)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Vendedor.Nome)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Observacao)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TipoFrete)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OrdemCompra)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DataEmissao)
-        </th>
-        <th></th>
-    </tr>
+    }
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Cadastro.Nome)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PrazoVencimento.Descricao)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Transportador.Nome)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Vendedor.Nome)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Observacao)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TipoFrete)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrdemCompra)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DataEmissao)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.PedidoID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.PedidoID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.PedidoID })
-        </td>
-    </tr>
-}
+    <br />
+</div>
 
-</table>
+
+<div role="main" class="col-md-10 principal">
+
+    <h1>Pedidos</h1>
+    <br>
+    <p>
+        <a href="Create" class="btn btn-primary">Novo Pedido</a>
+    </p>
+
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Cadastro.Nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].PrazoVencimento.Descricao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Transportador.Nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Vendedor.Nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Observacao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].TipoFrete)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].OrdemCompra)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].DataEmissao)
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cadastro.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrazoVencimento.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Transportador.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vendedor.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Observacao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoFrete)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrdemCompra)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataEmissao)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.PedidoID }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.PedidoID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.PedidoID })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+    <!--</div>-->
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+</div>
+
+       
+
+        
