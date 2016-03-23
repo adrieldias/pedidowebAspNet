@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using PedidoWeb.Models;
+using PagedList;
 
 namespace PedidoWeb.Controllers
 {
@@ -15,13 +16,32 @@ namespace PedidoWeb.Controllers
         private PedidoWebContext db = new PedidoWebContext();
 
         // GET: /Usuario/
-        public ActionResult Index(string sortOrder, string currentFilter, object search, int? page)
+        public ActionResult Index(string sortOrder, string currentFilter, string search, int? page)
         {
-            ViewBag.CurrentSort = sortOrder;
-            ViewBag.DateParam = sortOrder == "DataEmissao" ? "DataEmissao_desc" : "DataEmissao";
+            ViewBag.CurrentSort = sortOrder;            
+
+            if (search != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                search = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = search;
 
             var usuarios = db.Usuarios.Include(u => u.Vendedor);
-            return View(usuarios.ToList());
+
+            if (!String.IsNullOrEmpty(search))
+                usuarios = usuarios.Where(s => s.Login.ToUpper().Contains(search.ToUpper()));
+            
+            usuarios = usuarios.OrderBy(s => s.Login);            
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+
+            return View(usuarios.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: /Usuario/Details/5
