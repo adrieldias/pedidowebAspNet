@@ -4,8 +4,7 @@
     ViewBag.Title = "Details";
 }
 
-<div>
-	<hr />
+<div class="principal1coluna">
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Nome)
@@ -24,7 +23,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PercDescontoMaximo)
+            Desconto Máximo
         </dt>
 
         <dd>
@@ -56,8 +55,10 @@
         </dd>
 
     </dl>
+    <div class="form-group">
+        <div>
+            @Html.ActionLink("Editar", "Edit", null, new { id = Model.CadastroID, @class = "btn btn-primary" })
+            @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.CadastroID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
