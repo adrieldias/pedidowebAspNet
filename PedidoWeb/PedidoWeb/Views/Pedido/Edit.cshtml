@@ -18,88 +18,69 @@
         @Html.HiddenFor(model => model.PedidoID)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Status, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Status)
-                @Html.ValidationMessageFor(model => model.Status)
-            </div>
+            @Html.LabelFor(model => model.Status)
+            @Html.TextBoxFor(model => model.Status, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Status)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.CadastroID, "CadastroID", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("CadastroID", String.Empty)
-                @Html.ValidationMessageFor(model => model.CadastroID)
-            </div>
+            @Html.LabelFor(model => model.CadastroID, "CadastroID")
+            @Html.DropDownList("CadastroID", null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CadastroID)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.PrazoVencimentoID, "PrazoVencimentoID", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("PrazoVencimentoID", String.Empty)
-                @Html.ValidationMessageFor(model => model.PrazoVencimentoID)
-            </div>
+            @Html.LabelFor(model => model.PrazoVencimentoID, "PrazoVencimentoID")
+            @Html.DropDownList("PrazoVencimentoID", null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.PrazoVencimentoID)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Observacao, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Observacao)
-                @Html.ValidationMessageFor(model => model.Observacao)
-            </div>
+            @Html.LabelFor(model => model.Observacao)
+            @Html.TextBoxFor(model => model.Observacao, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Observacao)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.VendedorID, "VendedorID", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("VendedorID", String.Empty)
-                @Html.ValidationMessageFor(model => model.VendedorID)
-            </div>
+            @Html.LabelFor(model => model.VendedorID, "VendedorID")
+            @Html.DropDownList("VendedorID", null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.VendedorID)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.TipoFrete, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TipoFrete)
-                @Html.ValidationMessageFor(model => model.TipoFrete)
-            </div>
+            @Html.LabelFor(model => model.TipoFrete)
+            @Html.TextBoxFor(model => model.TipoFrete, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.TipoFrete)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.TransportadorID, "TransportadorID", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("TransportadorID", String.Empty)
-                @Html.ValidationMessageFor(model => model.TransportadorID)
-            </div>
+            @Html.LabelFor(model => model.TransportadorID, "TransportadorID")
+            @Html.DropDownList("TransportadorID", null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.TransportadorID)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.OrdemCompra, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.OrdemCompra)
-                @Html.ValidationMessageFor(model => model.OrdemCompra)
-            </div>
+            @Html.LabelFor(model => model.OrdemCompra)
+            @Html.TextBoxFor(model => model.OrdemCompra, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.OrdemCompra)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.DataEmissao, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DataEmissao)
-                @Html.ValidationMessageFor(model => model.DataEmissao)
-            </div>
+            @Html.LabelFor(model => model.DataEmissao)
+            @Html.TextBoxFor(model => model.DataEmissao, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.DataEmissao)
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+            <div>
+                <button type="submit" class="btn btn-primary">
+                    Salvar
+                </button>
+                @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
             </div>
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

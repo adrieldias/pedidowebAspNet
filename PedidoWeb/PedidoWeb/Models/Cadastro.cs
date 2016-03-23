@@ -28,6 +28,7 @@ namespace PedidoWeb.Models
         public string CpfCnpj { get; set; }
 
         [DisplayName("Email")]
+        [RegularExpression(".+\\@.+\\..+", ErrorMessage = "Informe um email válido.")]
         public string Email { get; set; }
 
         [DisplayName("Situação")]
