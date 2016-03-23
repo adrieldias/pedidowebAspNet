@@ -63,7 +63,7 @@
         <table class="table table-hover">
             <tr class="cabecalho-tabela">
                 <th>
-                    @Html.DisplayNameFor(model => model[0].Nome)
+                    @Html.ActionLink("Nome", "Index", new { sortOrder = ViewBag.NomeParam }, new { style = "color:#313131" })
                 </th>
                 <th>
                     @Html.Display("Fantasia")
