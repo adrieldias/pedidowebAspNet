@@ -9,6 +9,8 @@
     @Html.AntiForgeryToken()
     
     <div class="principal1coluna">
+        <h3>Editar Pedido</h3>
+        <hr />
         @Html.ValidationSummary(true)
         @Html.HiddenFor(model => model.PedidoID)
 
