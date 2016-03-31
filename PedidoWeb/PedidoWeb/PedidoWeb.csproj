@@ -166,8 +166,10 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CadastroController.cs" />
+    <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\Negocio\PedidoHelper.cs" />
     <Compile Include="Controllers\PedidoController.cs" />
     <Compile Include="Controllers\PedidoItemController.cs" />
     <Compile Include="Controllers\PrazoVencimentoController.cs" />
@@ -181,6 +183,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Empresa.cs" />
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\PrazoVencimento.cs" />
     <Compile Include="Models\Log.cs" />
@@ -308,6 +311,11 @@
     <Content Include="Views\Cadastro\Details.cshtml" />
     <Content Include="Views\Cadastro\Edit.cshtml" />
     <Content Include="Views\Cadastro\Index.cshtml" />
+    <Content Include="Views\Empresa\Create.cshtml" />
+    <Content Include="Views\Empresa\Delete.cshtml" />
+    <Content Include="Views\Empresa\Details.cshtml" />
+    <Content Include="Views\Empresa\Edit.cshtml" />
+    <Content Include="Views\Empresa\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
