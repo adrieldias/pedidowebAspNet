@@ -12,6 +12,22 @@
         <h2>Novo Usuario</h2>
         <hr />
         @Html.ValidationSummary(true)
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.EMail)
+            <div class="input-group">
+               @Html.TextBoxFor(model => model.EMail, new
+               {
+                   @class = "form-control long-textbox",
+                   placeholder = "email@exemplo.com.br"
+
+               })
+                <span class="input-group-addon">
+                    <i class="glyphicon glyphicon-envelope"></i>
+                </span>
+            </div>            
+            @Html.ValidationMessageFor(model => model.EMail)
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Login)            

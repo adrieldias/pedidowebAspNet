@@ -35,8 +35,9 @@
 
         <div class="form-group">
             @Html.Label("Vendedor")            
-            @Html.DropDownList("VendedorID", (IEnumerable<SelectListItem>)ViewBag.VendedorID
-                , string.Empty, new{ @class = "form-control"})
+            @*@Html.DropDownList("VendedorID", (IEnumerable<SelectListItem>)ViewBag.VendedorID
+                , string.Empty, new{ @class = "form-control"})*@
+            @Html.DropDownList("VendedorID", null, string.Empty, new { @class="form-control"})
             @Html.ValidationMessageFor(model => model.VendedorID)            
         </div>
 

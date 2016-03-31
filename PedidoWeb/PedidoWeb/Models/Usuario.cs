@@ -16,6 +16,11 @@ namespace PedidoWeb.Models
         [Key]
         public int UsuarioID { get; set; }
 
+        [DisplayName("E-mail")]
+        [Required(ErrorMessage="E-mail é obrigatório")]
+        [RegularExpression(".+\\@.+\\..+", ErrorMessage = "Informe um email válido.")]
+        public string EMail { get; set; }
+
         private string login;       
 
         [DisplayName("Senha")]
@@ -28,16 +33,26 @@ namespace PedidoWeb.Models
         [ForeignKey("Vendedor")]
         public int VendedorID { get; set; }
         public virtual Vendedor Vendedor { get; set; }
+        
+        private string codEmpresa { get; set; }
 
         // Properties
 
-        [DisplayName("Login")]
-        [Required(ErrorMessage = "Login é obrigatório")]
-        [RegularExpression(@"[A-Za-z0-9]+", ErrorMessage="Login não aceita caracteres especiais.")]        
+        [DisplayName("Nome")]
+        [Required(ErrorMessage = "Nome é obrigatório")]
+        [RegularExpression(@"[A-Za-z0-9]+", ErrorMessage="Nome não aceita caracteres especiais.")]        
         public string Login 
         { 
             get{ return this.login == null ? string.Empty : this.login.ToUpper(); }
             set { this.login = value.ToUpper(); } 
+        }
+
+        [DisplayName("Código de Empresa")]
+        [Required(ErrorMessage="Código de Empresa é obrigatório")]
+        public string CodEmpresa 
+        {
+            get { return this.codEmpresa == null ? string.Empty : this.codEmpresa.ToUpper();}
+            set { this.codEmpresa = value.ToUpper();} 
         }
     }
 }

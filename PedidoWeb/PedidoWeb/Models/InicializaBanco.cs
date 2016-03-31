@@ -114,28 +114,36 @@ namespace PedidoWeb.Models
                     Login = "administrador",
                     Senha = "1234",
                     TipoUsuario = "ADMINISTRADOR",           
-                    VendedorID = 1
+                    VendedorID = 1,
+                    CodEmpresa = "NIR",
+                    EMail = "administrador@administrador.com.br"
                 },
                 new Usuario{
                     UsuarioID = 2,
                     Login = "vendedor",
                     Senha = "1234",
                     TipoUsuario = "VENDEDOR",
-                    VendedorID = 2
+                    VendedorID = 2,
+                    CodEmpresa = "NIR",
+                    EMail = "vendedor@vendedor.com.br"
                 },
                 new Usuario{
                     UsuarioID = 3,
                     Login = "master",
                     Senha = "1234",
                     TipoUsuario = "ADMINISTRADOR",           
-                    VendedorID = 3
+                    VendedorID = 3,
+                    CodEmpresa = "NIR",
+                    EMail = "administrador@gmail.com.br"
                 },
                 new Usuario{
                     UsuarioID = 4,
                     Login = "teste",
                     Senha = "1234",
                     TipoUsuario = "VENDEDOR",
-                    VendedorID = 2
+                    VendedorID = 2,
+                    CodEmpresa = "NIR",
+                    EMail = "vendedor@gmail.com.br"
                 }
             }.ForEach(u => context.Usuarios.Add(u));
 
@@ -205,7 +213,14 @@ namespace PedidoWeb.Models
                 }
             }.ForEach(i => context.PedidoItems.Add(i));
 
-            base.Seed(context);
+            new List<Empresa>{
+                new Empresa{
+                    CodEmpresa = "NIR",
+                    Nome = "CEMAPA"
+                }
+            }.ForEach(e => context.Empresas.Add(e));
+
+            base.Seed(context);            
         }
     }
 }
