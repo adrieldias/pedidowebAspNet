@@ -14,19 +14,13 @@
         @Html.ValidationSummary(true)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Status)
-            @Html.TextBoxFor(model => model.Status, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Status)
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CadastroID, "CadastroID")
+            @Html.LabelFor(model => model.CadastroID, "Cliente")
             @Html.DropDownList("CadastroID", null, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.CadastroID)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.PrazoVencimentoID, "PrazoVencimentoID")
+            @Html.LabelFor(model => model.PrazoVencimentoID, "Forma de Pagamento")
             @Html.DropDownList("PrazoVencimentoID", null, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.PrazoVencimentoID)
         </div>
@@ -38,8 +32,8 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.VendedorID, "VendedorID")
-            @Html.DropDownList("VendedorID", null, new { @class = "form-control" })
+            @Html.LabelFor(model => model.VendedorID, "Vendedor")
+            @Html.DropDownList("VendedorID", null, new {disabled="disable", @class = "form-control" })
             @Html.ValidationMessageFor(model => model.VendedorID)
         </div>
 
@@ -59,12 +53,6 @@
             @Html.LabelFor(model => model.OrdemCompra)
             @Html.TextBoxFor(model => model.OrdemCompra, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.OrdemCompra)
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.DataEmissao)
-            @Html.TextBoxFor(model => model.DataEmissao, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.DataEmissao)
         </div>
 
         <div class="form-group">

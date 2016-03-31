@@ -101,6 +101,8 @@ namespace PedidoWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                pedido.DataEmissao = DateTime.Today;
+                pedido.Status = "ABERTO";
                 db.Pedidoes.Add(pedido);
                 db.SaveChanges();
                 return RedirectToAction("Index");
