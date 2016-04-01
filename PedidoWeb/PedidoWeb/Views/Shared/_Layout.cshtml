@@ -27,7 +27,14 @@
                     <ul class="nav navbar-nav">
                         <li>@Html.ActionLink("Pedidos Online", "Index", "Home")</li>
                     </ul>
-
+                    <ul class="nav navbar-nav pull-right">
+                        <li>
+                            @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                            {      
+                                @Html.ActionLink("Sair de " + @HttpContext.Current.User.Identity.Name, "Logoff", "Home"@*, null, new { @class = "glyphicon glyphicon-log-out" }*@)    
+                            }
+                        <li>
+                    </ul>                    
                 </div>
 
                 @*<div class="navbar-collapse collapse">
@@ -40,11 +47,12 @@
                     </div>*@
             </div>
         </nav>
+                
         @RenderBody()
-        
-        <footer>            
+   
+        <footer>       
             <div align="center">
-      
+         
                 <p><h6>2015 CEMAPA - Pedidos Online V 0.2</h6></p>
                 <p><h6>Av. João XXIII, 2150 Medianeira - PR</h6></p>
                 <p>

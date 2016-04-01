@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 using PedidoWeb.Controllers.Negocio;
 
@@ -12,7 +13,14 @@ namespace PedidoWeb.Controllers
     {
         public ActionResult Index()
         {
-            return View();           
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {                
+                return RedirectToAction("Index", "Pedido");
+            }
+            else
+            {                
+                return View();
+            }
         }
 
         [HttpPost]
@@ -34,6 +42,8 @@ namespace PedidoWeb.Controllers
             {
                 if (new Login(f["email"], f["senha"]).Autorizado)
                 {
+                    // Rotina para autenticar usuário
+                    FormsAuthentication.SetAuthCookie(f["email"], false);                    
                     return RedirectToAction("Index", "Pedido");
                 }
                 else
@@ -47,6 +57,12 @@ namespace PedidoWeb.Controllers
                 ViewBag.Message = ex.Message;
                 return View();
             }     
+        }
+
+        public ActionResult Logoff()
+        {
+            FormsAuthentication.SignOut();            
+            return RedirectToAction("Index");
         }
 
         public ActionResult About()
