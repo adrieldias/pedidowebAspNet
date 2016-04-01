@@ -41,6 +41,10 @@ namespace PedidoWeb.Models
         [DisplayName("Ordem de Compra")]
         public int OrdemCompra { get; set; }
 
+
+        //[DataType(DataType.Date)] 
+        //[DisplayFormat(DataFormatString =
+        //    "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [DisplayName("Data de Emissão")]
         public DateTime DataEmissao { get; set; }
     }
