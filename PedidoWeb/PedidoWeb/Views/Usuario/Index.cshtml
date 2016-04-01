@@ -26,6 +26,13 @@
 <br />
 <div class="principal1coluna">
 
+    
+    @if(ViewBag.mensagem != string.Empty && ViewBag.mensagem != null)
+    {             
+        <div class="alert alert-danger">@ViewBag.mensagem</div>
+    }        
+    
+
     <h2>Usuários</h2>
     
     <p>

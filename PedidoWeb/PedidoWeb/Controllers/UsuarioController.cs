@@ -16,7 +16,7 @@ namespace PedidoWeb.Controllers
         private PedidoWebContext db = new PedidoWebContext();
 
         // GET: /Usuario/
-        public ActionResult Index(string sortOrder, string currentFilter, string search, int? page)
+        public ActionResult Index(string sortOrder, string currentFilter, string search, int? page, string mensagem)
         {
             ViewBag.CurrentSort = sortOrder;            
 
@@ -40,6 +40,8 @@ namespace PedidoWeb.Controllers
 
             int pageSize = 3;
             int pageNumber = (page ?? 1);
+
+            ViewBag.mensagem = mensagem;
 
             return View(usuarios.ToPagedList(pageNumber, pageSize));
         }
@@ -73,6 +75,10 @@ namespace PedidoWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include="UsuarioID,Login,Senha,TipoUsuario,VendedorID,EMail,CodEmpresa")] Usuario usuario)
         {
+            // Verifica se já não existe um usuário cadastrado com esse mesmo email
+            if (db.Usuarios.Count(u => u.EMail == usuario.EMail) > 0)
+                return RedirectToAction("Index", new { @mensagem = string.Format("{0} {1} {2}",
+                    "E-mail", usuario.EMail, "já cadastrado em outro usuário")});
             if (ModelState.IsValid)
             {
                 db.Usuarios.Add(usuario);
