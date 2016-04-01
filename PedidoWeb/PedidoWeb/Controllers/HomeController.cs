@@ -4,13 +4,49 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+using PedidoWeb.Controllers.Negocio;
+
 namespace PedidoWeb.Controllers
 {
     public class HomeController : Controller
     {
         public ActionResult Index()
         {
-            return View();
+            return View();           
+        }
+
+        [HttpPost]
+        public ActionResult Index(FormCollection f)
+        {
+            ViewBag.Message = string.Empty;
+
+            if (f["email"] == string.Empty)
+            {
+                ViewBag.Message = "E-Mail é obrigatório";
+                return View();
+            }
+            if (f["senha"] == string.Empty)
+            {
+                ViewBag.Message = "Senha é obrigatória";
+                return View();
+            }
+            try
+            {
+                if (new Login(f["email"], f["senha"]).Autorizado)
+                {
+                    return RedirectToAction("Index", "Pedido");
+                }
+                else
+                {
+                    ViewBag.Message = "Usuário ou senha incorreto";
+                    return View();
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+                return View();
+            }     
         }
 
         public ActionResult About()
