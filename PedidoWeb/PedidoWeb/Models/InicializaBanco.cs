@@ -136,7 +136,7 @@ namespace PedidoWeb.Models
                     TipoUsuario = "ADMINISTRADOR",           
                     VendedorID = 3,
                     CodEmpresa = "NIR",
-                    EMail = "administrador@gmail.com.br"
+                    EMail = "administrador@gmail.com"
                 },
                 new Usuario{
                     UsuarioID = 4,
@@ -145,7 +145,7 @@ namespace PedidoWeb.Models
                     TipoUsuario = "VENDEDOR",
                     VendedorID = 2,
                     CodEmpresa = "NIR",
-                    EMail = "vendedor@gmail.com.br"
+                    EMail = "vendedor@gmail.com"
                 }
             }.ForEach(u => context.Usuarios.Add(u));
 
@@ -185,7 +185,55 @@ namespace PedidoWeb.Models
                     TransportadorID = 1,
                     OrdemCompra = 1,
                     DataEmissao = System.DateTime.Now.Date
-                }
+                },
+                new Pedido{
+                    PedidoID = 4,
+                    Status = "ABERTO",
+                    CadastroID = 1,
+                    PrazoVencimentoID = 2,
+                    Observacao = "TESTE 3",
+                    VendedorID = 2,
+                    TipoFrete = "CIF",
+                    TransportadorID = 1,
+                    OrdemCompra = 1,
+                    DataEmissao = System.DateTime.Now.Date
+                },
+                new Pedido{
+                    PedidoID = 5,
+                    Status = "ABERTO",
+                    CadastroID = 1,
+                    PrazoVencimentoID = 2,
+                    Observacao = "TESTE 3",
+                    VendedorID = 1,
+                    TipoFrete = "CIF",
+                    TransportadorID = 1,
+                    OrdemCompra = 1,
+                    DataEmissao = System.DateTime.Now.Date
+                },
+                new Pedido{
+                    PedidoID = 6,
+                    Status = "ABERTO",
+                    CadastroID = 1,
+                    PrazoVencimentoID = 2,
+                    Observacao = "TESTE 3",
+                    VendedorID = 1,
+                    TipoFrete = "CIF",
+                    TransportadorID = 1,
+                    OrdemCompra = 1,
+                    DataEmissao = System.DateTime.Now.Date
+                },
+                new Pedido{
+                    PedidoID = 7,
+                    Status = "ABERTO",
+                    CadastroID = 1,
+                    PrazoVencimentoID = 2,
+                    Observacao = "TESTE 3",
+                    VendedorID = 1,
+                    TipoFrete = "CIF",
+                    TransportadorID = 1,
+                    OrdemCompra = 1,
+                    DataEmissao = System.DateTime.Now.Date
+                },
             }.ForEach(p => context.Pedidoes.Add(p));
 
             new List<PedidoItem>{

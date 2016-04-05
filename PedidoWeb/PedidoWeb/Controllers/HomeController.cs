@@ -14,7 +14,9 @@ namespace PedidoWeb.Controllers
         public ActionResult Index()
         {
             if (HttpContext.User.Identity.IsAuthenticated)
-            {                
+            {
+                // Instancia PedidoHelper para guardar usuário corrente
+                new PedidoWeb.Controllers.Negocio.PedidoHelper(HttpContext.User.Identity.Name);
                 return RedirectToAction("Index", "Pedido");
             }
             else
@@ -43,7 +45,9 @@ namespace PedidoWeb.Controllers
                 if (new Login(f["email"], f["senha"]).Autorizado)
                 {
                     // Rotina para autenticar usuário
-                    FormsAuthentication.SetAuthCookie(f["email"], false);                    
+                    FormsAuthentication.SetAuthCookie(f["email"], false);   
+                    // Instancia PedidoHelper para guardar usuário corrente
+                    new PedidoWeb.Controllers.Negocio.PedidoHelper(f["email"]);
                     return RedirectToAction("Index", "Pedido");
                 }
                 else
