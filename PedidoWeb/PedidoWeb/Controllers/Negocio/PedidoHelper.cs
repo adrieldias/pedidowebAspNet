@@ -8,18 +8,13 @@ namespace PedidoWeb.Controllers.Negocio
 {
     public sealed class PedidoHelper
     {
-        private PedidoWebContext db = new PedidoWebContext();        
-        public static string TipoUsuario { get; set; }
-        public static string CodEmpresa { get; set; }        
+        private PedidoWebContext db = new PedidoWebContext();
+        public static Usuario UsuarioCorrente { get; set; }       
 
         public PedidoHelper(string email)
         {
-            var usuario = this.db.Usuarios.Single(u => u.EMail == email);            
-            if (usuario != null)
-            {
-                TipoUsuario = usuario.TipoUsuario;
-                CodEmpresa = usuario.CodEmpresa;
-            }
+            UsuarioCorrente = this.db.Usuarios.Single(u => u.EMail == email);            
+            
         }
     }
 }

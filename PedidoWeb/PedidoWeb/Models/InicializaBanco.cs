@@ -22,7 +22,8 @@ namespace PedidoWeb.Models
                     Fantasia = "JOAO",
                     Nome = "JOAO",
                     PercDescontoMaximo  = 2,
-                    Situacao = "ATIVO"
+                    Situacao = "ATIVO",
+                    VendedorID = 1
                 },
                 new Cadastro{
                     CadastroID = 2,
@@ -31,7 +32,8 @@ namespace PedidoWeb.Models
                     Fantasia = "MARIA",
                     Nome = "MARIA",
                     PercDescontoMaximo  = 2,
-                    Situacao = "ATIVO"
+                    Situacao = "ATIVO",
+                    VendedorID = 2
                 }
             }.ForEach(c => context.Cadastroes.Add(c));
 

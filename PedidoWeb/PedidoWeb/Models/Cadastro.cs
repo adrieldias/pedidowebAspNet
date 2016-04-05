@@ -33,5 +33,11 @@ namespace PedidoWeb.Models
 
         [DisplayName("Situação")]
         public string Situacao { get; set; }
+
+        [ForeignKey("Vendedor")]
+        public int VendedorID { get; set; }
+        public virtual Vendedor Vendedor { get; set; }
+
+        public ICollection<Pedido> Pedidos { get; set; }
     }
 }
