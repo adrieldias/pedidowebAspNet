@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using PedidoWeb.Models;
 using PagedList;
+using PedidoWeb.Controllers.Negocio;
 
 namespace PedidoWeb.Controllers
 {
@@ -103,6 +104,8 @@ namespace PedidoWeb.Controllers
             {
                 pedido.DataEmissao = DateTime.Today;
                 pedido.Status = "ABERTO";
+                Cadastro cadastro = db.Cadastroes.Single(c => c.CadastroID == pedido.CadastroID);
+                pedido.VendedorID = cadastro.VendedorID;
                 db.Pedidoes.Add(pedido);
                 db.SaveChanges();
                 return RedirectToAction("Index");

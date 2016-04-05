@@ -15,9 +15,10 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.CadastroID, "Cliente")
-            @Html.DropDownList("CadastroID", null,string.Empty, new { @class = "form-control" })
+            @Html.DropDownList("CadastroID", null,string.Empty, new {@class = "form-control" })
             @Html.ValidationMessageFor(model => model.CadastroID)
         </div>
+
 
         <div class="form-group">
             @Html.LabelFor(model => model.PrazoVencimentoID, "Forma de Pagamento")
@@ -26,15 +27,15 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Observacao)
-            @Html.TextBoxFor(model => model.Observacao, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Observacao)
+            @Html.LabelFor(model => model.VendedorID, "Vendedor")
+            @Html.DropDownList("VendedorID", null, new {@disabled=true, @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.VendedorID)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.VendedorID, "Vendedor")
-            @Html.DropDownList("VendedorID", null, new {@class = "form-control" })
-            @Html.ValidationMessageFor(model => model.VendedorID)
+            @Html.LabelFor(model => model.TransportadorID, "Transportador")
+            @Html.DropDownList("TransportadorID", null, string.Empty, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.TransportadorID)
         </div>
 
         <div class="form-group">
@@ -44,15 +45,15 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.TransportadorID, "TransportadorID")
-            @Html.DropDownList("TransportadorID", null,string.Empty, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.TransportadorID)
-        </div>
-
-        <div class="form-group">
             @Html.LabelFor(model => model.OrdemCompra)
             @Html.TextBoxFor(model => model.OrdemCompra, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.OrdemCompra)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Observacao)
+            @Html.TextBoxFor(model => model.Observacao, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Observacao)
         </div>
 
         <div class="form-group">
@@ -68,4 +69,7 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $("#VendedorID").prop("disabled", true);
+    </script>
 }
