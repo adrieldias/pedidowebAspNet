@@ -14,7 +14,9 @@ namespace PedidoWeb.Controllers
         public ActionResult Index()
         {
             if (HttpContext.User.Identity.IsAuthenticated)
-            {                
+            {
+                // Instancia PedidoHelper para guardar usuário corrente
+                new PedidoWeb.Controllers.Negocio.PedidoHelper(HttpContext.User.Identity.Name);
                 return RedirectToAction("Index", "Pedido");
             }
             else

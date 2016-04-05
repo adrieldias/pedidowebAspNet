@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using PedidoWeb.Models;
 using PagedList;
 
+using PedidoWeb.Controllers.Negocio;
+
 namespace PedidoWeb.Controllers
 {
     public class PedidoController : Controller
@@ -37,7 +39,8 @@ namespace PedidoWeb.Controllers
             ViewBag.CurrentFilter = search;
 
             var pedidos = from s in db.Pedidoes
-                         select s;
+                .Where(p => p.VendedorID == PedidoHelper.UsuarioCorrente.VendedorID || PedidoHelper.UsuarioCorrente.TipoUsuario == "ADMINISTRADOR")
+                 select s;
 
             if (search != string.Empty)
             {
