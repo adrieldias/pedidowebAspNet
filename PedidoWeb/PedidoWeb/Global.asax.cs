@@ -21,11 +21,7 @@ namespace PedidoWeb
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             // Criar o DB
-            Database.SetInitializer<PedidoWebContext>(new InicializaBanco());
-
-            // Deixei aqui para instanciar por enquanto a classe estática helper
-            // Este código deverá ser colocado logo após fazer o login passando o email do usuário
-            new PedidoWeb.Controllers.Negocio.PedidoHelper("administrador@administrador.com.br");
+            Database.SetInitializer<PedidoWebContext>(new InicializaBanco());            
         }
     }
 }

@@ -183,7 +183,55 @@ namespace PedidoWeb.Models
                     TransportadorID = 1,
                     OrdemCompra = 1,
                     DataEmissao = System.DateTime.Now.Date
-                }
+                },
+                new Pedido{
+                    PedidoID = 4,
+                    Status = "ABERTO",
+                    CadastroID = 1,
+                    PrazoVencimentoID = 2,
+                    Observacao = "TESTE 3",
+                    VendedorID = 2,
+                    TipoFrete = "CIF",
+                    TransportadorID = 1,
+                    OrdemCompra = 1,
+                    DataEmissao = System.DateTime.Now.Date
+                },
+                new Pedido{
+                    PedidoID = 5,
+                    Status = "ABERTO",
+                    CadastroID = 1,
+                    PrazoVencimentoID = 2,
+                    Observacao = "TESTE 3",
+                    VendedorID = 1,
+                    TipoFrete = "CIF",
+                    TransportadorID = 1,
+                    OrdemCompra = 1,
+                    DataEmissao = System.DateTime.Now.Date
+                },
+                new Pedido{
+                    PedidoID = 6,
+                    Status = "ABERTO",
+                    CadastroID = 1,
+                    PrazoVencimentoID = 2,
+                    Observacao = "TESTE 3",
+                    VendedorID = 1,
+                    TipoFrete = "CIF",
+                    TransportadorID = 1,
+                    OrdemCompra = 1,
+                    DataEmissao = System.DateTime.Now.Date
+                },
+                new Pedido{
+                    PedidoID = 7,
+                    Status = "ABERTO",
+                    CadastroID = 1,
+                    PrazoVencimentoID = 2,
+                    Observacao = "TESTE 3",
+                    VendedorID = 1,
+                    TipoFrete = "CIF",
+                    TransportadorID = 1,
+                    OrdemCompra = 1,
+                    DataEmissao = System.DateTime.Now.Date
+                },
             }.ForEach(p => context.Pedidoes.Add(p));
 
             new List<PedidoItem>{

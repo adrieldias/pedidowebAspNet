@@ -16,13 +16,16 @@ namespace PedidoWeb.Controllers
         private PedidoWebContext db = new PedidoWebContext();
 
         // GET: /Pedido/
-        public ViewResult Index(string sortOrder, string currentFilter, object search, int? page)
+        public ViewResult Index(string sortOrder, string currentFilter, string search, string searchByDate, int? page)
         {
+            if (search == null) search = string.Empty;
+            if (searchByDate == null) searchByDate = string.Empty;
+            if (currentFilter == null) currentFilter = string.Empty;
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateParam = sortOrder == "DataEmissao" ? "DataEmissao_desc" : "DataEmissao";
-
-
-            if (search != null)
+            
+            if (search != string.Empty || searchByDate != string.Empty)
             {
                 page = 1;
             }
@@ -36,13 +39,24 @@ namespace PedidoWeb.Controllers
             var pedidos = from s in db.Pedidoes
                          select s;
 
-            if (search != null)
+            if (search != string.Empty)
             {
-                if (search is int)
-                    pedidos = pedidos.Where(s => s.PedidoID == (int)search);
-                if(search is string)
+                int numero;
+                int.TryParse(search, out numero);
+
+                if (numero > 0)
+                    pedidos = pedidos.Where(s => s.PedidoID == numero);
+                else                    
                     pedidos = pedidos.Where(s => s.Cadastro.Nome.ToUpper().Contains(((string)search).ToUpper()));
             }
+            
+            if(searchByDate != string.Empty)
+            {
+                DateTime data;
+                if (DateTime.TryParse(searchByDate, out data))
+                    pedidos = pedidos.Where(s => s.DataEmissao == data);
+            }
+
             switch (sortOrder)
             {
                 case "DataEmissao":
@@ -57,7 +71,7 @@ namespace PedidoWeb.Controllers
             }
 
 
-            int pageSize = 3;
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
             return View(pedidos.ToPagedList(pageNumber, pageSize));
         }
