@@ -29,5 +29,6 @@ namespace PedidoWeb.Models
             get { return nome != null ? this.nome.ToUpper() : string.Empty; }
             set { this.nome = value.ToUpper(); }
         }
+        public ICollection<Pedido> Pedidos { get; set; }
     }
 }

@@ -38,6 +38,17 @@ namespace PedidoWeb.Models
         public System.Data.Entity.DbSet<PedidoWeb.Models.Produto> Produtoes { get; set; }
 
         public System.Data.Entity.DbSet<PedidoWeb.Models.Empresa> Empresas { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Pedido>()
+            .HasRequired(p => p.Vendedor)
+            .WithMany(v => v.Pedidos)
+            .HasForeignKey(p => p.VendedorID)
+            .WillCascadeOnDelete(false);
+
+            base.OnModelCreating(modelBuilder);
+        }
     
     }
 }
