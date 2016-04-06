@@ -22,7 +22,7 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.DataEmissao)
-            @Html.TextBoxFor(model => model.DataEmissao, new {@readonly="readonly", @class = "form-control" })
+            @Html.TextBoxFor(model => model.DataEmissao, "{0:dd/MM/yyyy}", new { @readonly = "readonly", @class = "form-control" })
             @Html.ValidationMessageFor(model => model.DataEmissao)
         </div>
 
@@ -46,7 +46,9 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.TipoFrete)
-            @Html.TextBoxFor(model => model.TipoFrete, new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.TipoFrete, 
+                new List<SelectListItem>() { new SelectListItem(){Text="CIF", Value="CIF"}, 
+                    new SelectListItem(){Text="FOB", Value="FOB" }}, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.TipoFrete)
         </div>
 

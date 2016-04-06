@@ -6,6 +6,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 
 namespace PedidoWeb.Models
 {
@@ -42,9 +43,9 @@ namespace PedidoWeb.Models
         public int OrdemCompra { get; set; }
 
 
-        //[DataType(DataType.Date)] 
-        //[DisplayFormat(DataFormatString =
-        //    "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString =
+            "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [DisplayName("Data de Emissão")]
         public DateTime DataEmissao { get; set; }
     }

@@ -87,6 +87,7 @@ namespace PedidoWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                cadastro.Situacao = "ATIVO";
                 db.Cadastroes.Add(cadastro);
                 db.SaveChanges();
                 return RedirectToAction("Index");

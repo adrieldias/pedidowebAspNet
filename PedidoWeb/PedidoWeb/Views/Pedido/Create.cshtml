@@ -40,7 +40,9 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.TipoFrete)
-            @Html.TextBoxFor(model => model.TipoFrete, new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.TipoFrete, 
+                new List<SelectListItem>() { new SelectListItem(){Text="CIF", Value="CIF"},
+                    new SelectListItem(){Text="FOB", Value="FOB" }}, string.Empty, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.TipoFrete)
         </div>
 

@@ -58,7 +58,7 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Situacao)
-            @Html.TextBoxFor(model => model.Situacao, new { @class = "form-control" })
+            @Html.TextBoxFor(model => model.Situacao, new { @readonly = "readonly", @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Situacao)
         </div>
 
