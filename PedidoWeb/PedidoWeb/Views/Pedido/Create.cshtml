@@ -18,8 +18,6 @@
             @Html.DropDownList("CadastroID", null,string.Empty, new {@class = "form-control" })
             @Html.ValidationMessageFor(model => model.CadastroID)
         </div>
-
-
         <div class="form-group">
             @Html.LabelFor(model => model.PrazoVencimentoID, "Forma de Pagamento")
             @Html.DropDownList("PrazoVencimentoID", null, new { @class = "form-control" })
@@ -40,11 +38,12 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.TipoFrete)
-            @Html.DropDownListFor(model => model.TipoFrete, 
+            @Html.DropDownListFor(model => model.TipoFrete,
                 new List<SelectListItem>() { new SelectListItem(){Text="CIF", Value="CIF"},
                     new SelectListItem(){Text="FOB", Value="FOB" }}, string.Empty, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.TipoFrete)
         </div>
+
 
         <div class="form-group">
             @Html.LabelFor(model => model.OrdemCompra)
@@ -54,7 +53,7 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Observacao)
-            @Html.TextBoxFor(model => model.Observacao, new { @class = "form-control" })
+            @Html.TextAreaFor(model => model.Observacao, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Observacao)
         </div>
 

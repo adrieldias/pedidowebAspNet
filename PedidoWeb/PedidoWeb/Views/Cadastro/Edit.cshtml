@@ -27,12 +27,6 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.PercDescontoMaximo)
-            @Html.TextBoxFor(model => model.PercDescontoMaximo, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.PercDescontoMaximo)
-        </div>
-
-        <div class="form-group">
             @Html.LabelFor(model => model.CpfCnpj)
             @Html.TextBoxFor(model => model.CpfCnpj, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.CpfCnpj)
@@ -54,6 +48,12 @@
 
             </div>
             @Html.ValidationMessageFor(model => model.Email)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PercDescontoMaximo)
+            @Html.TextBoxFor(model => model.PercDescontoMaximo, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.PercDescontoMaximo)
         </div>
 
         <div class="form-group">

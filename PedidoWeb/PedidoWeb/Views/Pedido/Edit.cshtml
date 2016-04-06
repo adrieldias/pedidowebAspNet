@@ -59,15 +59,15 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Observacao)
-            @Html.TextBoxFor(model => model.Observacao, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Observacao)
+            @Html.LabelFor(model => model.Status)
+            @Html.TextBoxFor(model => model.Status, new { @readonly = "readonly", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Status)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Status)
-            @Html.TextBoxFor(model => model.Status, new {@readonly="readonly",  @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Status)
+            @Html.LabelFor(model => model.Observacao)
+            @Html.TextAreaFor(model => model.Observacao, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Observacao)
         </div>
 
         <div class="form-group">
