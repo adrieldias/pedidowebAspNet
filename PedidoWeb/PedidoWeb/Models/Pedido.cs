@@ -22,10 +22,12 @@ namespace PedidoWeb.Models
         public virtual Cadastro Cadastro { get; set; }
 
         [ForeignKey("PrazoVencimento")]
-        public int PrazoVencimentoID { get; set; }
+        public int? PrazoVencimentoID { get; set; }
         public virtual PrazoVencimento PrazoVencimento { get; set; }
 
         [DisplayName("Observações")]
+        [Required(AllowEmptyStrings = true)]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Observacao { get; set; }
 
         [ForeignKey("Vendedor")]
@@ -33,14 +35,16 @@ namespace PedidoWeb.Models
         public virtual Vendedor Vendedor { get; set; }
 
         [DisplayName("Tipo de Frete")]
+        [Required(AllowEmptyStrings = true)]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string TipoFrete { get; set; }
 
         [ForeignKey("Transportador")]
-        public int TransportadorID { get; set; }
+        public int? TransportadorID { get; set; }
         public virtual Transportador Transportador { get; set; }
 
         [DisplayName("Ordem de Compra")]
-        public int OrdemCompra { get; set; }
+        public int? OrdemCompra { get; set; }
 
 
         [DataType(DataType.Date)]
@@ -48,5 +52,8 @@ namespace PedidoWeb.Models
             "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [DisplayName("Data de Emissão")]
         public DateTime DataEmissao { get; set; }
+
+        // Lazy Load
+        public virtual List<PedidoItem> Itens { get; set; }
     }
 }

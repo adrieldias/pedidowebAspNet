@@ -1,76 +1,250 @@
-﻿@model PedidoWeb.Models.Pedido
-
+﻿
 @{
     ViewBag.Title = "Create";
 }
 
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
+
+
 
     <div class="principal1coluna">
         <h2>Novo Pedido</h2>
         <hr />
-        @Html.ValidationSummary(true)
+        <br />
 
         <div class="form-group">
-            @Html.LabelFor(model => model.CadastroID, "Cliente")
-            @Html.DropDownList("CadastroID", null,string.Empty, new {@class = "form-control" })
-            @Html.ValidationMessageFor(model => model.CadastroID)
+            @Html.Label("Vendedor")
+            @Html.DropDownList("VendedorID", null, new { @disabled = true, @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Cliente")
+            @Html.DropDownList("CadastroID", null, string.Empty, new { @class = "form-control" })
+            <span class="error" style="visibility: hidden">Cliente é obrigatório</span>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.PrazoVencimentoID, "Forma de Pagamento")
+            @Html.Label("Forma de Pagamento")
             @Html.DropDownList("PrazoVencimentoID", null, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.PrazoVencimentoID)
+            <span class="error" style="visibility: hidden">Prazo de Vencimento</span>
+        </div>        
+
+        <div class="form-group">
+            @Html.Label("Transportador")
+            @Html.DropDownList("TransportadorID", null, string.Empty, new { @class = "form-control" })            
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.VendedorID, "Vendedor")
-            @Html.DropDownList("VendedorID", null, new {@disabled=true, @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.VendedorID)
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.TransportadorID, "Transportador")
-            @Html.DropDownList("TransportadorID", null, string.Empty, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.TransportadorID)
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.TipoFrete)
-            @Html.DropDownListFor(model => model.TipoFrete,
+            @Html.Label("Tipo de Frete")
+            @Html.DropDownList("TipoFrete",
                 new List<SelectListItem>() { new SelectListItem(){Text="CIF", Value="CIF"},
-                    new SelectListItem(){Text="FOB", Value="FOB" }}, string.Empty, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.TipoFrete)
+                    new SelectListItem(){Text="FOB", Value="FOB" }}, string.Empty, new { @class = "form-control" })            
         </div>
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.OrdemCompra)
-            @Html.TextBoxFor(model => model.OrdemCompra, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.OrdemCompra)
+            @Html.Label("Ordem de Compra")            
+            <input type="text" id="OrdemCompra" class="form-control"/>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Observacao)
-            @Html.TextAreaFor(model => model.Observacao, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Observacao)
+            @Html.Label("Observação")                        
+            <textarea id="Observacao" class="form-control"></textarea>       
         </div>
 
-        <div class="form-group">
-            <div>
-                <button type="submit" class="btn btn-primary">
-                    Salvar
-                </button>
-                @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
+        <br />        
+        
+        <div class="details">
+            <h2>Itens do Pedido</h2>
+            <hr />
+            <br />
+
+            <div class="form-group">
+                @Html.Label("Produto")
+                @Html.DropDownList("ProdutoID", null, string.Empty, new { @class="form-control"})
+                <span class="error" style="visibility: hidden">Produto é obrigatório</span>
             </div>
+
+            <div class="form-group">
+                @Html.Label("Quantidade")
+                <input type="text" id="Quantidade" class="form-control" />
+                <span class="error" style="visibility: hidden">Quantidade é obrigatória</span>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Valor Unitário")
+                <input type="text" id="ValorUnitario" class="form-control" />
+                <span class="error" style="visibility: hidden">Valor Unitário é obrigatório</span>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Observação do Item")
+                <textarea id="ObservacaoItem" class="form-control"></textarea>
+                <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>               
+            </div>
+            
+            <input type="button" id="add" value="Adicionar Item" class="btn btn-block" />          
+            <br />          
+            <div id="pedidoItens"></div>            
+            <br />
+            <input type="button" id="submit" value="Salvar Pedido" class="btn btn-primary btn-group-justified" /> 
         </div>
+
     </div>
-}
+
+
+
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
     <script>
+
+                    //CadastroID: $('#CadastroID').val().trim(),
+                    //PrazoVencimentoID: $('#PrazoVencimentoID').val().trim(),
+                    //VendedorID: $('#VendedorID').val().trim(),
+                    //TransportadorID: $('#TransportadorID').val().trim(),
+
         $("#VendedorID").prop("disabled", true);
+
+        $("document").ready(function () {
+            var pedidoItens = [];
+
+            // Add button click function
+            $('#add').click(function () {
+                // Validações
+                var isValidItem = true;
+                if ($('#ProdutoID').val().trim() == '') {                    
+                    isValidItem = false;
+                    $('#ProdutoID').siblings('span.error').css('visibility', 'visible');
+                }
+                else {
+                    $('#ProdutoID').siblings('span.error').css('visibility', 'hidden');
+                }
+
+                if ($('#Quantidade').val().trim() == '' || isNaN($('#Quantidade').val().trim().replace(',', '.'))) {
+                    isValidItem = false;
+                    $('#Quantidade').siblings('span.error').css('visibility', 'visible');
+                }
+                else {
+                    $('#Quantidade').siblings('span.error').css('visibility', 'hidden');
+                }
+
+                if ($('#ValorUnitario').val().trim() == '' || isNaN($('#ValorUnitario').val().trim().replace(',', '.'))) {
+                    isValidItem = false;
+                    $('#ValorUnitario').siblings('span.error').css('visibility', 'visible');
+                }
+                else {
+                    $('#ValorUnitario').siblings('span.error').css('visibility', 'hidden');
+                }
+
+                if ($('#ObservacaoItem').val().length > 30) {
+                    isValidItem = false;
+                    $('#ObservacaoItem').siblings('span.error').css('visibility', 'visible');
+                }
+                else {
+                    $('#ObservacaoItem').siblings('span.error').css('visibility', 'hidden');
+                }
+
+                // Add item to list if valid
+                if (isValidItem) {
+                    var el = document.getElementById('ProdutoID');
+                    pedidoItens.push({
+                        ProdutoID: $('#ProdutoID').val().trim(),
+                        Quantidade: $('#Quantidade').val().trim().replace(',', '.'),
+                        ValorUnitario: $('#ValorUnitario').val().trim().replace(',', '.'),
+                        Observacao: $('#ObservacaoItem').val().trim(),
+                        DescProduto: el.options[el.selectedIndex].text
+                    });
+
+                    $('#ProdutoID').val('').focus();
+                    $('#Quantidade').val('');
+                    $('#ValorUnitario').val('');
+                    $('#ObservacaoItem').val('');   
+                }
+                GeneratedItemsTable();
+
+            });
+
+            // Save button click function
+            $('#submit').click(function () {
+
+                // Validação do pedido
+                var isValidOrder = true;
+
+                if ($('#CadastroID').val().trim() == '') {
+                    isValidOrder = false;
+                    $('#CadastroID').siblings('span.error').css('visibility', 'visible');
+                }
+                else {
+                    $('#CadastroID').siblings('span.error').css('visibility', 'hidden');
+                }
+
+                if ($('#PrazoVencimentoID').val().trim() == '') {
+                    isValidOrder = false;
+                    $('#PrazoVencimentoID').siblings('span.error').css('visibility', 'visible');
+                }
+                else {
+                    $('#PrazoVencimentoID').siblings('span.error').css('visibility', 'hidden');
+                }
+
+                // Salvar
+                if (isValidOrder) {
+                    var data = {
+                        CadastroID: $('#CadastroID').val().trim(),
+                        PrazoVencimentoID: $('#PrazoVencimentoID').val().trim(),
+                        VendedorID: $('#VendedorID').val().trim(),
+                        TransportadorID: $('#TransportadorID').val().trim(),
+                        TipoFrete: $('#TipoFrete').val().trim(),
+                        OrdemCompra: $('#OrdemCompra').val().trim(),
+                        Observacao: $('#Observacao').val().trim(),
+                        Itens: pedidoItens
+                    }
+
+                    $(this).val('Por favor aguarde...');
+
+                    $.ajax({
+                        url: '/Pedido/SalvaPedido',
+                        type: 'POST',
+                        data: JSON.stringify(data),
+                        datatype: "JSON",
+                        contentType: "application/json",
+                        success: function (d) {
+                            // Checa se o pedido foi salvo no banco de dados
+                            if (d.status == true) {                                
+                                window.location.href = '/Pedido/Index';
+                            }
+                            else {
+                                alert('Falha ao salvar o pedido');
+                            }
+                            
+                        },
+                        error: function () {
+                            alert('Erro ao salvar pedido. Por favor tente novamente.');
+                        }
+                    })
+                }
+            })
+
+
+            // Function for show added items in table
+            function GeneratedItemsTable() {
+                if (pedidoItens.length > 0) {
+                    var $table = $('<table class="table table-responsive table-striped "></table>');
+                    $table.append('<thead><tr><th>Produto</th><th></th><th>Quantidade</th><th>Valor</th></tr></thead>');
+                    var $tbody = $('<tbody />');                    
+                    $.each(pedidoItens, function (i, val) {
+                        var $row = $('<tr/>');
+                        $row.append($('<td/>').html(val.ProdutoID));
+                        $row.append($('<td/>').html(val.DescProduto));
+                        $row.append($('<td/>').html(val.Quantidade));
+                        $row.append($('<td/>').html(val.ValorUnitario));                                                              
+                        $tbody.append($row);
+                    });
+                    $table.append($tbody);
+                    $('#pedidoItens').html($table);
+                }
+            }
+
+        })
     </script>
 }

@@ -1,0 +1,109 @@
+﻿@model PedidoWeb.Models.Pedido
+
+@{
+    ViewBag.Title = "Adicionar Item";
+}
+
+<div class="principal1coluna">
+    <h2>Adicionar Item ao Pedido</h2>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Cadastro.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cadastro.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PrazoVencimento.Descricao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PrazoVencimento.Descricao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Transportador.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Transportador.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendedor.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Vendedor.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Observacao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Observacao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoFrete)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipoFrete)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrdemCompra)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrdemCompra)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DataEmissao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataEmissao)
+        </dd>
+
+    </dl>
+
+    @*Div modal para os itens de pedido*@
+    <div class="modal" id="modal"></div>
+
+    @*<div class="form-group">
+        <div>
+            @Html.ActionLink("Editar", "Edit", new { id = Model.CadastroID }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    </div>*@
+    <div class="form-group">
+        <input type="button" id="edit" value="Adicionar Item" class="btn btn-block" onclick="JanelaModal(@Model.PedidoID)" />
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        function JanelaModal(id) {
+            //$("#modal").load("Details?id=" + 5, function () {
+            $("#modal").load("/PedidoItem/Create?pedidoID=" + id, function () {
+                $("#modal").modal();
+            })
+        }
+    </script>
+}

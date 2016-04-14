@@ -34,12 +34,13 @@ namespace PedidoWeb.Controllers
                 return HttpNotFound();
             }
             return View(pedidoitem);
-        }
+        }        
 
         // GET: /PedidoItem/Create
-        public ActionResult Create()
+        public ActionResult Create(int pedidoID)
         {
-            ViewBag.PedidoID = new SelectList(db.Pedidoes, "PedidoID", "Status");
+            //ViewBag.PedidoID = new SelectList(db.Pedidoes, "PedidoID", "Status");
+            ViewBag.PedidoID = pedidoID;
             ViewBag.ProdutoID = new SelectList(db.Produtoes, "ProdutoID", "Descricao");
             return View();
         }

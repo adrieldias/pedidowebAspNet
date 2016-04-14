@@ -68,7 +68,7 @@
             @Html.LabelFor(model => model.Observacao)
             @Html.TextAreaFor(model => model.Observacao, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Observacao)
-        </div>
+        </div>        
 
         <div class="form-group">
             <div>
@@ -76,11 +76,11 @@
                     Salvar
                 </button>
                 @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
-            </div>
+            </div>            
         </div>
     </div>
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryval")    
 }

@@ -7,6 +7,7 @@
 
 <!-- Elementos da página devem estar dentro de um container -->
 <!-- Barra lateral esquerda -->
+
 <aside role="complementary" class="col-md-2">
     <ul class="nav nav-pills nav-stacked">
         <li role="presentation" class="menulateral">
@@ -35,31 +36,32 @@
     {
         <div class="input-group" style="padding-left: 0px; padding-right: 0px">
             @Html.TextBox("Search", null, new
-            {
-                onchange = "$(this.form).submit();",
-                placeholder = "Pesquisar por Cliente ou nº do Pedido",
-                @class = "form-control"
-            })
-            <span class="input-group-btn">                
-                <input type="submit" value="Procurar" class="btn btn-default"/>
+        {
+            onchange = "$(this.form).submit();",
+            placeholder = "Pesquisar por Cliente ou nº do Pedido",
+            @class = "form-control"
+        })
+            <span class="input-group-btn">
+                <input type="submit" value="Procurar" class="btn btn-default" />
             </span>
-            
+
         </div>
 
     }
     <br />
-   
+
 </div>
-<div class="col-md-5" style="padding-left: 0px; padding-right: 0px">
+<div class="col-md-1"></div>
+<div class="col-md-4" style="padding-left: 0px; padding-right: 0px">
     @using (Html.BeginForm("Index", "Pedido", FormMethod.Get))
     {
         <div class="input-group" style="padding-left: 0px; padding-right: 0px">
             @Html.TextBox("SearchByDate", null, new
-            {
-                onchange = "$(this.form).submit();",
-                placeholder = "Pesquisar por Data",
-                @class = "form-control jqueryui-marker-datepicker"
-            })
+        {
+            onchange = "$(this.form).submit();",
+            placeholder = "Pesquisar por Data",
+            @class = "form-control jqueryui-marker-datepicker"
+        })
             <span class="input-group-btn">
                 <input type="submit" value="Procurar" class="btn btn-default" />
             </span>
@@ -68,7 +70,6 @@
     }
     <br />
 </div>
-
 
 <div role="main" class="col-md-10 principal">
 
@@ -106,15 +107,15 @@
                 <th>
                     @Html.DisplayName("Cliente")
                 </th>
-                
+
                 <th>
                     @Html.DisplayName("Prazo")
                 </th>
-                
+
                 <th>
                     @Html.DisplayName("Frete")
                 </th>
-                
+
                 <th>
                     @Html.DisplayNameFor(model => model[0].DataEmissao)
                 </th>
@@ -134,15 +135,15 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Cadastro.Nome)
                     </td>
-                    
+
                     <td>
                         @Html.DisplayFor(modelItem => item.PrazoVencimento.Descricao)
-                    </td>                    
+                    </td>
 
                     <td>
                         @Html.DisplayFor(modelItem => item.TipoFrete)
                     </td>
-                    
+
                     <td>
                         @Html.DisplayFor(modelItem => item.DataEmissao)
                     </td>
@@ -154,17 +155,9 @@
                 </tr>
             }
 
-        </table>        
+        </table>
     </div>
-    <!--</div>-->
+
     Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))    
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 </div>
-
-
-
-
-
-       
-
-        

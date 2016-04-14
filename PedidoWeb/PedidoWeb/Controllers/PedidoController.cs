@@ -100,14 +100,81 @@ namespace PedidoWeb.Controllers
             return View(pedido);
         }
 
+        // GET
+        public ActionResult AddItem(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Pedido pedido = db.Pedidoes.Find(id);
+
+            if (pedido == null)
+            {
+                return HttpNotFound();
+            }
+            return View(pedido);
+        }
+
         // GET: /Pedido/Create
         public ActionResult Create()
-        {
+        {            
             ViewBag.CadastroID = new SelectList(db.Cadastroes, "CadastroID", "Nome");
             ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes, "PrazoVencimentoID", "Descricao");
             ViewBag.TransportadorID = new SelectList(db.Transportadors, "TransportadorID", "Nome");
-            ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome");
-            return View();
+            if (PedidoHelper.UsuarioCorrente.TipoUsuario == "ADMINISTRADOR")
+            {
+                ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome");
+            }
+            else
+            {
+                ViewBag.VendedorID = new SelectList(db.Vendedors.Where(v => v.VendedorID == PedidoHelper.UsuarioCorrente.VendedorID)
+                    , "VendedorID", "Nome");
+            }
+            ViewBag.ProdutoID = new SelectList(db.Produtoes, "ProdutoID", "Descricao");
+            return View();            
+        }
+
+        [HttpPost]
+        public JsonResult SalvaPedido(Pedido pedido)
+        {
+            bool status = false;
+
+            if(ModelState.IsValid)
+            {
+                Pedido p = new Pedido();
+                p.CadastroID = pedido.CadastroID;
+                p.DataEmissao = System.DateTime.Now.Date;
+                p.Observacao = pedido.Observacao == null ? string.Empty : pedido.Observacao;
+                p.OrdemCompra = pedido.OrdemCompra;
+                p.PrazoVencimentoID = pedido.PrazoVencimentoID;
+                p.TipoFrete = pedido.TipoFrete == null ? string.Empty : pedido.TipoFrete;
+                p.TransportadorID = pedido.TransportadorID;
+                p.VendedorID = pedido.VendedorID;
+                p.Status = "ABERTO";
+                db.Pedidoes.Add(p);
+                db.SaveChanges();
+
+                foreach(var item in pedido.Itens)
+                {
+                    PedidoItem i = new PedidoItem();
+                    i.PedidoID = p.PedidoID;
+                    i.ProdutoID = item.ProdutoID;
+                    i.Quantidade = item.Quantidade;
+                    i.ValorUnitario = item.ValorUnitario;
+                    i.Observacao = item.Observacao;
+                    db.PedidoItems.Add(i);
+                    db.SaveChanges();
+                }
+                status = true;
+            }
+            else
+            {
+                status = false;
+            }
+
+            return new JsonResult { Data = new { status = status } };
         }
 
         // POST: /Pedido/Create
@@ -115,7 +182,7 @@ namespace PedidoWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="PedidoID,Status,CadastroID,PrazoVencimentoID,Observacao,VendedorID,TipoFrete,TransportadorID,OrdemCompra,DataEmissao")] Pedido pedido)
+        public ActionResult Create([Bind(Include = "PedidoID,Status,CadastroID,PrazoVencimentoID,Observacao,VendedorID,TipoFrete,TransportadorID,OrdemCompra,DataEmissao")] Pedido pedido)
         {
             if (ModelState.IsValid)
             {
@@ -125,7 +192,7 @@ namespace PedidoWeb.Controllers
                 pedido.VendedorID = cadastro.VendedorID;
                 db.Pedidoes.Add(pedido);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("AddItem", new { @id = pedido.PedidoID });
             }
 
             ViewBag.CadastroID = new SelectList(db.Cadastroes, "CadastroID", "Nome", pedido.CadastroID);
