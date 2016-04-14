@@ -15,12 +15,14 @@ namespace PedidoWeb.Controllers
         private PedidoWebContext db = new PedidoWebContext();
 
         // GET: /Empresa/
+        [Authorize]
         public ActionResult Index()
         {
             return View(db.Empresas.ToList());
         }
 
         // GET: /Empresa/Details/5
+        [Authorize]
         public ActionResult Details(string id)
         {
             if (id == null)
@@ -36,6 +38,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Empresa/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -46,6 +49,7 @@ namespace PedidoWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include="CodEmpresa,Nome")] Empresa empresa)
         {
             if (ModelState.IsValid)
@@ -59,6 +63,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Empresa/Edit/5
+        [Authorize]
         public ActionResult Edit(string id)
         {
             if (id == null)
@@ -78,6 +83,7 @@ namespace PedidoWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include="CodEmpresa,Nome")] Empresa empresa)
         {
             if (ModelState.IsValid)
@@ -90,6 +96,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Empresa/Delete/5
+        [Authorize]
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -107,6 +114,7 @@ namespace PedidoWeb.Controllers
         // POST: /Empresa/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(string id)
         {
             Empresa empresa = db.Empresas.Find(id);

@@ -16,6 +16,7 @@ namespace PedidoWeb.Controllers
         private PedidoWebContext db = new PedidoWebContext();
 
         // GET: /Usuario/
+        [Authorize]
         public ActionResult Index(string sortOrder, string currentFilter, string search, int? page, string mensagem)
         {
             ViewBag.CurrentSort = sortOrder;            
@@ -47,6 +48,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Usuario/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -62,6 +64,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Usuario/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome");
@@ -73,6 +76,7 @@ namespace PedidoWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include="UsuarioID,Login,Senha,TipoUsuario,VendedorID,EMail,CodEmpresa")] Usuario usuario)
         {
             // Verifica se já não existe um usuário cadastrado com esse mesmo email
@@ -91,6 +95,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Usuario/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -111,6 +116,7 @@ namespace PedidoWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include="UsuarioID,Login,Senha,TipoUsuario,VendedorID,EMail,CodEmpresa")] Usuario usuario)
         {
             if (ModelState.IsValid)
@@ -124,6 +130,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Usuario/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -141,6 +148,7 @@ namespace PedidoWeb.Controllers
         // POST: /Usuario/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             Usuario usuario = db.Usuarios.Find(id);

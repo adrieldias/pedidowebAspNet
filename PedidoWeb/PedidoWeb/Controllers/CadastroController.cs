@@ -16,8 +16,9 @@ namespace PedidoWeb.Controllers
         private PedidoWebContext db = new PedidoWebContext();
 
         // GET: /Cadastro/
+        [Authorize]
         public ViewResult Index(string sortOrder, string currentFilter, string search, int? page)
-        {
+        {            
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NomeParam = sortOrder == "Nome" ? "Nome_desc" : "Nome";
 
@@ -58,6 +59,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Cadastro/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -73,6 +75,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Cadastro/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -83,6 +86,7 @@ namespace PedidoWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include="CadastroID,Nome,Fantasia,PercDescontoMaximo,CpfCnpj,Email,Situacao")] Cadastro cadastro)
         {
             if (ModelState.IsValid)
@@ -97,6 +101,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Cadastro/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -116,6 +121,7 @@ namespace PedidoWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include="CadastroID,Nome,Fantasia,PercDescontoMaximo,CpfCnpj,Email,Situacao")] Cadastro cadastro)
         {
             if (ModelState.IsValid)
@@ -128,6 +134,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Cadastro/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -145,6 +152,7 @@ namespace PedidoWeb.Controllers
         // POST: /Cadastro/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             Cadastro cadastro = db.Cadastroes.Find(id);

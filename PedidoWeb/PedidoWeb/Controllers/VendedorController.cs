@@ -15,12 +15,14 @@ namespace PedidoWeb.Controllers
         private PedidoWebContext db = new PedidoWebContext();
 
         // GET: /Vendedor/
+        [Authorize]
         public ActionResult Index()
         {
             return View(db.Vendedors.ToList());
         }
 
         // GET: /Vendedor/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,6 +38,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Vendedor/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -46,6 +49,7 @@ namespace PedidoWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include="VendedorID,PercDescontoMaximo,Nome")] Vendedor vendedor)
         {
             if (ModelState.IsValid)
@@ -59,6 +63,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Vendedor/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -78,6 +83,7 @@ namespace PedidoWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include="VendedorID,PercDescontoMaximo,Nome")] Vendedor vendedor)
         {
             if (ModelState.IsValid)
@@ -90,6 +96,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Vendedor/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -107,6 +114,7 @@ namespace PedidoWeb.Controllers
         // POST: /Vendedor/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             Vendedor vendedor = db.Vendedors.Find(id);

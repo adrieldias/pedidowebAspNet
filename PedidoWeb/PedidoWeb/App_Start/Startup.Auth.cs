@@ -3,6 +3,9 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 
+using System.Web;
+using PedidoWeb.Controllers.Negocio;
+
 namespace PedidoWeb
 {
     public partial class Startup

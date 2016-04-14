@@ -10,6 +10,7 @@ namespace PedidoWeb.Controllers
     {
         //
         // GET: /PrazoVencimento/
+        [Authorize]
         public ActionResult Index()
         {
             return View();
@@ -17,6 +18,7 @@ namespace PedidoWeb.Controllers
 
         //
         // GET: /PrazoVencimento/Details/5
+        [Authorize]
         public ActionResult Details(int id)
         {
             return View();
@@ -24,6 +26,7 @@ namespace PedidoWeb.Controllers
 
         //
         // GET: /PrazoVencimento/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -32,6 +35,7 @@ namespace PedidoWeb.Controllers
         //
         // POST: /PrazoVencimento/Create
         [HttpPost]
+        [Authorize]
         public ActionResult Create(FormCollection collection)
         {
             try
@@ -48,6 +52,7 @@ namespace PedidoWeb.Controllers
 
         //
         // GET: /PrazoVencimento/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
             return View();
@@ -56,6 +61,7 @@ namespace PedidoWeb.Controllers
         //
         // POST: /PrazoVencimento/Edit/5
         [HttpPost]
+        [Authorize]
         public ActionResult Edit(int id, FormCollection collection)
         {
             try
@@ -72,6 +78,7 @@ namespace PedidoWeb.Controllers
 
         //
         // GET: /PrazoVencimento/Delete/5
+        [Authorize]
         public ActionResult Delete(int id)
         {
             return View();
@@ -80,6 +87,7 @@ namespace PedidoWeb.Controllers
         //
         // POST: /PrazoVencimento/Delete/5
         [HttpPost]
+        [Authorize]
         public ActionResult Delete(int id, FormCollection collection)
         {
             try

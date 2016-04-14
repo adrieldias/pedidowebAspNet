@@ -19,6 +19,7 @@ namespace PedidoWeb.Controllers
         private PedidoWebContext db = new PedidoWebContext();
 
         // GET: /Pedido/
+        [Authorize]
         public ViewResult Index(string sortOrder, string currentFilter, string search, string searchByDate, int? page)
         {
             if (search == null) search = string.Empty;
@@ -86,6 +87,7 @@ namespace PedidoWeb.Controllers
         //}
 
         // GET: /Pedido/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -98,28 +100,17 @@ namespace PedidoWeb.Controllers
                 return HttpNotFound();
             }
             return View(pedido);
-        }
-
-        // GET
-        public ActionResult AddItem(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            Pedido pedido = db.Pedidoes.Find(id);
-
-            if (pedido == null)
-            {
-                return HttpNotFound();
-            }
-            return View(pedido);
-        }
+        }        
 
         // GET: /Pedido/Create
+        [Authorize]
         public ActionResult Create()
-        {            
+        {
+            if(PedidoHelper.UsuarioCorrente == null)
+            {
+                new PedidoHelper(HttpContext.User.Identity.Name);
+            }
+
             ViewBag.CadastroID = new SelectList(db.Cadastroes, "CadastroID", "Nome");
             ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes, "PrazoVencimentoID", "Descricao");
             ViewBag.TransportadorID = new SelectList(db.Transportadors, "TransportadorID", "Nome");
@@ -137,6 +128,7 @@ namespace PedidoWeb.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public JsonResult SalvaPedido(Pedido pedido)
         {
             bool status = false;
@@ -180,31 +172,37 @@ namespace PedidoWeb.Controllers
         // POST: /Pedido/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PedidoID,Status,CadastroID,PrazoVencimentoID,Observacao,VendedorID,TipoFrete,TransportadorID,OrdemCompra,DataEmissao")] Pedido pedido)
-        {
-            if (ModelState.IsValid)
-            {
-                pedido.DataEmissao = DateTime.Today;
-                pedido.Status = "ABERTO";
-                Cadastro cadastro = db.Cadastroes.Single(c => c.CadastroID == pedido.CadastroID);
-                pedido.VendedorID = cadastro.VendedorID;
-                db.Pedidoes.Add(pedido);
-                db.SaveChanges();
-                return RedirectToAction("AddItem", new { @id = pedido.PedidoID });
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create([Bind(Include = "PedidoID,Status,CadastroID,PrazoVencimentoID,Observacao,VendedorID,TipoFrete,TransportadorID,OrdemCompra,DataEmissao")] Pedido pedido)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        pedido.DataEmissao = DateTime.Today;
+        //        pedido.Status = "ABERTO";
+        //        Cadastro cadastro = db.Cadastroes.Single(c => c.CadastroID == pedido.CadastroID);
+        //        pedido.VendedorID = cadastro.VendedorID;
+        //        db.Pedidoes.Add(pedido);
+        //        db.SaveChanges();
+        //        return RedirectToAction("AddItem", new { @id = pedido.PedidoID });
+        //    }
 
-            ViewBag.CadastroID = new SelectList(db.Cadastroes, "CadastroID", "Nome", pedido.CadastroID);
-            ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes, "PrazoVencimentoID", "Descricao", pedido.PrazoVencimentoID);
-            ViewBag.TransportadorID = new SelectList(db.Transportadors, "TransportadorID", "Nome", pedido.TransportadorID);
-            ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", pedido.VendedorID);
-            return View(pedido);
-        }
+        //    ViewBag.CadastroID = new SelectList(db.Cadastroes, "CadastroID", "Nome", pedido.CadastroID);
+        //    ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes, "PrazoVencimentoID", "Descricao", pedido.PrazoVencimentoID);
+        //    ViewBag.TransportadorID = new SelectList(db.Transportadors, "TransportadorID", "Nome", pedido.TransportadorID);
+        //    ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", pedido.VendedorID);
+        //    return View(pedido);
+        //}
 
         // GET: /Pedido/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
+            if (PedidoHelper.UsuarioCorrente == null)
+            {
+                new PedidoHelper(HttpContext.User.Identity.Name);
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -226,8 +224,14 @@ namespace PedidoWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include="PedidoID,Status,CadastroID,PrazoVencimentoID,Observacao,VendedorID,TipoFrete,TransportadorID,OrdemCompra,DataEmissao")] Pedido pedido)
         {
+            if (PedidoHelper.UsuarioCorrente == null)
+            {
+                new PedidoHelper(HttpContext.User.Identity.Name);
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(pedido).State = EntityState.Modified;
@@ -242,8 +246,14 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Pedido/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
+            if (PedidoHelper.UsuarioCorrente == null)
+            {
+                new PedidoHelper(HttpContext.User.Identity.Name);
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -259,8 +269,14 @@ namespace PedidoWeb.Controllers
         // POST: /Pedido/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (PedidoHelper.UsuarioCorrente == null)
+            {
+                new PedidoHelper(HttpContext.User.Identity.Name);
+            }
+
             Pedido pedido = db.Pedidoes.Find(id);
             db.Pedidoes.Remove(pedido);
             db.SaveChanges();

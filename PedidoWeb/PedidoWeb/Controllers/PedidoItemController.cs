@@ -15,6 +15,7 @@ namespace PedidoWeb.Controllers
         private PedidoWebContext db = new PedidoWebContext();
 
         // GET: /PedidoItem/
+        [Authorize]
         public ActionResult Index()
         {
             var pedidoitems = db.PedidoItems.Include(p => p.Pedido).Include(p => p.Produto);
@@ -22,6 +23,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /PedidoItem/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,6 +39,7 @@ namespace PedidoWeb.Controllers
         }        
 
         // GET: /PedidoItem/Create
+        [Authorize]
         public ActionResult Create(int pedidoID)
         {
             //ViewBag.PedidoID = new SelectList(db.Pedidoes, "PedidoID", "Status");
@@ -50,6 +53,7 @@ namespace PedidoWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include="PedidoItemID,PedidoID,ProdutoID,Quantidade,Observacao,ValorUnitario")] PedidoItem pedidoitem)
         {
             if (ModelState.IsValid)
@@ -65,6 +69,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /PedidoItem/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -86,6 +91,7 @@ namespace PedidoWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include="PedidoItemID,PedidoID,ProdutoID,Quantidade,Observacao,ValorUnitario")] PedidoItem pedidoitem)
         {
             if (ModelState.IsValid)
@@ -100,6 +106,7 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /PedidoItem/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -117,6 +124,7 @@ namespace PedidoWeb.Controllers
         // POST: /PedidoItem/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             PedidoItem pedidoitem = db.PedidoItems.Find(id);
