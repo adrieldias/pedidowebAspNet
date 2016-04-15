@@ -53,7 +53,21 @@ namespace PedidoWeb.Models
         [DisplayName("Data de Emissão")]
         public DateTime DataEmissao { get; set; }
 
+        
+        private string codEmpresa;
+
         // Lazy Load
         public virtual List<PedidoItem> Itens { get; set; }
+        public virtual Empresa Empresa { get; set; }
+
+        // Properties
+
+        [ForeignKey("Empresa")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        public string CodEmpresa 
+        { 
+            get{ return this.codEmpresa == null ? string.Empty : this.codEmpresa.ToUpper(); }
+            set { this.codEmpresa = value == null ? string.Empty : value.ToUpper(); }
+        }
     }
 }

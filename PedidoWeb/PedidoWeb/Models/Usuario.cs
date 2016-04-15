@@ -36,6 +36,8 @@ namespace PedidoWeb.Models
         
         private string codEmpresa { get; set; }
 
+        
+
         // Properties
 
         [DisplayName("Nome")]
@@ -49,10 +51,16 @@ namespace PedidoWeb.Models
 
         [DisplayName("Código de Empresa")]
         [Required(ErrorMessage="Código de Empresa é obrigatório")]
+        [ForeignKey("Empresa")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string CodEmpresa 
         {
             get { return this.codEmpresa == null ? string.Empty : this.codEmpresa.ToUpper();}
-            set { this.codEmpresa = value.ToUpper();} 
+            set { this.codEmpresa = value == null ? string.Empty : value.ToUpper(); } 
         }
+
+        // Lazy Load
+
+        public virtual Empresa Empresa { get; set; }
     }
 }

@@ -20,6 +20,9 @@ namespace PedidoWeb.Models
         [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true, NullDisplayText = "Informar Valor")]
         public decimal PercDescontoMaximo { get; set; }
 
+        
+        private string codEmpresa;
+
         // Properties
 
         [DisplayName("Nome")]
@@ -30,5 +33,17 @@ namespace PedidoWeb.Models
             set { this.nome = value.ToUpper(); }
         }
         public ICollection<Pedido> Pedidos { get; set; }
+
+
+        [ForeignKey("Empresa")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        public string CodEmpresa
+        {
+            get { return this.codEmpresa == null ? string.Empty : this.codEmpresa.ToUpper(); }
+            set { this.codEmpresa = value == null ? string.Empty : value.ToUpper(); }
+        }
+
+        // Lazy Load
+        public virtual Empresa Empresa { get; set; }
     }
 }

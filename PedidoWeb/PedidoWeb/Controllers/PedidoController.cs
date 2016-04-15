@@ -145,6 +145,7 @@ namespace PedidoWeb.Controllers
                 p.TransportadorID = pedido.TransportadorID;
                 p.VendedorID = pedido.VendedorID;
                 p.Status = "ABERTO";
+                p.CodEmpresa = PedidoHelper.UsuarioCorrente.CodEmpresa;
                 db.Pedidoes.Add(p);
                 db.SaveChanges();
 

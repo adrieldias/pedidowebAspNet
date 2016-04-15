@@ -23,7 +23,8 @@ namespace PedidoWeb.Models
                     Nome = "JOAO",
                     PercDescontoMaximo  = 2,
                     Situacao = "ATIVO",
-                    VendedorID = 1
+                    VendedorID = 1,
+                    CodEmpresa = "NIR"
                 },
                 new Cadastro{
                     CadastroID = 2,
@@ -33,7 +34,8 @@ namespace PedidoWeb.Models
                     Nome = "MARIA",
                     PercDescontoMaximo  = 2,
                     Situacao = "ATIVO",
-                    VendedorID = 2
+                    VendedorID = 2,
+                    CodEmpresa = "NIR"
                 }
             }.ForEach(c => context.Cadastroes.Add(c));
 
@@ -41,11 +43,13 @@ namespace PedidoWeb.Models
             {
                 new PrazoVencimento{
                     PrazoVencimentoID = 1,
-                    Descricao = "A VISTA"                    
+                    Descricao = "A VISTA",
+                    CodEmpresa = "NIR"                    
                 },
                 new PrazoVencimento{
                     PrazoVencimentoID = 2,
-                    Descricao = "30 DIAS"                    
+                    Descricao = "30 DIAS",
+                    CodEmpresa = "NIR"                    
                 }
             }.ForEach(p => context.PrazoVencimentoes.Add(p));
 
@@ -57,7 +61,8 @@ namespace PedidoWeb.Models
                     PercDescontoMaximo = 2,
                     PrecoVarejo = 100,
                     Situacao = "ATIVO",
-                    UnidadeMedida = "UN"
+                    UnidadeMedida = "UN",
+                    CodEmpresa = "NIR"
                 },
                 new Produto{
                     ProdutoID = 2,
@@ -65,7 +70,8 @@ namespace PedidoWeb.Models
                     PercDescontoMaximo = 2,
                     PrecoVarejo = 100,
                     Situacao = "ATIVO",
-                    UnidadeMedida = "UN"
+                    UnidadeMedida = "UN",
+                    CodEmpresa = "NIR"
                 },
                 new Produto{
                     ProdutoID = 3,
@@ -73,7 +79,8 @@ namespace PedidoWeb.Models
                     PercDescontoMaximo = 2,
                     PrecoVarejo = 100,
                     Situacao = "ATIVO",
-                    UnidadeMedida = "UN"
+                    UnidadeMedida = "UN",
+                    CodEmpresa = "NIR"
                 }
             }.ForEach(p => context.Produtoes.Add(p));
 
@@ -81,11 +88,13 @@ namespace PedidoWeb.Models
             {
                 new Transportador{
                     TransportadorID = 1,
-                    Nome = "TRASPORTADOR 1"
+                    Nome = "TRASPORTADOR 1",
+                    CodEmpresa = "NIR"
                 },
                 new Transportador{
                     TransportadorID = 2,
-                    Nome = "TRASPORTADOR 2"
+                    Nome = "TRASPORTADOR 2",
+                    CodEmpresa = "NIR"
                 }
             }.ForEach(t => context.Transportadors.Add(t));
 
@@ -94,17 +103,20 @@ namespace PedidoWeb.Models
                 new Vendedor{
                     VendedorID = 1,
                     Nome = "VENDEDOR 1",
-                    PercDescontoMaximo = 2
+                    PercDescontoMaximo = 2,
+                    CodEmpresa = "NIR"
                 },
                 new Vendedor{
                     VendedorID = 2,
                     Nome = "VENDEDOR 2",
-                    PercDescontoMaximo = 2
+                    PercDescontoMaximo = 2,
+                    CodEmpresa = "NIR"
                 },
                 new Vendedor{
                     VendedorID = 3,
                     Nome = "VENDEDOR 3",
-                    PercDescontoMaximo = 2
+                    PercDescontoMaximo = 2,
+                    CodEmpresa = "NIR"
                 }
             };
             vendedores.ForEach(v => context.Vendedors.Add(v));
@@ -160,7 +172,8 @@ namespace PedidoWeb.Models
                     TipoFrete = "CIF",
                     TransportadorID = 1,
                     OrdemCompra = 1,
-                    DataEmissao = System.DateTime.Now.Date
+                    DataEmissao = System.DateTime.Now.Date,
+                    CodEmpresa = "NIR"
                 },
                 new Pedido{
                     PedidoID = 2,
@@ -172,7 +185,8 @@ namespace PedidoWeb.Models
                     TipoFrete = "CIF",
                     TransportadorID = 2,
                     OrdemCompra = 1,
-                    DataEmissao = System.DateTime.Now.Date
+                    DataEmissao = System.DateTime.Now.Date,
+                    CodEmpresa = "NIR"
                 },
                 new Pedido{
                     PedidoID = 3,
@@ -184,7 +198,8 @@ namespace PedidoWeb.Models
                     TipoFrete = "CIF",
                     TransportadorID = 1,
                     OrdemCompra = 1,
-                    DataEmissao = System.DateTime.Now.Date
+                    DataEmissao = System.DateTime.Now.Date,
+                    CodEmpresa = "NIR"
                 },
                 new Pedido{
                     PedidoID = 4,
@@ -196,7 +211,8 @@ namespace PedidoWeb.Models
                     TipoFrete = "CIF",
                     TransportadorID = 1,
                     OrdemCompra = 1,
-                    DataEmissao = System.DateTime.Now.Date
+                    DataEmissao = System.DateTime.Now.Date,
+                    CodEmpresa = "NIR"
                 },
                 new Pedido{
                     PedidoID = 5,
@@ -208,7 +224,8 @@ namespace PedidoWeb.Models
                     TipoFrete = "CIF",
                     TransportadorID = 1,
                     OrdemCompra = 1,
-                    DataEmissao = System.DateTime.Now.Date
+                    DataEmissao = System.DateTime.Now.Date,
+                    CodEmpresa = "NIR"
                 },
                 new Pedido{
                     PedidoID = 6,
@@ -220,7 +237,8 @@ namespace PedidoWeb.Models
                     TipoFrete = "CIF",
                     TransportadorID = 1,
                     OrdemCompra = 1,
-                    DataEmissao = System.DateTime.Now.Date
+                    DataEmissao = System.DateTime.Now.Date,
+                    CodEmpresa = "NIR"
                 },
                 new Pedido{
                     PedidoID = 7,
@@ -232,7 +250,8 @@ namespace PedidoWeb.Models
                     TipoFrete = "CIF",
                     TransportadorID = 1,
                     OrdemCompra = 1,
-                    DataEmissao = System.DateTime.Now.Date
+                    DataEmissao = System.DateTime.Now.Date,
+                    CodEmpresa = "NIR"
                 },
             }.ForEach(p => context.Pedidoes.Add(p));
 

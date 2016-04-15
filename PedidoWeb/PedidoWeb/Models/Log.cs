@@ -23,5 +23,21 @@ namespace PedidoWeb.Models
         [ForeignKey("Vendedor")]
         public int VendedorID { get; set; }
         public virtual Vendedor Vendedor { get; set; }
+
+        
+        private string codEmpresa;
+        // Properties
+
+        [ForeignKey("Empresa")]
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
+        public string CodEmpresa
+        {
+            get { return this.codEmpresa == null ? string.Empty : this.codEmpresa.ToUpper(); }
+            set { this.codEmpresa = value == null ? string.Empty : value.ToUpper(); }
+        }
+
+        // Lazy Load
+
+        public virtual Empresa Empresa { get; set; }
     }
 }
