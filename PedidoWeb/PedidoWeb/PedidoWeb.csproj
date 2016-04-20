@@ -337,6 +337,7 @@
     <Content Include="Views\Empresa\Edit.cshtml" />
     <Content Include="Views\Empresa\Index.cshtml" />
     <Content Include="Views\Pedido\Create.cshtml" />
+    <Content Include="Views\PedidoItem\ListaItens.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

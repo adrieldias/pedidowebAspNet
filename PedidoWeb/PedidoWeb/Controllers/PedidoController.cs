@@ -208,16 +208,25 @@ namespace PedidoWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Pedido pedido = db.Pedidoes.Find(id);
-            if (pedido == null)
-            {
-                return HttpNotFound();
+
+            List<Pedido> pedidos = db.Pedidoes
+                .Include(v => v.Vendedor)
+                .Include(e => e.Empresa)
+                .Include(i => i.Itens)
+                .Include(p => p.PrazoVencimento)
+                .Include(t => t.Transportador)
+                .Where(p => p.PedidoID == id).ToList();
+
+            foreach(var pedido in pedidos)
+            {                 
+                ViewBag.CadastroID = new SelectList(db.Cadastroes, "CadastroID", "Nome", pedido.CadastroID);
+                ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes, "PrazoVencimentoID", "Descricao", pedido.PrazoVencimentoID);
+                ViewBag.TransportadorID = new SelectList(db.Transportadors, "TransportadorID", "Nome", pedido.TransportadorID);
+                ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", pedido.VendedorID);
+                return View(pedido);
             }
-            ViewBag.CadastroID = new SelectList(db.Cadastroes, "CadastroID", "Nome", pedido.CadastroID);
-            ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes, "PrazoVencimentoID", "Descricao", pedido.PrazoVencimentoID);
-            ViewBag.TransportadorID = new SelectList(db.Transportadors, "TransportadorID", "Nome", pedido.TransportadorID);
-            ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", pedido.VendedorID);
-            return View(pedido);
+            
+            return HttpNotFound();
         }
 
         // POST: /Pedido/Edit/5

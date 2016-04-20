@@ -1,0 +1,60 @@
+﻿@model IEnumerable<PedidoWeb.Models.PedidoItem>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Itens do Pedido</title>
+</head>
+<body>    
+    <h4>Itens do Pedido</h4>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Pedido.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Produto.Descricao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Quantidade)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ValorUnitario)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Observacao)
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pedido.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Produto.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantidade)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorUnitario)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Observacao)
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</body>
+</html>

@@ -133,6 +133,15 @@ namespace PedidoWeb.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
+        public ActionResult ListaItens(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            var itens = db.PedidoItems.Where(i => i.PedidoID == id);
+            return View(itens.ToList());
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
