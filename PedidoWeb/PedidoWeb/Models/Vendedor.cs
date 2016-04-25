@@ -45,5 +45,10 @@ namespace PedidoWeb.Models
 
         // Lazy Load
         public virtual Empresa Empresa { get; set; }
+
+        [DisplayName("Situação")]
+        public string Situacao { get; set; }
+
+        public int CodVendedor { get; set; }
     }
 }

@@ -204,6 +204,7 @@
     <Compile Include="Models\Empresa.cs" />
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\PedidoCreate.cs" />
+    <Compile Include="Models\Cidade.cs" />
     <Compile Include="Models\PrazoVencimento.cs" />
     <Compile Include="Models\Log.cs" />
     <Compile Include="Models\PeditoItem.cs" />

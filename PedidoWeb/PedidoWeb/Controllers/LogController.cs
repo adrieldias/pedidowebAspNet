@@ -17,7 +17,7 @@ namespace PedidoWeb.Controllers
         // GET: /Log/
         public ActionResult Index()
         {
-            var logs = db.Logs.Include(l => l.Vendedor);
+            var logs = db.Logs.Include(l => l.Usuario);
             return View(logs.ToList());
         }
 
@@ -39,7 +39,7 @@ namespace PedidoWeb.Controllers
         // GET: /Log/Create
         public ActionResult Create()
         {
-            ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome");
+            ViewBag.UsuarioID = new SelectList(db.Usuarios, "UsuarioID", "Nome");
             return View();
         }
 
@@ -48,7 +48,7 @@ namespace PedidoWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="LogID,DataAlteracao,Alteracao,VendedorID")] Log log)
+        public ActionResult Create([Bind(Include="LogID,DataAlteracao,Alteracao,UsuarioID")] Log log)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +57,7 @@ namespace PedidoWeb.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", log.VendedorID);
+            ViewBag.UsuarioID = new SelectList(db.Usuarios, "UsuarioID", "Nome", log.UsuarioID);
             return View(log);
         }
 
@@ -73,7 +73,7 @@ namespace PedidoWeb.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", log.VendedorID);
+            ViewBag.UsuarioID = new SelectList(db.Usuarios, "UsuarioID", "Nome", log.UsuarioID);
             return View(log);
         }
 
@@ -82,7 +82,7 @@ namespace PedidoWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="LogID,DataAlteracao,Alteracao,VendedorID")] Log log)
+        public ActionResult Edit([Bind(Include="LogID,DataAlteracao,Alteracao,UsuarioID")] Log log)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace PedidoWeb.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", log.VendedorID);
+            ViewBag.UsuarioID = new SelectList(db.Usuarios, "UsuarioID", "Nome", log.UsuarioID);
             return View(log);
         }
 

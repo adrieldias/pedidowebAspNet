@@ -40,7 +40,27 @@ namespace PedidoWeb.Models
 
         public ICollection<Pedido> Pedidos { get; set; }
 
-        
+        [DisplayName("Telefone")]
+        public string Fone { get; set; }
+
+        [DisplayName("Código")]
+        public int CodCadastro { get; set; }
+
+        public string IE { get; set; }
+
+        [DisplayName("Endereço")]
+        public string Endereco { get; set; }
+
+        public string Bairro { get; set; }
+
+        [ForeignKey("Cidade")]
+        public int CidadeID { get; set; }
+        public Cidade Cidade { get; set; }
+
+        public string CEP { get; set; }
+
+        public string StatusSincronismo { get; set; }
+
         private string codEmpresa;
 
         // Properties
@@ -55,5 +75,6 @@ namespace PedidoWeb.Models
 
         //Lazy Load
         public virtual Empresa Empresa { get; set; }
+
     }
 }

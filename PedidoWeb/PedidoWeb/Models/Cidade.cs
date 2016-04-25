@@ -9,23 +9,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PedidoWeb.Models
 {
-    public class Log
+    public class Cidade
     {
         [Key]
-        public int LogID { get; set; }
+        public int CidadeID { get; set; }
 
-        [DisplayName("Data Alteração")]
-        public DateTime DataAlteracao { get; set; }
+        [DisplayName("Descrição")]
+        public string Descricao { get; set; }
 
-        [DisplayName("Alteração")]
-        public string Alteracao { get; set; }
+        [DisplayName("UF")]
+        public string UF { get; set; }
 
-        [ForeignKey("Usuario")]
-        public int UsuarioID { get; set; }
-        public virtual Usuario Usuario { get; set; }
+        public int CodCidade { get; set; }
 
         
         private string codEmpresa;
+
+
         // Properties
 
         [ForeignKey("Empresa")]
@@ -37,7 +37,6 @@ namespace PedidoWeb.Models
         }
 
         // Lazy Load
-
         public virtual Empresa Empresa { get; set; }
     }
 }

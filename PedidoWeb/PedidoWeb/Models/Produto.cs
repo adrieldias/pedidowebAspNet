@@ -31,6 +31,8 @@ namespace PedidoWeb.Models
         [DisplayName("Situação")]
         public string Situacao { get; set; }
 
+        public int CodProduto { get; set; }
+
         
         private string codEmpresa;
         

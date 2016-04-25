@@ -17,6 +17,10 @@ namespace PedidoWeb.Models
         [DisplayName("Nome")]
         public string Nome { get; set; }
 
+        public string CNPJ { get; set; }
+
+        public int CodCadastro { get; set; }
+
         
         private string codEmpresa;
 

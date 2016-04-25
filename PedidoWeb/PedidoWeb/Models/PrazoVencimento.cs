@@ -17,6 +17,8 @@ namespace PedidoWeb.Models
         [DisplayName("Descrição")]
         public string Descricao { get; set; }
 
+        public int CodPrazoVencimento { get; set; }
+
         
         private string codEmpresa;
 
