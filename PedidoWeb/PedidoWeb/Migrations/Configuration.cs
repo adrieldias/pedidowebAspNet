@@ -9,7 +9,8 @@ namespace PedidoWeb.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
             ContextKey = "PedidoWeb.Models.PedidoWebContext";
         }
 
