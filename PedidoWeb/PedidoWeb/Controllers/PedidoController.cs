@@ -11,6 +11,7 @@ using PagedList;
 using PedidoWeb.Controllers.Negocio;
 
 using PedidoWeb.Controllers.Negocio;
+using System.Data.Entity.Validation;
 
 namespace PedidoWeb.Controllers
 {
@@ -135,32 +136,89 @@ namespace PedidoWeb.Controllers
 
             if(ModelState.IsValid)
             {
-                Pedido p = new Pedido();
-                p.CadastroID = pedido.CadastroID;
-                p.DataEmissao = System.DateTime.Now.Date;
-                p.Observacao = pedido.Observacao == null ? string.Empty : pedido.Observacao;
-                p.OrdemCompra = pedido.OrdemCompra;
-                p.PrazoVencimentoID = pedido.PrazoVencimentoID;
-                p.TipoFrete = pedido.TipoFrete == null ? string.Empty : pedido.TipoFrete;
-                p.TransportadorID = pedido.TransportadorID;
-                p.VendedorID = pedido.VendedorID;
-                p.Status = "ABERTO";
-                p.CodEmpresa = PedidoHelper.UsuarioCorrente.CodEmpresa;
-                db.Pedidoes.Add(p);
-                db.SaveChanges();
-
-                foreach(var item in pedido.Itens)
-                {
-                    PedidoItem i = new PedidoItem();
-                    i.PedidoID = p.PedidoID;
-                    i.ProdutoID = item.ProdutoID;
-                    i.Quantidade = item.Quantidade;
-                    i.ValorUnitario = item.ValorUnitario;
-                    i.Observacao = item.Observacao;
-                    db.PedidoItems.Add(i);
+                if(pedido.PedidoID == null || pedido.PedidoID == 0) // Pedido não existe - Inclusão
+                { 
+                    Pedido p = new Pedido();
+                    p.CadastroID = pedido.CadastroID;
+                    p.DataEmissao = System.DateTime.Now.Date;
+                    p.Observacao = pedido.Observacao == null ? string.Empty : pedido.Observacao;
+                    p.OrdemCompra = pedido.OrdemCompra;
+                    p.PrazoVencimentoID = pedido.PrazoVencimentoID;
+                    p.TipoFrete = pedido.TipoFrete == null ? string.Empty : pedido.TipoFrete;
+                    p.TransportadorID = pedido.TransportadorID;
+                    p.VendedorID = pedido.VendedorID;
+                    p.Status = "ABERTO";
+                    p.CodEmpresa = PedidoHelper.UsuarioCorrente.CodEmpresa;
+                    db.Pedidoes.Add(p);
                     db.SaveChanges();
+
+                    foreach(var item in pedido.Itens)
+                    {
+                        PedidoItem i = new PedidoItem();
+                        i.PedidoID = p.PedidoID;
+                        i.ProdutoID = item.ProdutoID;
+                        i.Quantidade = item.Quantidade;
+                        i.ValorUnitario = item.ValorUnitario;
+                        i.Observacao = item.Observacao;
+                        db.PedidoItems.Add(i);
+                        db.SaveChanges();
+                    }
+                    status = true;
                 }
-                status = true;
+                else // Alteração
+                {
+                    try
+                    {
+                        // Exclui itens do pedido cadastrados no B.D.
+                        List<PedidoItem> itens = db.PedidoItems.Where(p => p.PedidoID == pedido.PedidoID).ToList();
+                        foreach (var i in itens)
+                        {
+                            db.Entry(i).State = EntityState.Deleted;
+                            db.PedidoItems.Remove(i);
+                            db.SaveChanges();
+                        }
+
+                        //Carrega as informações do banco de dados novamente
+                        db.Pedidoes.Include(p => p.Itens).Where(p => p.PedidoID == pedido.PedidoID);
+
+                        // Salva o Pedido
+                        itens = new List<PedidoItem>(pedido.Itens);
+                        foreach (var i in pedido.Itens)
+                        {
+                            i.PedidoItemID = 0;
+                            i.PedidoID = pedido.PedidoID;
+                            db.Entry(i).State = EntityState.Modified;                            
+                            db.PedidoItems.Add(i);                            
+                            db.SaveChanges();
+                        }
+
+                        pedido.Itens = null;
+                        db.Entry(pedido).State = EntityState.Modified;
+
+                        db.SaveChanges();
+                        status = true;
+                    }
+                    catch(DbEntityValidationException en)
+                    {
+                        string errorMessages = string.Empty;
+                        foreach (DbEntityValidationResult validationResult in en.EntityValidationErrors)
+                        {
+                            string entityName = validationResult.Entry.Entity.GetType().Name;
+                            foreach (DbValidationError error in validationResult.ValidationErrors)
+                            {
+                                //errorMessages += (entityName + "." + error.PropertyName + ": " + error.ErrorMessage)+"\n";
+                                errorMessages += (error.PropertyName + ": " + error.ErrorMessage) + "\n";
+                            }
+                        }
+                        status = false;
+                        return new JsonResult { Data = new { status = status } };
+                    }
+                    catch(Exception e)
+                    {
+                        status = false;
+                        return new JsonResult { Data = new { status = status } };
+                    }
+                }
             }
             else
             {
@@ -209,20 +267,28 @@ namespace PedidoWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            db.Configuration.ProxyCreationEnabled = false;
+
             List<Pedido> pedidos = db.Pedidoes
                 .Include(v => v.Vendedor)
                 .Include(e => e.Empresa)
                 .Include(i => i.Itens)
                 .Include(p => p.PrazoVencimento)
                 .Include(t => t.Transportador)
+                .Include(c => c.Cadastro)
                 .Where(p => p.PedidoID == id).ToList();
 
             foreach(var pedido in pedidos)
-            {                 
+            {
+                // Seta o campo pedido dos itens de pedido para null afim de evitar referência cíclica ao gerar JSON
+                for (var i = 0; i < pedido.Itens.Count; i++)
+                    pedido.Itens[i].Pedido = null;
+
                 ViewBag.CadastroID = new SelectList(db.Cadastroes, "CadastroID", "Nome", pedido.CadastroID);
                 ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes, "PrazoVencimentoID", "Descricao", pedido.PrazoVencimentoID);
                 ViewBag.TransportadorID = new SelectList(db.Transportadors, "TransportadorID", "Nome", pedido.TransportadorID);
                 ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", pedido.VendedorID);
+                ViewBag.ProdutoID = new SelectList(db.Produtoes, "ProdutoID", "Descricao");
                 return View(pedido);
             }
             

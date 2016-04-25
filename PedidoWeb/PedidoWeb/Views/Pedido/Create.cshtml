@@ -145,8 +145,8 @@
                     var el = document.getElementById('ProdutoID');
                     pedidoItens.push({
                         ProdutoID: $('#ProdutoID').val().trim(),
-                        Quantidade: $('#Quantidade').val().trim().replace(',', '.'),
-                        ValorUnitario: $('#ValorUnitario').val().trim().replace(',', '.'),
+                        Quantidade: $('#Quantidade').val().trim(),
+                        ValorUnitario: $('#ValorUnitario').val().trim(),
                         Observacao: $('#ObservacaoItem').val().trim(),
                         DescProduto: el.options[el.selectedIndex].text
                     });
@@ -225,18 +225,36 @@
             function GeneratedItemsTable() {
                 if (pedidoItens.length > 0) {
                     var $table = $('<table class="table table-responsive table-striped "></table>');
-                    $table.append('<thead><tr><th>Produto</th><th></th><th>Quantidade</th><th>Valor</th></tr></thead>');
+                    $table.append('<thead><tr><th>Produto</th><th></th><th>Quantidade</th><th>Valor</th><th></th></tr></thead>');
                     var $tbody = $('<tbody />');                    
                     $.each(pedidoItens, function (i, val) {
                         var $row = $('<tr/>');
                         $row.append($('<td/>').html(val.ProdutoID));
                         $row.append($('<td/>').html(val.DescProduto));
                         $row.append($('<td/>').html(val.Quantidade));
-                        $row.append($('<td/>').html(val.ValorUnitario));                                                              
+                        $row.append($('<td/>').html(val.ValorUnitario));
+                        $row.append($('<td><button id=excluir class="btn btn-danger">Excluir</button></td>').click(function () {
+                            for(var i in pedidoItens)
+                            {                                
+                                if(pedidoItens[i].ProdutoID == val.ProdutoID
+                                    && pedidoItens[i].Quantidade == val.Quantidade
+                                    && pedidoItens[i].ValorUnitario == val.ValorUnitario
+                                    && pedidoItens[i].Observacao == val.Observacao)
+                                {                                    
+                                    pedidoItens.splice(i, 1);
+                                    GeneratedItemsTable();
+                                }
+                            }
+                        }));
+                        
+
                         $tbody.append($row);
                     });
                     $table.append($tbody);
                     $('#pedidoItens').html($table);
+                }
+                else {
+                    $('#pedidoItens').html('');
                 }
             }
 

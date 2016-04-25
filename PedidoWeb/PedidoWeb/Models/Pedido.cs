@@ -57,7 +57,7 @@ namespace PedidoWeb.Models
         private string codEmpresa;
 
         // Lazy Load
-        public virtual List<PedidoItem> Itens { get; set; }
+        public List<PedidoItem> Itens { get; set; }
         public virtual Empresa Empresa { get; set; }
 
         // Properties
