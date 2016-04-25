@@ -170,29 +170,29 @@ namespace PedidoWeb.Controllers
                     try
                     {
                         // Exclui itens do pedido cadastrados no B.D.
+                        
+
                         List<PedidoItem> itens = db.PedidoItems.Where(p => p.PedidoID == pedido.PedidoID).ToList();
                         foreach (var i in itens)
                         {
                             db.Entry(i).State = EntityState.Deleted;
-                            db.PedidoItems.Remove(i);
-                            db.SaveChanges();
+                            //db.PedidoItems.Remove(i);                            
                         }
-
-                        //Carrega as informações do banco de dados novamente
-                        db.Pedidoes.Include(p => p.Itens).Where(p => p.PedidoID == pedido.PedidoID);
-
+                        
+                        
                         // Salva o Pedido
                         itens = new List<PedidoItem>(pedido.Itens);
                         foreach (var i in pedido.Itens)
                         {
                             i.PedidoItemID = 0;
-                            i.PedidoID = pedido.PedidoID;
-                            db.Entry(i).State = EntityState.Modified;                            
-                            db.PedidoItems.Add(i);                            
-                            db.SaveChanges();
-                        }
+                            i.PedidoID = pedido.PedidoID;                           
+                            db.Entry(i).State = EntityState.Added;
+                            //db.PedidoItems.Add(i);                                                        
+                        }                        
 
                         pedido.Itens = null;
+                        pedido.Empresa = null;
+
                         db.Entry(pedido).State = EntityState.Modified;
 
                         db.SaveChanges();
@@ -268,6 +268,7 @@ namespace PedidoWeb.Controllers
             }
 
             db.Configuration.ProxyCreationEnabled = false;
+            db.Configuration.LazyLoadingEnabled = false;
 
             List<Pedido> pedidos = db.Pedidoes
                 .Include(v => v.Vendedor)

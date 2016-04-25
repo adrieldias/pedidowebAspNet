@@ -54,8 +54,8 @@ namespace PedidoWeb.Models
         public string Bairro { get; set; }
 
         [ForeignKey("Cidade")]
-        public int CidadeID { get; set; }
-        public Cidade Cidade { get; set; }
+        public int? CidadeID { get; set; }
+        public virtual Cidade Cidade { get; set; }
 
         public string CEP { get; set; }
 
