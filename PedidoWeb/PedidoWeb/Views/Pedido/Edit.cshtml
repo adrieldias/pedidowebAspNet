@@ -17,7 +17,7 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.VendedorID, "Vendedor")
-            @Html.DropDownList("VendedorID", null, new { @class = "form-control" })
+            @Html.DropDownList("VendedorID", null, new { @readonly = "readonly", @class = "form-control" })
             @Html.ValidationMessageFor(model => model.VendedorID)
         </div>
 
@@ -116,11 +116,28 @@
     <script>
         $("document").ready(function () {
             
+            $("#VendedorID").prop("disabled", true);
+            $("#DataEmissao").prop("disabled", true);
+            $("#Status").prop("disabled", true);
+
+            var itens = @Html.Raw(Json.Encode(@Model.Itens));
+
+            var produtos = @Html.Raw(Json.Encode(@ViewBag.ProdutoID));
             
-            var teste = @Html.Raw(Json.Encode(@Model.Itens));
+            
+            for(var i = 0; i < produtos.length; i++)
+            {
+                for(var j = 0; j < itens.length; j++)
+                {
+                    if(produtos[i].Value == itens[j].ProdutoID){
+                        itens[j].DescProduto = produtos[i].Text;
+                        
+                    }
+                }
+            }
+            
 
-
-            var pedidoItens = teste;
+            var pedidoItens = itens;
             GeneratedItemsTable();
 
             // Add button click function

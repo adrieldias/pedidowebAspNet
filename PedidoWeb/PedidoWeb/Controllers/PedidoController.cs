@@ -47,13 +47,20 @@ namespace PedidoWeb.Controllers
 
             if (search != string.Empty)
             {
+                DateTime data;
+                DateTime.TryParse(search, out data);
+                
+                
                 int numero;
                 int.TryParse(search, out numero);
 
-                if (numero > 0)
-                    pedidos = pedidos.Where(s => s.PedidoID == numero);
-                else                    
-                    pedidos = pedidos.Where(s => s.Cadastro.Nome.ToUpper().Contains(((string)search).ToUpper()));
+                if (data > DateTime.MinValue)
+                    pedidos = pedidos.Where(s => s.DataEmissao == data);
+                else
+                    if (numero > 0)
+                        pedidos = pedidos.Where(s => s.PedidoID == numero);
+                        else
+                            pedidos = pedidos.Where(s => s.Cadastro.Nome.ToUpper().Contains(((string)search).ToUpper()));
             }
             
             if(searchByDate != string.Empty)
@@ -290,6 +297,7 @@ namespace PedidoWeb.Controllers
                 ViewBag.TransportadorID = new SelectList(db.Transportadors, "TransportadorID", "Nome", pedido.TransportadorID);
                 ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", pedido.VendedorID);
                 ViewBag.ProdutoID = new SelectList(db.Produtoes, "ProdutoID", "Descricao");
+                
                 return View(pedido);
             }
             
