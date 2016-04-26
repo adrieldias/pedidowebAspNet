@@ -15,12 +15,12 @@ namespace PedidoWeb.Models
         public int PedidoItemID { get; set; }
 
         [ForeignKey("Pedido")]
-        public int PedidoID { get; set; }
-        public Pedido Pedido { get; set; }
+        public int? PedidoID { get; set; }
+        public virtual Pedido Pedido { get; set; }
 
         [ForeignKey("Produto")]
         public int ProdutoID { get; set; }
-        public Produto Produto { get; set; }
+        public virtual Produto Produto { get; set; }
 
         public int Quantidade { get; set; }
 
@@ -31,7 +31,7 @@ namespace PedidoWeb.Models
         [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true, NullDisplayText = "Informar Valor")]
         public decimal ValorUnitario { get; set; }
 
-        public int CodPedidoItem { get; set; }
+        public int? CodPedidoItem { get; set; }
 
         public string StatusSincronismo { get; set; }
     }
