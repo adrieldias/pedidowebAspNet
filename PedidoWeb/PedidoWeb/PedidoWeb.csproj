@@ -215,6 +215,10 @@
     <Compile Include="Migrations\201604252012446_pedidoItem1.Designer.cs">
       <DependentUpon>201604252012446_pedidoItem1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604262044462_cadastro.cs" />
+    <Compile Include="Migrations\201604262044462_cadastro.Designer.cs">
+      <DependentUpon>201604262044462_cadastro.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Empresa.cs" />
@@ -397,6 +401,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604252012446_pedidoItem1.resx">
       <DependentUpon>201604252012446_pedidoItem1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604262044462_cadastro.resx">
+      <DependentUpon>201604262044462_cadastro.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

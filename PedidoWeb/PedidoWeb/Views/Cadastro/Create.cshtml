@@ -15,20 +15,26 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Nome)
-            @Html.TextBoxFor(model => model.Nome, new { @class = "form-control" })
+            @Html.TextBoxFor(model => model.Nome, new { @class = "form-control", @style = "text-transform: uppercase" })
             @Html.ValidationMessageFor(model => model.Nome)
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Fantasia)
-            @Html.TextBoxFor(model => model.Fantasia, new { @class = "form-control" })
+            @Html.TextBoxFor(model => model.Fantasia, new { @class = "form-control", @style = "text-transform: uppercase" })
             @Html.ValidationMessageFor(model => model.Fantasia)
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.CpfCnpj)
-            @Html.TextBoxFor(model => model.CpfCnpj, new { @class = "form-control" })
+            @Html.TextBoxFor(model => model.CpfCnpj, new { @class = "form-control", @style = "text-transform: uppercase" })
             @Html.ValidationMessageFor(model => model.CpfCnpj)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IE)
+            @Html.TextBoxFor(model => model.IE, new { @class="form-control"})
+            @Html.ValidationMessageFor(model => model.IE)
         </div>
 
         <div class="form-group">
@@ -47,13 +53,38 @@
 
             </div>
             @Html.ValidationMessageFor(model => model.Email)
+        </div>        
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.CidadeID)
+            @Html.DropDownList("CidadeID", (IEnumerable<SelectListItem>)ViewBag.CidadeID, string.Empty, new { @class="form-control"})
+            @Html.ValidationMessageFor(model => model.CidadeID)
+        </div>  
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Endereco)
+            @Html.TextBoxFor(model => model.Endereco, new { @class="form-control"})
+            @Html.ValidationMessageFor(model => model.Endereco)
         </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Bairro)
+            @Html.TextBoxFor(model => model.Bairro, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Bairro)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CEP)
+            @Html.TextBoxFor(model => model.CEP, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CEP)
+        </div>
+
 
         <div class="form-group">
             @Html.LabelFor(model => model.PercDescontoMaximo)
             @Html.TextBoxFor(model => model.PercDescontoMaximo, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.PercDescontoMaximo)
-        </div>  
+        </div>
 
         <div class="form-group">
             <div>
