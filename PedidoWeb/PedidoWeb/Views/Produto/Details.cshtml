@@ -1,0 +1,54 @@
+﻿@model PedidoWeb.Models.Produto
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="principal1coluna">
+    <h2>Produto</h2>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Descricao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PercDescontoMaximo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PercDescontoMaximo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UnidadeMedida)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UnidadeMedida)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PrecoVarejo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PrecoVarejo)
+        </dd>             
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CodProduto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CodProduto)
+        </dd>
+    </dl>
+    <p>
+        @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
+    </p>
+</div>

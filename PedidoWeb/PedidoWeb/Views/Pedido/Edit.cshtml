@@ -264,7 +264,8 @@
             // Function for show added items in table
             function GeneratedItemsTable() {   
                 if (pedidoItens.length > 0) {
-                    var $table = $('<table class="table table-responsive table-striped "></table>');
+                    var $div = $('<div class="table-responsive"></div>');
+                    var $table = $('<table class="table table-responsive table-striped"></table>');
                     $table.append('<thead><tr><th>Produto</th><th></th><th>Quantidade</th><th>Valor</th><th></th></tr></thead>');
                     var $tbody = $('<tbody />');
                     $.each(pedidoItens, function (i, val) {
@@ -289,7 +290,8 @@
                         $tbody.append($row);
                     });
                     $table.append($tbody);
-                    $('#pedidoItens').html($table);
+                    $div.append($table);
+                    $('#pedidoItens').html($div);
                 }
                 else{
                     $('#pedidoItens').html('');

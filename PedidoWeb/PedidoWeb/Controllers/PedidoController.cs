@@ -135,6 +135,14 @@ namespace PedidoWeb.Controllers
             return View();            
         }
 
+        [Authorize]
+        public string ValorUnitario(FormCollection f)
+        {            
+            var n = f.GetValue("ProdutoID");
+            var produto = db.Produtoes.Find(Convert.ToInt64(n.AttemptedValue));
+            return produto.PrecoVarejo.ToString();
+        }
+
         [HttpPost]
         [Authorize]
         public JsonResult SalvaPedido(Pedido pedido)
