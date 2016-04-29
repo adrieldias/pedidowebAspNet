@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using PedidoWeb.Models;
 using PagedList;
 
+using PedidoWeb.Controllers.Negocio;
+
 namespace PedidoWeb.Controllers
 {
     public class CadastroController : Controller
@@ -53,7 +55,7 @@ namespace PedidoWeb.Controllers
             }
 
 
-            int pageSize = 3;
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
             return View(cadastros.ToPagedList(pageNumber, pageSize));
         }
@@ -75,91 +77,94 @@ namespace PedidoWeb.Controllers
         }
 
         // GET: /Cadastro/Create
-        [Authorize]
-        public ActionResult Create()
-        {
-            return View();
-        }
+        //[Authorize]
+        //public ActionResult Create()
+        //{
+        //    ViewBag.CidadeID = new SelectList(db.Cidades.OrderBy(c => c.Descricao), "CidadeID", "Descricao");
+        //    return View();
+        //}
 
         // POST: /Cadastro/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
-        public ActionResult Create([Bind(Include="CadastroID,Nome,Fantasia,PercDescontoMaximo,CpfCnpj,Email,Situacao")] Cadastro cadastro)
-        {
-            if (ModelState.IsValid)
-            {
-                cadastro.Situacao = "ATIVO";
-                db.Cadastroes.Add(cadastro);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[Authorize]
+        //public ActionResult Create([Bind(Include="CadastroID,Nome,Fantasia,PercDescontoMaximo,CpfCnpj,Email,Situacao,VendedorID,Fone,IE,Endereco,Bairro,CidadeID,CEP")] Cadastro cadastro)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        cadastro.Situacao = "ATIVO";
+        //        cadastro.VendedorID = PedidoHelper.UsuarioCorrente.VendedorID;
+        //        cadastro.CodEmpresa = PedidoHelper.UsuarioCorrente.CodEmpresa;
+        //        db.Cadastroes.Add(cadastro);
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index", "Pedido");
+        //    }
 
-            return View(cadastro);
-        }
+        //    return RedirectToAction("Index", "Pedido");
+        //}
 
         // GET: /Cadastro/Edit/5
-        [Authorize]
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Cadastro cadastro = db.Cadastroes.Find(id);
-            if (cadastro == null)
-            {
-                return HttpNotFound();
-            }
-            return View(cadastro);
-        }
+        //[Authorize]
+        //public ActionResult Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Cadastro cadastro = db.Cadastroes.Find(id);
+        //    if (cadastro == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(cadastro);
+        //}
 
         // POST: /Cadastro/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
-        public ActionResult Edit([Bind(Include="CadastroID,Nome,Fantasia,PercDescontoMaximo,CpfCnpj,Email,Situacao")] Cadastro cadastro)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(cadastro).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(cadastro);
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[Authorize]
+        //public ActionResult Edit([Bind(Include = "CadastroID,Nome,Fantasia,PercDescontoMaximo,CpfCnpj,Email,Situacao,VendedorID,Fone,IE,Endereco,Bairro,CidadeID,CEP")] Cadastro cadastro)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(cadastro).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(cadastro);
+        //}
 
-        // GET: /Cadastro/Delete/5
-        [Authorize]
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Cadastro cadastro = db.Cadastroes.Find(id);
-            if (cadastro == null)
-            {
-                return HttpNotFound();
-            }
-            return View(cadastro);
-        }
+        //// GET: /Cadastro/Delete/5
+        //[Authorize]
+        //public ActionResult Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Cadastro cadastro = db.Cadastroes.Find(id);
+        //    if (cadastro == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(cadastro);
+        //}
 
         // POST: /Cadastro/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Cadastro cadastro = db.Cadastroes.Find(id);
-            db.Cadastroes.Remove(cadastro);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //[Authorize]
+        //public ActionResult DeleteConfirmed(int id)
+        //{
+        //    Cadastro cadastro = db.Cadastroes.Find(id);
+        //    db.Cadastroes.Remove(cadastro);
+        //    db.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
 
         protected override void Dispose(bool disposing)
         {

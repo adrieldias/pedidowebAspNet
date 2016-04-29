@@ -21,7 +21,7 @@ namespace PedidoWeb.Models
         public string Alteracao { get; set; }
 
         [ForeignKey("Usuario")]
-        public int UsuarioID { get; set; }
+        public int? UsuarioID { get; set; }
         public virtual Usuario Usuario { get; set; }
 
         

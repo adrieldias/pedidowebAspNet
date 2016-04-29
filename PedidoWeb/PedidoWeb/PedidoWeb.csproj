@@ -199,6 +199,26 @@
     <Compile Include="Migrations\201604151243538_CodEmpresa1.Designer.cs">
       <DependentUpon>201604151243538_CodEmpresa1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604251644143_alteracoes.cs" />
+    <Compile Include="Migrations\201604251644143_alteracoes.Designer.cs">
+      <DependentUpon>201604251644143_alteracoes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604251824265_Log_com_usuario_null.cs" />
+    <Compile Include="Migrations\201604251824265_Log_com_usuario_null.Designer.cs">
+      <DependentUpon>201604251824265_Log_com_usuario_null.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604251928246_pedidoItem.cs" />
+    <Compile Include="Migrations\201604251928246_pedidoItem.Designer.cs">
+      <DependentUpon>201604251928246_pedidoItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604252012446_pedidoItem1.cs" />
+    <Compile Include="Migrations\201604252012446_pedidoItem1.Designer.cs">
+      <DependentUpon>201604252012446_pedidoItem1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604262044462_cadastro.cs" />
+    <Compile Include="Migrations\201604262044462_cadastro.Designer.cs">
+      <DependentUpon>201604262044462_cadastro.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Empresa.cs" />
@@ -269,6 +289,8 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.11.4.js" />
     <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -277,7 +299,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -339,11 +363,12 @@
     <Content Include="Views\Empresa\Index.cshtml" />
     <Content Include="Views\Pedido\Create.cshtml" />
     <Content Include="Views\PedidoItem\ListaItens.cshtml" />
+    <Content Include="Views\Produto\Index.cshtml" />
+    <Content Include="Views\Produto\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\PrazoVencimento\" />
-    <Folder Include="Views\Produto\" />
     <Folder Include="Views\Shared\EditorTemplates\" />
     <Folder Include="Views\Transportador\" />
   </ItemGroup>
@@ -366,6 +391,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604151243538_CodEmpresa1.resx">
       <DependentUpon>201604151243538_CodEmpresa1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604251644143_alteracoes.resx">
+      <DependentUpon>201604251644143_alteracoes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604251824265_Log_com_usuario_null.resx">
+      <DependentUpon>201604251824265_Log_com_usuario_null.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604251928246_pedidoItem.resx">
+      <DependentUpon>201604251928246_pedidoItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604252012446_pedidoItem1.resx">
+      <DependentUpon>201604252012446_pedidoItem1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604262044462_cadastro.resx">
+      <DependentUpon>201604262044462_cadastro.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -47,13 +47,20 @@ namespace PedidoWeb.Controllers
 
             if (search != string.Empty)
             {
+                DateTime data;
+                DateTime.TryParse(search, out data);
+                
+                
                 int numero;
                 int.TryParse(search, out numero);
 
-                if (numero > 0)
-                    pedidos = pedidos.Where(s => s.PedidoID == numero);
-                else                    
-                    pedidos = pedidos.Where(s => s.Cadastro.Nome.ToUpper().Contains(((string)search).ToUpper()));
+                if (data > DateTime.MinValue)
+                    pedidos = pedidos.Where(s => s.DataEmissao == data);
+                else
+                    if (numero > 0)
+                        pedidos = pedidos.Where(s => s.PedidoID == numero);
+                        else
+                            pedidos = pedidos.Where(s => s.Cadastro.Nome.ToUpper().Contains(((string)search).ToUpper()));
             }
             
             if(searchByDate != string.Empty)
@@ -128,6 +135,14 @@ namespace PedidoWeb.Controllers
             return View();            
         }
 
+        [Authorize]
+        public string ValorUnitario(FormCollection f)
+        {            
+            var n = f.GetValue("ProdutoID");
+            var produto = db.Produtoes.Find(Convert.ToInt64(n.AttemptedValue));
+            return produto.PrecoVarejo.ToString();
+        }
+
         [HttpPost]
         [Authorize]
         public JsonResult SalvaPedido(Pedido pedido)
@@ -169,33 +184,33 @@ namespace PedidoWeb.Controllers
                 {
                     try
                     {
+
+                        //db.Configuration.ProxyCreationEnabled = false;
+                        //db.Configuration.LazyLoadingEnabled = false;
+
                         // Exclui itens do pedido cadastrados no B.D.
-                        List<PedidoItem> itens = db.PedidoItems.Where(p => p.PedidoID == pedido.PedidoID).ToList();
-                        foreach (var i in itens)
+                        var itens = db.PedidoItems.Where(i => i.PedidoID == pedido.PedidoID);
+                        foreach(var i in itens)
                         {
                             db.Entry(i).State = EntityState.Deleted;
-                            db.PedidoItems.Remove(i);
-                            db.SaveChanges();
                         }
-
-                        //Carrega as informações do banco de dados novamente
-                        db.Pedidoes.Include(p => p.Itens).Where(p => p.PedidoID == pedido.PedidoID);
-
-                        // Salva o Pedido
-                        itens = new List<PedidoItem>(pedido.Itens);
-                        foreach (var i in pedido.Itens)
-                        {
-                            i.PedidoItemID = 0;
-                            i.PedidoID = pedido.PedidoID;
-                            db.Entry(i).State = EntityState.Modified;                            
-                            db.PedidoItems.Add(i);                            
-                            db.SaveChanges();
-                        }
-
-                        pedido.Itens = null;
-                        db.Entry(pedido).State = EntityState.Modified;
 
                         db.SaveChanges();
+
+                        Pedido obj = db.Pedidoes.Find(pedido.PedidoID);
+
+                        foreach (var i in pedido.Itens)
+                        {
+                            i.Produto = null;
+                            if (obj.Itens == null)
+                                obj.Itens = new List<PedidoItem>();
+                            obj.Itens.Add(i);
+                        }
+
+
+                        db.Entry(obj).State = EntityState.Modified;
+                        db.SaveChanges();
+                                       
                         status = true;
                     }
                     catch(DbEntityValidationException en)
@@ -268,14 +283,15 @@ namespace PedidoWeb.Controllers
             }
 
             db.Configuration.ProxyCreationEnabled = false;
+            db.Configuration.LazyLoadingEnabled = false;
 
             List<Pedido> pedidos = db.Pedidoes
-                .Include(v => v.Vendedor)
-                .Include(e => e.Empresa)
+                //.Include(v => v.Vendedor)
+                //.Include(e => e.Empresa)
                 .Include(i => i.Itens)
-                .Include(p => p.PrazoVencimento)
-                .Include(t => t.Transportador)
-                .Include(c => c.Cadastro)
+                //.Include(p => p.PrazoVencimento)
+                //.Include(t => t.Transportador)
+                //.Include(c => c.Cadastro)
                 .Where(p => p.PedidoID == id).ToList();
 
             foreach(var pedido in pedidos)
@@ -289,6 +305,7 @@ namespace PedidoWeb.Controllers
                 ViewBag.TransportadorID = new SelectList(db.Transportadors, "TransportadorID", "Nome", pedido.TransportadorID);
                 ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", pedido.VendedorID);
                 ViewBag.ProdutoID = new SelectList(db.Produtoes, "ProdutoID", "Descricao");
+                
                 return View(pedido);
             }
             
@@ -353,7 +370,7 @@ namespace PedidoWeb.Controllers
                 new PedidoHelper(HttpContext.User.Identity.Name);
             }
 
-            Pedido pedido = db.Pedidoes.Find(id);
+            Pedido pedido = db.Pedidoes.Include(p => p.Itens).Where(p => p.PedidoID == id).First();
             db.Pedidoes.Remove(pedido);
             db.SaveChanges();
             return RedirectToAction("Index");

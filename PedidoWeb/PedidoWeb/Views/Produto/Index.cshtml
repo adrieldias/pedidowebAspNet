@@ -1,15 +1,12 @@
-﻿@using PagedList.Mvc;
-@model PagedList.IPagedList<PedidoWeb.Models.Cadastro>
+﻿@model IEnumerable<PedidoWeb.Models.Produto>
 
 @{
-    ViewBag.Title = "Cadastro";
+    ViewBag.Title = "Index";
 }
 
-<!-- Elementos da página devem estar dentro de um container -->
-<!-- Barra lateral esquerda -->
 <aside role="complementary" class="col-md-2">
     <ul class="nav nav-pills nav-stacked">
-        <li role="presentation" class="menulateral">            
+        <li role="presentation" class="menulateral">
             <a href="~/Pedido/Index">
                 <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
                 Pedido
@@ -30,8 +27,9 @@
     </ul>
     <br />
 </aside>
-<div class="col-md-10 margem-zero" >
-    @using (Html.BeginForm("Index", "Cadastro", FormMethod.Get))
+
+<div class="col-md-10 margem-zero">
+    @using (Html.BeginForm("Index", "Produto", FormMethod.Get))
     {
         <div class="input-group margem-zero">
             @Html.TextBox("Search", null, new
@@ -42,52 +40,48 @@
 
             <span class="input-group-btn">
                 <input type="submit" value="Procurar" class="btn btn-default" />
-            </span>           
-             
+            </span>
         </div>
-
     }
     <br />
 </div>
 
-
 <div role="main" class="col-md-10 principal">
-
-    <h2>Cadastros</h2>
+    <h2>Produtos</h2>
     <br>
     <p>
         @*@Html.ActionLink("Novo Cadastro", "Create", null, new { @class = "btn btn-primary btn-group-justified" })*@
     </p>
     <div>
-        
+
         <p style="text-align: right">
             Legendas:&nbsp;
             <label class="text-info">
                 <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Informações&nbsp;
             </label>
-            
-            
         </p>
     </div>
     <div class="table-responsive">
         <table class="table table-striped">
-            <tr class="cabecalho-tabela">
+            <tr>
                 <th>
-                    @*@Html.ActionLink("Nome", "Index", new { sortOrder = ViewBag.NomeParam }, new { style = "color:#313131" })*@
-                    @Html.Label("Nome")
+                    @Html.DisplayNameFor(model => model.Descricao)
                 </th>
                 <th>
-                    @Html.Label("Fantasia")
-                </th>                
-                <th>
-                    @Html.DisplayNameFor(model => model[0].CpfCnpj)
+                    @Html.DisplayNameFor(model => model.PercDescontoMaximo)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model[0].Fone)
+                    @Html.DisplayNameFor(model => model.UnidadeMedida)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model[0].Email)
-                </th>                
+                    @Html.DisplayNameFor(model => model.PrecoVarejo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Situacao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CodProduto)
+                </th>
                 <th></th>
             </tr>
 
@@ -95,27 +89,29 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Nome)
+                        @Html.DisplayFor(modelItem => item.Descricao)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Fantasia)
-                    </td>                    
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CpfCnpj)
+                        @Html.DisplayFor(modelItem => item.PercDescontoMaximo)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Fone)
+                        @Html.DisplayFor(modelItem => item.UnidadeMedida)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>                    
+                        @Html.DisplayFor(modelItem => item.PrecoVarejo)
+                    </td>
                     <td>
-                        @Html.ActionLink(" ", "Details", new { id = item.CadastroID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })                        
+                        @Html.DisplayFor(modelItem => item.Situacao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CodProduto)
+                    </td>
+                    <td>
+                        @Html.ActionLink(" ", "Details", new { id = item.ProdutoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
                     </td>
                 </tr>
             }
+
         </table>
     </div>
-    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 </div>

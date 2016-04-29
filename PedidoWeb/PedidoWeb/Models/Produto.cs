@@ -17,11 +17,11 @@ namespace PedidoWeb.Models
         [DisplayName("Descrição")]
         public string Descricao { get; set; }
 
-        [DisplayName("Percentual Máximo de Desconto")]
+        [DisplayName("Perc. Max. Desconto")]
         [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true, NullDisplayText = "Informar Valor")]
         public decimal PercDescontoMaximo { get; set; }
 
-        [DisplayName("UN")]
+        [DisplayName("Un")]
         public string UnidadeMedida { get; set; }
 
         [DisplayName("Preço")]
@@ -31,6 +31,7 @@ namespace PedidoWeb.Models
         [DisplayName("Situação")]
         public string Situacao { get; set; }
 
+        [DisplayName("Código Cemapa")]
         public int CodProduto { get; set; }
 
         
