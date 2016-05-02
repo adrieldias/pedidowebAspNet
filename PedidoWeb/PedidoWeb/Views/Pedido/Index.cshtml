@@ -32,24 +32,7 @@
     </ul>
     <br />
 </aside>
-<div class="col-md-10" style="padding-left: 0px; padding-right: 0px">
-    @using (Html.BeginForm("Index", "Pedido", FormMethod.Get))
-    {
-        <div class="input-group" style="padding-left: 0px; padding-right: 0px">
-            @Html.TextBox("Search", null, new
-        {
-            onchange = "$(this.form).submit();",
-            placeholder = "Pesquisar por Cliente, nº do Pedido ou Data",
-            @class = "form-control"
-        })
-            <span class="input-group-btn">
-                <input type="submit" value="Procurar" class="btn btn-default" />
-            </span>
-        </div>
-    }
-    <br />
 
-</div>
 @*<div class="col-md-1"></div>
 <div class="col-md-4" style="padding-left: 0px; padding-right: 0px">
     @using (Html.BeginForm("Index", "Pedido", FormMethod.Get))
@@ -72,9 +55,30 @@
 
 <div role="main" class="col-md-10 principal">
 
+    <br />
+    
+    <div>
+        @using (Html.BeginForm("Index", "Pedido", FormMethod.Get))
+        {
+            <div class="input-group" style="padding-left: 0px; padding-right: 0px">
+                @Html.TextBox("Search", null, new
+        {
+            onchange = "$(this.form).submit();",
+            placeholder = "Pesquisar por Cliente, nº do Pedido ou Data",
+            @class = "form-control"
+        })
+                <span class="input-group-btn">
+                    <input type="submit" value="Procurar" class="btn btn-default" />
+                </span>
+            </div>
+        }
+        <br />
+
+    </div>
+
     <h2>Pedidos</h2>
     <br>
-    
+
     @Html.ActionLink("Novo Pedido", "Create", null, new { @class = "btn btn-primary btn-group-justified" })
     
 
