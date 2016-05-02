@@ -97,6 +97,7 @@ namespace PedidoWeb.Controllers
         //        cadastro.Situacao = "ATIVO";
         //        cadastro.VendedorID = PedidoHelper.UsuarioCorrente.VendedorID;
         //        cadastro.CodEmpresa = PedidoHelper.UsuarioCorrente.CodEmpresa;
+        //        cadastro.StatusSincronismo = "NOVO";
         //        db.Cadastroes.Add(cadastro);
         //        db.SaveChanges();
         //        return RedirectToAction("Index", "Pedido");
@@ -132,6 +133,7 @@ namespace PedidoWeb.Controllers
         //    if (ModelState.IsValid)
         //    {
         //        db.Entry(cadastro).State = EntityState.Modified;
+        //        cadastro.StatusSincronismo = "ALTERADO";
         //        db.SaveChanges();
         //        return RedirectToAction("Index");
         //    }

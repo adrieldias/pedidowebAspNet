@@ -164,6 +164,7 @@ namespace PedidoWeb.Controllers
                     p.VendedorID = pedido.VendedorID;
                     p.Status = "ABERTO";
                     p.CodEmpresa = PedidoHelper.UsuarioCorrente.CodEmpresa;
+                    p.StatusSincronismo = "NOVO";
                     db.Pedidoes.Add(p);
                     db.SaveChanges();
 
@@ -175,6 +176,7 @@ namespace PedidoWeb.Controllers
                         i.Quantidade = item.Quantidade;
                         i.ValorUnitario = item.ValorUnitario;
                         i.Observacao = item.Observacao;
+                        i.StatusSincronismo = "NOVO";
                         db.PedidoItems.Add(i);
                         db.SaveChanges();
                     }
@@ -204,9 +206,10 @@ namespace PedidoWeb.Controllers
                             i.Produto = null;
                             if (obj.Itens == null)
                                 obj.Itens = new List<PedidoItem>();
+                            i.StatusSincronismo = "ALTERADO";
                             obj.Itens.Add(i);
                         }
-
+                        obj.StatusSincronismo = "ALTERADO";
 
                         db.Entry(obj).State = EntityState.Modified;
                         db.SaveChanges();
