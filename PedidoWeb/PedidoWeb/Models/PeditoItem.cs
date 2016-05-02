@@ -31,7 +31,7 @@ namespace PedidoWeb.Models
         [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true, NullDisplayText = "Informar Valor")]
         public decimal ValorUnitario { get; set; }
 
-        public int CodPedidoItem { get; set; }
+        public int? CodPedidoItem { get; set; }
 
         public string StatusSincronismo { get; set; }
     }

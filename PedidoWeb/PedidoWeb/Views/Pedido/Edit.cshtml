@@ -4,110 +4,136 @@
     ViewBag.Title = "Edit";
 }
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+
+@Html.AntiForgeryToken()
     
-    <div class="principal1coluna">
-        <h3>Editar Pedido</h3>
+<div class="principal1coluna">
+    <h3>Editar Pedido</h3>
+    <hr />
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.PedidoID)
+    @Html.HiddenFor(model => model.CodEmpresa)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.VendedorID, "Vendedor")
+        @Html.DropDownList("VendedorID", null, new { @readonly = "readonly", @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.VendedorID)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CadastroID, "Cliente")
+        @Html.DropDownList("CadastroID", null, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.CadastroID)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.DataEmissao)
+        @Html.TextBoxFor(model => model.DataEmissao, "{0:dd/MM/yyyy}", new { @readonly = "readonly", @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.DataEmissao)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PrazoVencimentoID, "Forma de Pagamento")
+        @Html.DropDownList("PrazoVencimentoID", null, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.PrazoVencimentoID)
+    </div>       
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TransportadorID, "Transportador")
+        @Html.DropDownList("TransportadorID", null, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.TransportadorID)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TipoFrete)
+        @Html.DropDownListFor(model => model.TipoFrete, 
+            new List<SelectListItem>() { new SelectListItem(){Text="CIF", Value="CIF"}, 
+                new SelectListItem(){Text="FOB", Value="FOB" }}, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.TipoFrete)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.OrdemCompra)
+        @Html.TextBoxFor(model => model.OrdemCompra, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.OrdemCompra)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Status)
+        @Html.TextBoxFor(model => model.Status, new { @readonly = "readonly", @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Status)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Observacao)
+        @Html.TextAreaFor(model => model.Observacao, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Observacao)
+    </div>  
+    <br />
+    <div class="details">
+        <h2>Itens do Pedido</h2>
         <hr />
-        @Html.ValidationSummary(true)
-        @Html.HiddenFor(model => model.PedidoID)
-        @Html.HiddenFor(model => model.CodEmpresa)
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.VendedorID, "Vendedor")
-            @Html.DropDownList("VendedorID", null, new { @readonly = "readonly", @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.VendedorID)
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CadastroID, "Cliente")
-            @Html.DropDownList("CadastroID", null, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.CadastroID)
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.DataEmissao)
-            @Html.TextBoxFor(model => model.DataEmissao, "{0:dd/MM/yyyy}", new { @readonly = "readonly", @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.DataEmissao)
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PrazoVencimentoID, "Forma de Pagamento")
-            @Html.DropDownList("PrazoVencimentoID", null, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.PrazoVencimentoID)
-        </div>       
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.TransportadorID, "Transportador")
-            @Html.DropDownList("TransportadorID", null, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.TransportadorID)
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.TipoFrete)
-            @Html.DropDownListFor(model => model.TipoFrete, 
-                new List<SelectListItem>() { new SelectListItem(){Text="CIF", Value="CIF"}, 
-                    new SelectListItem(){Text="FOB", Value="FOB" }}, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.TipoFrete)
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.OrdemCompra)
-            @Html.TextBoxFor(model => model.OrdemCompra, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.OrdemCompra)
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Status)
-            @Html.TextBoxFor(model => model.Status, new { @readonly = "readonly", @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Status)
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Observacao)
-            @Html.TextAreaFor(model => model.Observacao, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Observacao)
-        </div>  
         <br />
-        <div class="details">
-            <h2>Itens do Pedido</h2>
-            <hr />
-            <br />
 
+        @{AjaxOptions ajaxOptions = new AjaxOptions()
+        {
+            UpdateTargetId = "ValorUnitario",
+            OnSuccess = "SuccessRequest",
+            OnFailure = "FailureRequest",
+            HttpMethod = "POST"
+        };
+        }
+
+        @using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
+        {
             <div class="form-group">
-                @Html.Label("Produto")
-                @Html.DropDownList("ProdutoID", null, string.Empty, new { @class = "form-control" })
+                @Html.Label("Produto")                  
+                @Html.DropDownList("ProdutoID", null, string.Empty, new { @class = "form-control", onchange = "buscaValor()" })
                 <span class="error" style="visibility: hidden">Produto é obrigatório</span>
             </div>
 
-            <div class="form-group">
-                @Html.Label("Quantidade")
-                <input type="text" id="Quantidade" class="form-control" />
-                <span class="error" style="visibility: hidden">Quantidade é obrigatória</span>
-            </div>
+            <script type="text/javascript">
+                function buscaValor() {
+                    $("#ProdutoID").submit();
+                }
 
-            <div class="form-group">
-                @Html.Label("Valor Unitário")
-                <input type="text" id="ValorUnitario" class="form-control" />
-                <span class="error" style="visibility: hidden">Valor Unitário é obrigatório</span>
-            </div>
+                function SuccessRequest(response) {
+                    //alert(response);
+                    $('#ValorUnitario').val(response);
+                }
 
-            <div class="form-group">
-                @Html.Label("Observação do Item")
-                <textarea id="ObservacaoItem" class="form-control"></textarea>
-                <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>
-            </div>
+                function FailureRequest(response) {
+                    alert("Não foi possível buscar o preço do produto");
+                }
+            </script>
+        }
 
-            <input type="button" id="add" value="Adicionar Item" class="btn btn-block" />
-            <br />
-            <div id="pedidoItens"></div>
-            <br />
-            <input type="button" id="submit" value="Salvar Pedido" class="btn btn-primary btn-group-justified" />
+        <div class="form-group">
+            @Html.Label("Quantidade")
+            <input type="text" id="Quantidade" class="form-control" />
+            <span class="error" style="visibility: hidden">Quantidade é obrigatória</span>
         </div>
+
+        <div class="form-group">
+            @Html.Label("Valor Unitário")
+            <input type="text" id="ValorUnitario" name="ValorUnitario" class="form-control" />
+            <span class="error" style="visibility: hidden">Valor Unitário é obrigatório</span>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Observação do Item")
+            <textarea id="ObservacaoItem" class="form-control"></textarea>
+            <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>
+        </div>
+
+        <input type="button" id="add" value="Adicionar Item" class="btn btn-block" />
+        <br />
+        <div id="pedidoItens"></div>
+        <br />
+        <input type="button" id="submit" value="Salvar Pedido" class="btn btn-primary btn-group-justified" />
     </div>
-}
+</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")    
