@@ -30,31 +30,30 @@
     </ul>
     <br />
 </aside>
-<div class="col-md-10 margem-zero" >
-    @using (Html.BeginForm("Index", "Cadastro", FormMethod.Get))
-    {
-        <div class="input-group margem-zero">
-            @Html.TextBox("Search", null, new
+
+<div role="main" class="col-md-10 principal">
+    <br />
+    <div>
+        @using (Html.BeginForm("Index", "Cadastro", FormMethod.Get))
+        {
+            <div class="input-group margem-zero">
+                @Html.TextBox("Search", null, new
             {
                 placeholder = "Pesquisar por Nome",
                 @class = "form-control"
             })
 
-            <span class="input-group-btn">
-                <input type="submit" value="Procurar" class="btn btn-default" />
-            </span>           
-             
-        </div>
+                <span class="input-group-btn">
+                    <input type="submit" value="Procurar" class="btn btn-default" />
+                </span>
 
-    }
-    <br />
-</div>
+            </div>
+        }        
+    </div>
 
-
-<div role="main" class="col-md-10 principal">
 
     <h2>Cadastros</h2>
-    <br>
+    
     <p>
         @*@Html.ActionLink("Novo Cadastro", "Create", null, new { @class = "btn btn-primary btn-group-justified" })*@
     </p>
