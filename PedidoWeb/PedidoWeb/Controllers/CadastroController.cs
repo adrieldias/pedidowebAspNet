@@ -50,7 +50,7 @@ namespace PedidoWeb.Controllers
                     cadastros = cadastros.OrderByDescending(s => s.Nome);
                     break;
                 default:
-                    cadastros = cadastros.OrderByDescending(s => s.Nome);
+                    cadastros = cadastros.OrderBy(s => s.Nome);
                     break;
             }
 

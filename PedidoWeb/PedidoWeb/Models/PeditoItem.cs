@@ -28,11 +28,19 @@ namespace PedidoWeb.Models
         public string Observacao { get; set; }
 
         [DisplayName("Valor Unitário")]
-        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true, NullDisplayText = "Informar Valor")]
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true, NullDisplayText = "0,00")]
         public decimal ValorUnitario { get; set; }
 
         public int? CodPedidoItem { get; set; }
 
         public string StatusSincronismo { get; set; }
+
+        [DisplayName("Valor de Desconto")]
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true, NullDisplayText = "0,00")]
+        public decimal? ValorDesconto { get; set; }
+
+        [DisplayName("Percentual de Desconto")]
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true, NullDisplayText = "0,00")]
+        public decimal? PercentualDesconto { get; set; }
     }
 }

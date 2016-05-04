@@ -79,7 +79,7 @@ namespace PedidoWeb.Controllers
                     pedidos = pedidos.OrderByDescending(s => s.DataEmissao);
                     break;
                 default:
-                    pedidos = pedidos.OrderByDescending(s => s.DataEmissao);
+                    pedidos = pedidos.OrderBy(s => s.DataEmissao);
                     break;
             }
 
@@ -162,11 +162,14 @@ namespace PedidoWeb.Controllers
                     p.TipoFrete = pedido.TipoFrete == null ? string.Empty : pedido.TipoFrete;
                     p.TransportadorID = pedido.TransportadorID;
                     p.VendedorID = pedido.VendedorID;
-                    p.Status = "ABERTO";
+                    p.Status = "APROVADO";
                     p.CodEmpresa = PedidoHelper.UsuarioCorrente.CodEmpresa;
                     p.StatusSincronismo = "NOVO";
                     db.Pedidoes.Add(p);
                     db.SaveChanges();
+                    
+                    decimal valorPedido = 0;
+                    decimal valorProduto = 0;
 
                     foreach(var item in pedido.Itens)
                     {
@@ -177,9 +180,25 @@ namespace PedidoWeb.Controllers
                         i.ValorUnitario = item.ValorUnitario;
                         i.Observacao = item.Observacao;
                         i.StatusSincronismo = "NOVO";
+                        i.PercentualDesconto = item.PercentualDesconto;
+                        i.ValorDesconto = item.ValorDesconto;
+                        valorPedido += item.ValorUnitario * item.Quantidade;
+                        var produto = db.Produtoes.Find(item.ProdutoID);
+                        valorProduto += produto.PrecoVarejo * item.Quantidade;                        
                         db.PedidoItems.Add(i);
                         db.SaveChanges();
                     }
+                    
+                    //if (pedido.Cadastro.PercDescontoMaximo != null || pedido.Cadastro.PercDescontoMaximo > 0)
+                    //{
+                    //    var valorMaxDesconto = valorProduto + (valorProduto * pedido.Cadastro.PercDescontoMaximo / 100);
+                    //    if(valorPedido > valorMaxDesconto)
+                    //    {
+                    //        p.Status = "EM ANALISE";
+                    //        db.Entry(p).State = EntityState.Modified;
+                    //        db.SaveChanges();
+                    //    }
+                    //}
                     status = true;
                 }
                 else // Alteração
@@ -374,6 +393,7 @@ namespace PedidoWeb.Controllers
             }
 
             Pedido pedido = db.Pedidoes.Include(p => p.Itens).Where(p => p.PedidoID == id).First();
+            db.PedidoItems.RemoveRange(pedido.Itens);
             db.Pedidoes.Remove(pedido);
             db.SaveChanges();
             return RedirectToAction("Index");

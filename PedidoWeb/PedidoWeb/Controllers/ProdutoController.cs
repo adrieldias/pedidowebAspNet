@@ -48,7 +48,7 @@ namespace PedidoWeb.Controllers
                     produtos = produtos.OrderByDescending(s => s.Descricao);
                     break;
                 default:
-                    produtos = produtos.OrderByDescending(s => s.Descricao);
+                    produtos = produtos.OrderBy(s => s.Descricao);
                     break;
             }
 

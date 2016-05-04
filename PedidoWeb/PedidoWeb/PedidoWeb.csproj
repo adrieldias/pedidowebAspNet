@@ -219,6 +219,14 @@
     <Compile Include="Migrations\201604262044462_cadastro.Designer.cs">
       <DependentUpon>201604262044462_cadastro.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605031234152_ValorDesconto.cs" />
+    <Compile Include="Migrations\201605031234152_ValorDesconto.Designer.cs">
+      <DependentUpon>201605031234152_ValorDesconto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605041238138_PercentualDesconto.cs" />
+    <Compile Include="Migrations\201605041238138_PercentualDesconto.Designer.cs">
+      <DependentUpon>201605041238138_PercentualDesconto.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Empresa.cs" />
@@ -406,6 +414,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201604262044462_cadastro.resx">
       <DependentUpon>201604262044462_cadastro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605031234152_ValorDesconto.resx">
+      <DependentUpon>201605031234152_ValorDesconto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605041238138_PercentualDesconto.resx">
+      <DependentUpon>201605041238138_PercentualDesconto.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
