@@ -53,9 +53,9 @@ namespace PedidoWeb.Models
         [DisplayName("Data de Emissão")]
         public DateTime DataEmissao { get; set; }
 
-        public int CodPedidoCab { get; set; }
+        public int? CodPedidoCab { get; set; }
 
-        public int NumeroPedido { get; set; }
+        public System.Nullable<int> NumeroPedido { get; set; }
 
         public string StatusSincronismo { get; set; }
 

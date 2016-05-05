@@ -154,6 +154,7 @@ namespace PedidoWeb.Controllers
                 if(pedido.PedidoID == null || pedido.PedidoID == 0) // Pedido não existe - Inclusão
                 { 
                     Pedido p = new Pedido();
+                    p.NumeroPedido = pedido.NumeroPedido;
                     p.CadastroID = pedido.CadastroID;
                     p.DataEmissao = System.DateTime.Now.Date;
                     p.Observacao = pedido.Observacao == null ? string.Empty : pedido.Observacao;

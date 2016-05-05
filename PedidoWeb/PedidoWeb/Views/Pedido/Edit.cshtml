@@ -1,7 +1,7 @@
 ﻿@model PedidoWeb.Models.Pedido
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Editar";
 }
 
 
@@ -18,6 +18,12 @@
         @Html.LabelFor(model => model.VendedorID, "Vendedor")
         @Html.DropDownList("VendedorID", null, new { @readonly = "readonly", @class = "form-control" })
         @Html.ValidationMessageFor(model => model.VendedorID)
+    </div>
+
+    <div>
+        @Html.Label("Número")
+        @Html.TextBox("NumeroPedido", null, new { @class = "form-control" })
+        <span class="error" style="visibility: hidden">Número inválido</span>
     </div>
 
     <div class="form-group">

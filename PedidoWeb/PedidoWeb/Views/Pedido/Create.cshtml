@@ -1,11 +1,8 @@
 ﻿
 @{
     ViewBag.Title = "Create";
-}
 
-
-
-
+}    
     <div class="principal1coluna">
         <h2>Novo Pedido</h2>
         <hr />
@@ -14,6 +11,12 @@
         <div class="form-group">
             @Html.Label("Vendedor")
             @Html.DropDownList("VendedorID", null, new { @disabled = true, @class = "form-control" })
+        </div>
+
+        <div>
+            @Html.Label("Número")
+            @Html.TextBox("NumeroPedido", null, new { @class="form-control"})
+            <span class="error" style="visibility: hidden">Número inválido</span>
         </div>
 
         <div class="form-group">
@@ -106,34 +109,70 @@
                 <span class="error" style="visibility: hidden">Percentual de desconto inválido</span>
                                
             </div>
-            <div class="form-group col-md-1">
+            <div class="form-group col-md-2">
                 
             </div>
-            <div class="form-group col-md-6" style="padding: 0 0 0 0">                
+            <div class="form-group col-md-5" style="padding: 0 0 0 0">                
                 @Html.Label("Valor de Desconto")
                 <input type="text" id="ValorDesconto" name="ValorDesconto" class="form-control" />
                 <span class="error" style="visibility: hidden">Valor de desconto inválido</span>
             </div>            
 
+            <div class="clearfix"></div>
+
             <div class="form-group">
                 @Html.Label("Observação do Item")
                 <textarea id="ObservacaoItem" class="form-control"></textarea>
                 <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>               
-            </div>
+            </div>            
             
-            <input type="button" id="add" value="Adicionar Item" class="btn btn-block" />          
-            <br />          
+            <div class="col-md-6">
+                @*<input type="button" id="add" value="Salvar Item" class="btn btn-default btn-group-justified" />*@
+                <button type="button" id="add" class="btn btn-default btn-group-justified">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Salvar Item
+                </button>
+            </div>
+
+            <div class="col-md-6">
+                @*<input type="button" id="del" value="Cancelar Inclusão" class="btn btn-danger btn-group-justified" />*@
+                <button type="button" id="del" class="btn btn-danger btn-group-justified">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Cancelar Inclusão
+                </button>
+            </div>
+                
+            <div class="clearfix"></div>
+            <br />        
             <div id="pedidoItens"></div>  
-            <div id="totalPedido"></div>          
+            <div id="totalPedido"></div>  
+            <hr />        
             <br />
-            <input type="button" id="submit" value="Salvar Pedido" class="btn btn-primary btn-group-justified" /> 
+            
         </div>
 
+        <div class="col-md-6">
+            @*<input type="button" id="submit" value="Salvar Pedido" class="btn btn-primary btn-group-justified" />*@
+            <button type="button" id="submit" class="btn btn-primary btn-group-justified">
+                <span class="glyphicon glyphicon-floppy-disk"></span>
+                Salvar Pedido
+            </button>
+
+        </div>
+        <div class="col-md-6">
+            @*<input type="button" id="voltar" value="Sair sem salvar" class="btn btn-danger btn-group-justified" />*@
+            @*<button type="button" id="voltar" class="btn btn-danger btn-group-justified">
+                <span class="glyphicon glyphicon-share-alt"></span>
+                Sair sem Salvar
+            </button>*@
+            <a href="@Url.Action("Index")" class="btn btn-danger btn-group-justified" >
+                <span class="glyphicon glyphicon-share-alt"></span>
+                Sair sem Salvar
+            </a>
+        </div>
+        <div class="clearfix"></div>
+
     </div>
-
-
-
-
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -161,6 +200,16 @@
                     $('#ValorDesconto').val(percDesconto * valUnitario / 100);
                 }
             })
+
+            // Add  CancelaItem change function
+            $('#del').click(function () {
+                $('#ProdutoID').val('').focus();
+                $('#Quantidade').val('');
+                $('#ValorUnitario').val('');
+                $('#ObservacaoItem').val('');
+                $('#PercDesconto').val('');
+                $('#ValorDesconto').val('');
+            });
 
             // Add button click function
             $('#add').click(function () {
@@ -256,6 +305,13 @@
                     $('#PrazoVencimentoID').siblings('span.error').css('visibility', 'hidden');
                 }
 
+                if (isNaN($('#NumeroPedido').val().trim())) {
+                    isValidOrder = false;
+                    $('#NumeroPedido').siblings('span.error').css('visibility', 'visible');
+                } else {
+                    $('#NumeroPedido').siblings('span.error').css('visibility', 'hidden');
+                }
+
                 // Salvar
                 if (isValidOrder) {
                     var data = {
@@ -266,6 +322,7 @@
                         TipoFrete: $('#TipoFrete').val().trim(),
                         OrdemCompra: $('#OrdemCompra').val().trim(),
                         Observacao: $('#Observacao').val().trim(),
+                        NumeroPedido : $('#NumeroPedido').val().trim(),
                         Itens: pedidoItens
                     }
 

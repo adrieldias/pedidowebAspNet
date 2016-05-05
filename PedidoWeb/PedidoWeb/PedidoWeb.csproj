@@ -227,6 +227,10 @@
     <Compile Include="Migrations\201605041238138_PercentualDesconto.Designer.cs">
       <DependentUpon>201605041238138_PercentualDesconto.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605051234106_teste.cs" />
+    <Compile Include="Migrations\201605051234106_teste.Designer.cs">
+      <DependentUpon>201605051234106_teste.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Empresa.cs" />
@@ -420,6 +424,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605041238138_PercentualDesconto.resx">
       <DependentUpon>201605041238138_PercentualDesconto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605051234106_teste.resx">
+      <DependentUpon>201605051234106_teste.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
