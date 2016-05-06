@@ -67,21 +67,14 @@
                 <th>
                     @Html.DisplayNameFor(model => model[0].Descricao)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model[0].PercDescontoMaximo)
-                </th>
+                
                 <th>
                     @Html.DisplayNameFor(model => model[0].UnidadeMedida)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model[0].PrecoVarejo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model[0].Situacao)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model[0].CodProduto)
-                </th>
+                </th>                
+                
                 <th></th>
             </tr>
 
@@ -91,21 +84,14 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Descricao)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PercDescontoMaximo)
-                    </td>
+                    
                     <td>
                         @Html.DisplayFor(modelItem => item.UnidadeMedida)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.PrecoVarejo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Situacao)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CodProduto)
-                    </td>
+                    </td>                   
+                    
                     <td>
                         @Html.ActionLink(" ", "Details", new { id = item.ProdutoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
                     </td>
@@ -117,3 +103,4 @@
     Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 </div>
+<div class="clearfix"></div>

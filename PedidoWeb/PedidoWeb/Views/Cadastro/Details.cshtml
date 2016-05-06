@@ -8,6 +8,24 @@
     <h2>Informações</h2>
     <hr />
     <dl class="dl-horizontal">
+        
+        <dt>
+            @Html.DisplayName("Código")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CadastroID)
+        </dd>
+
+        @if(Model.CodCadastro > 0)
+        {
+            <dt>
+                @Html.DisplayName("Código Cemapa")
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.CodCadastro)
+            </dd>
+        }
+        
         <dt>
             @Html.DisplayNameFor(model => model.Nome)
         </dt>
@@ -22,6 +40,14 @@
 
         <dd>
             @Html.DisplayFor(model => model.Fantasia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fone)
         </dd>
 
         <dt>
@@ -41,6 +67,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.IE)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IE)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Email)
         </dt>
 
@@ -56,10 +90,50 @@
             @Html.DisplayFor(model => model.Situacao)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Endereco)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Endereco)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayName("Cidade")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cidade.Descricao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Bairro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Bairro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CEP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CEP)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Vendedor")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Vendedor.Nome)
+        </dd>
+
     </dl>
     <div class="form-group">
-        <div>
-            @Html.ActionLink("Editar", "Edit", new { id = Model.CadastroID}, new { @class = "btn btn-primary" })
+        <div>            
             @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
         </div>
     </div>

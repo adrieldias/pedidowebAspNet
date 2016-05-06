@@ -108,23 +108,15 @@
                 </th>
 
                 <th>
-                    @Html.DisplayName("ID")
+                    @Html.DisplayName("Código")
                 </th>
 
                 <th>
                     @Html.DisplayName("Cliente")
-                </th>
+                </th>                
 
                 <th>
-                    @Html.DisplayName("Prazo")
-                </th>
-
-                <th>
-                    @Html.DisplayName("Frete")
-                </th>
-
-                <th>
-                    @Html.DisplayNameFor(model => model[0].DataEmissao)
+                    @Html.DisplayName("Emissão")
                 </th>
                 <th></th>
             </tr>
@@ -141,15 +133,7 @@
 
                     <td>
                         @Html.DisplayFor(modelItem => item.Cadastro.Nome)
-                    </td>
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PrazoVencimento.Descricao)
-                    </td>
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TipoFrete)
-                    </td>
+                    </td>                    
 
                     <td>
                         @Html.DisplayFor(modelItem => item.DataEmissao)
