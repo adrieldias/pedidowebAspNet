@@ -79,7 +79,7 @@ namespace PedidoWeb.Controllers
                     pedidos = pedidos.OrderByDescending(s => s.DataEmissao);
                     break;
                 default:
-                    pedidos = pedidos.OrderBy(s => s.DataEmissao);
+                    pedidos = pedidos.OrderByDescending(s => s.PedidoID);
                     break;
             }
 
