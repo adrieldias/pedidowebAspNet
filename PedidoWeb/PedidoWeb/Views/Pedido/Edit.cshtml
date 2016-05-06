@@ -126,18 +126,66 @@
             <span class="error" style="visibility: hidden">Valor Unitário é obrigatório</span>
         </div>
 
+        <div class="form-group col-md-5" style="padding: 0 0 0 0">
+            @Html.Label("Percentual de Desconto")
+            <input type="text" id="PercDesconto" name="PercDesconto" class="form-control" />
+            <span class="error" style="visibility: hidden">Percentual de desconto inválido</span>
+
+        </div>
+        <div class="form-group col-md-2">
+
+        </div>
+        <div class="form-group col-md-5" style="padding: 0 0 0 0">
+            @Html.Label("Valor de Desconto")
+            <input type="text" id="ValorDesconto" name="ValorDesconto" class="form-control" />
+            <span class="error" style="visibility: hidden">Valor de desconto inválido</span>
+        </div>
+
+        <div class="clearfix"></div>
+
         <div class="form-group">
             @Html.Label("Observação do Item")
             <textarea id="ObservacaoItem" class="form-control"></textarea>
             <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>
         </div>
+        
+        <div class="col-md-6">
+            @*<input type="button" id="add" value="Salvar Item" class="btn btn-default btn-group-justified" />*@
+            <button type="button" id="add" class="btn btn-default btn-group-justified">
+                <span class="glyphicon glyphicon-ok"></span>
+                Salvar Item
+            </button>
+        </div>
 
-        <input type="button" id="add" value="Adicionar Item" class="btn btn-block" />
-        <br />
+        <div class="col-md-6">
+            @*<input type="button" id="del" value="Cancelar Inclusão" class="btn btn-danger btn-group-justified" />*@
+            <button type="button" id="del" class="btn btn-danger btn-group-justified">
+                <span class="glyphicon glyphicon-remove"></span>
+                Cancelar Item
+            </button>
+        </div>
+
+        <div class="clearfix"></div>
+        <br />        
         <div id="pedidoItens"></div>
-        <br />
-        <input type="button" id="submit" value="Salvar Pedido" class="btn btn-primary btn-group-justified" />
+        <div id="totalPedido"></div>
+        <hr />
+        <br />        
     </div>
+    
+    <div class="col-md-6">        
+        <button type="button" id="submit" class="btn btn-primary btn-group-justified">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            Salvar Pedido
+        </button>
+    </div>
+    <div class="col-md-6">        
+        <a href="@Url.Action("Index")" class="btn btn-danger btn-group-justified">
+            <span class="glyphicon glyphicon-share-alt"></span>
+            Sair sem Salvar
+        </a>
+    </div>
+    <div class="clearfix"></div>
 </div>
 
 
@@ -162,15 +210,48 @@
                 for(var j = 0; j < itens.length; j++)
                 {
                     if(produtos[i].Value == itens[j].ProdutoID){
-                        itens[j].DescProduto = produtos[i].Text;
-                        
-                    }
-                }
-            }
-            
+                        itens[j].DescProduto = produtos[i].Text;                        
+                    }                    
+                }                
+            }                       
 
             var pedidoItens = itens;
-            GeneratedItemsTable();            
+            var totalPedido = 0;
+
+            for(var i = 0; i < itens.length; i++)
+            {
+                totalPedido += Number(
+                    Number(itens[i].Quantidade) 
+                    * Number(itens[i].ValorUnitario) 
+                    - Number(itens[i].Quantidade) 
+                    * Number(itens[i].ValorDesconto)
+                );           
+            }
+
+            GeneratedItemsTable(); 
+
+            // Add desconto change function        
+            $('#PercDesconto').change(function () {
+                var percDesconto = Number($('#PercDesconto').val().replace(',','.'));
+                var valUnitario = Number($('#ValorUnitario').val().replace(',','.'));
+                                
+                if (isNaN(percDesconto)) {
+                    $('#PercDesconto').siblings('span.error').css('visibility', 'visible');
+                }
+                else {
+                    $('#ValorDesconto').val(parseFloat(percDesconto * valUnitario / 100).toFixed(2).replace('.', ','));
+                }
+            })
+
+            // Add  CancelaItem change function
+            $('#del').click(function () {
+                $('#ProdutoID').val('').focus();
+                $('#Quantidade').val('');
+                $('#ValorUnitario').val('');
+                $('#ObservacaoItem').val('');
+                $('#PercDesconto').val('');
+                $('#ValorDesconto').val('');
+            });
 
             // Add button click function
             $('#add').click(function () {
@@ -208,6 +289,13 @@
                     $('#ObservacaoItem').siblings('span.error').css('visibility', 'hidden');
                 }
 
+                if (isNaN($('#PercDesconto').val().trim().replace(',', '.'))) {
+                    isValidItem = false;
+                    $('#PercDesconto').siblings('span.error').css('visibility', 'visible');
+                } else {
+                    $('#PercDesconto').siblings('span.error').css('visibility', 'hidden');
+                }
+
                 // Add item to list if valid
                 if (isValidItem) {
                     var el = document.getElementById('ProdutoID');
@@ -216,13 +304,17 @@
                         Quantidade: $('#Quantidade').val().trim(),
                         ValorUnitario: $('#ValorUnitario').val().trim(),
                         Observacao: $('#ObservacaoItem').val().trim(),
-                        DescProduto: el.options[el.selectedIndex].text
+                        DescProduto: el.options[el.selectedIndex].text,
+                        ValorDesconto : $('#ValorDesconto').val().trim(),
+                        PercentualDesconto : $('#PercDesconto').val().trim()
                     });
 
                     $('#ProdutoID').val('').focus();
                     $('#Quantidade').val('');
                     $('#ValorUnitario').val('');
                     $('#ObservacaoItem').val('');
+                    $('#PercDesconto').val('');
+                    $('#ValorDesconto').val('');
                 }
                 GeneratedItemsTable();
 
@@ -298,13 +390,14 @@
                 if (pedidoItens.length > 0) {
                     var $div = $('<div class="table-responsive"></div>');
                     var $table = $('<table class="table table-responsive table-striped"></table>');
-                    $table.append('<thead><tr><th>Produto</th><th></th><th>Quantidade</th><th>Valor</th><th></th></tr></thead>');
+                    $table.append('<thead><tr><th>Produto</th><th></th><th>Quantidade</th><th>Desconto Unitário</th><th>Valor Unitário</th><th></th></tr></thead>');
                     var $tbody = $('<tbody />');
                     $.each(pedidoItens, function (i, val) {
                         var $row = $('<tr/>');
                         $row.append($('<td/>').html(val.ProdutoID));
                         $row.append($('<td/>').html(val.DescProduto));
                         $row.append($('<td/>').html(val.Quantidade));
+                        $row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
                         $row.append($('<td/>').html(val.ValorUnitario));                        
                         $row.append($('<td><button id=excluir class="btn btn-danger">Excluir</button></td>').click(function(){
                             for(var i in pedidoItens)
@@ -312,9 +405,14 @@
                                 if(pedidoItens[i].ProdutoID == val.ProdutoID
                                     && pedidoItens[i].Quantidade == val.Quantidade
                                     && pedidoItens[i].ValorUnitario == val.ValorUnitario
-                                    && pedidoItens[i].Observacao == val.Observacao)
+                                    && pedidoItens[i].Observacao == val.Observacao
+                                    && pedidoItens[i].ValorDesconto == val.ValorDesconto)
                                 {                                    
-                                    pedidoItens.splice(i, 1);
+                                    pedidoItens.splice(i, 1);                                    
+                                    totalPedido -= ((val.Quantidade
+                                        * val.ValorUnitario)
+                                        - (val.Quantidade 
+                                        * val.ValorDesconto));                                    
                                     GeneratedItemsTable();
                                 }
                             }
@@ -327,6 +425,22 @@
                 }
                 else{
                     $('#pedidoItens').html('');
+                }
+
+                if (isNaN(totalPedido)) {
+                    $('#totalPedido').html(
+                        '<p class="label label-default">'
+                        + 'Total do Pedido R$: 0.00'
+                        + '</p>'
+                        );
+                    totalPedido = 0;
+                } else {
+                    $('#totalPedido').html(
+                        '<p class="label label-default">'
+                        + 'Total do Pedido R$: '
+                        + parseFloat(totalPedido).toFixed(2)
+                        + '</p>'
+                        );
                 }
             }
         });
