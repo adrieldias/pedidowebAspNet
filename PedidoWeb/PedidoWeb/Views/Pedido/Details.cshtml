@@ -7,8 +7,19 @@
 <div class="principal1coluna">
     <h2>Informações</h2>
     <hr />
+
+    @if (Model.Status == "EM ANALISE")
+    {
+        <h4 class="alert alert-warning">Este pedido está em análise</h4>
+    }
+
+    @if (Model.Status == "CANCELADO")
+    {
+        <h4 class="alert alert-danger">Este pedido está cancelado</h4>
+    }
+
     <dl class="dl-horizontal">
-        
+
         <dt>
             @Html.DisplayName("Código")
         </dt>
@@ -33,7 +44,7 @@
         <dd>
             @Html.DisplayFor(model => model.Cadastro.Nome)
         </dd>
-        
+
         <dt>
             @Html.DisplayName("Prazo")
         </dt>
@@ -64,7 +75,7 @@
 
         <dd>
             @Html.DisplayFor(model => model.Status)
-        </dd>        
+        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.TipoFrete)
@@ -100,13 +111,90 @@
 
     </dl>
 
-    <div>
-        @Html.Action("ListaItens", "PedidoItem", new { id = Model.PedidoID })
+    @*<div>
+            @Html.Action("ListaItens", "PedidoItem", new { id = Model.PedidoID })
+        </div>*@
+
+    <div class="table-responsive">
+        <table class="table table-responsive table-striped">
+            <tr>
+                <th>
+                    @Html.DisplayName("Descrição")
+                </th>
+                <th>
+                    @Html.DisplayName("Quantidade")
+                </th>
+                <th>
+                    @Html.DisplayName("Valor Unitário")
+                </th>
+                <th>
+                    @Html.DisplayName("% Desconto")
+                </th>
+                <th>
+                    @Html.DisplayName("Desconto Unitário")
+                </th>
+                <th>
+                    @Html.DisplayName("Observação")
+                </th>
+            </tr>
+
+            @foreach (var item in Model.Itens)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Produto.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantidade)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorUnitario)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PercentualDesconto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorDesconto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Observacao)
+                    </td>
+                </tr>
+            }
+        </table>
     </div>
+
+    @{
+        decimal teste = 0;
+        
+        foreach(var item in Model.Itens)
+        {
+            decimal valDesc = Convert.ToDecimal(item.ValorDesconto == null ? 0 : item.ValorDesconto);
+            
+            teste += (item.Quantidade * item.ValorUnitario)
+                - (item.Quantidade * valDesc);
+        }
+        <div id="TotalPedido">
+            <p class="label label-default">Total do Pedido R$ @Html.Label(teste.ToString())</p>            
+        </div>
+        <br />
+    }
+
     <div class="form-group">
         <div>
             @Html.ActionLink("Editar", "Edit", new { id = Model.PedidoID }, new { @class = "btn btn-primary" })
             @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
+
+            @if (ViewBag.TipoUsuario == "ADMINISTRADOR")
+            {
+                @Html.ActionLink("Aceitar", "StatusPedido", new { id = Model.PedidoID, status = "APROVADO" }, new { @class = "btn btn-success" })
+            }
+            @if (ViewBag.TipoUsuario == "ADMINISTRADOR")
+            {
+                @Html.ActionLink("Recusar", "StatusPedido", new { id = Model.PedidoID, status = "CANCELADO" }, new { @class = "btn btn-danger" })
+            }
+
         </div>
     </div>
-</div>
+
+    </div>

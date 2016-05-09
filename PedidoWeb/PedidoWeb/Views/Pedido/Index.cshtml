@@ -124,7 +124,26 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Status)
+                        @if(item.Status == "EM ANALISE")
+                        { 
+                            <div class="label label-warning">
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </div>
+                        }                       
+                        else                 
+                        if(item.Status == "CANCELADO")
+                        {
+                            <div class="label label-danger">
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="label label-success">
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </div>
+                        }
+                        
                     </td>
 
                     <td>

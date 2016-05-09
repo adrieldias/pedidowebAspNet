@@ -17,9 +17,6 @@
         <table class="table table-striped">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Pedido.Status)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Produto.Descricao)
                 </th>
                 <th>
@@ -27,6 +24,12 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.ValorUnitario)
+                </th>
+                <th>
+                    @Html.DisplayName("% Desconto")
+                </th>
+                <th>
+                    @Html.DisplayName("Desconto Unitário")
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Observacao)
@@ -37,9 +40,6 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Pedido.Status)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => item.Produto.Descricao)
                     </td>
                     <td>
@@ -49,12 +49,19 @@
                         @Html.DisplayFor(modelItem => item.ValorUnitario)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.PercentualDesconto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorDesconto)
+                    </td>
+                    <td>
                         @Html.DisplayFor(modelItem => item.Observacao)
                     </td>
                 </tr>
             }
 
         </table>
-    </div>
+    </div>    
+
 </body>
 </html>

@@ -10,7 +10,6 @@ using PedidoWeb.Models;
 using PagedList;
 using PedidoWeb.Controllers.Negocio;
 
-using PedidoWeb.Controllers.Negocio;
 using System.Data.Entity.Validation;
 
 namespace PedidoWeb.Controllers
@@ -28,7 +27,7 @@ namespace PedidoWeb.Controllers
             if (currentFilter == null) currentFilter = string.Empty;
 
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.DateParam = sortOrder == "DataEmissao" ? "DataEmissao_desc" : "DataEmissao";
+            ViewBag.DateParam = sortOrder == "DataEmissao" ? "DataEmissao_desc" : "DataEmissao";            
             
             if (search != string.Empty || searchByDate != string.Empty)
             {
@@ -79,7 +78,7 @@ namespace PedidoWeb.Controllers
                     pedidos = pedidos.OrderByDescending(s => s.DataEmissao);
                     break;
                 default:
-                    pedidos = pedidos.OrderByDescending(s => s.PedidoID);
+                    pedidos = pedidos.OrderByDescending(s => s.Status).ThenByDescending(s => s.PedidoID);
                     break;
             }
 
@@ -102,7 +101,9 @@ namespace PedidoWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Pedido pedido = db.Pedidoes.Find(id);
+
+            Pedido pedido = db.Pedidoes.Include(p => p.Itens).First(p => p.PedidoID == id);
+            ViewBag.TipoUsuario = PedidoHelper.UsuarioCorrente.TipoUsuario;
             if (pedido == null)
             {
                 return HttpNotFound();
@@ -163,7 +164,7 @@ namespace PedidoWeb.Controllers
                     p.TipoFrete = pedido.TipoFrete == null ? string.Empty : pedido.TipoFrete;
                     p.TransportadorID = pedido.TransportadorID;
                     p.VendedorID = pedido.VendedorID;
-                    p.Status = "APROVADO";
+                    p.Status = new StatusPedido().CalculaStatus(pedido);
                     p.CodEmpresa = PedidoHelper.UsuarioCorrente.CodEmpresa;
                     p.StatusSincronismo = "NOVO";
                     db.Pedidoes.Add(p);
@@ -188,18 +189,8 @@ namespace PedidoWeb.Controllers
                         valorProduto += produto.PrecoVarejo * item.Quantidade;                        
                         db.PedidoItems.Add(i);
                         db.SaveChanges();
-                    }
+                    }                    
                     
-                    //if (pedido.Cadastro.PercDescontoMaximo != null || pedido.Cadastro.PercDescontoMaximo > 0)
-                    //{
-                    //    var valorMaxDesconto = valorProduto + (valorProduto * pedido.Cadastro.PercDescontoMaximo / 100);
-                    //    if(valorPedido > valorMaxDesconto)
-                    //    {
-                    //        p.Status = "EM ANALISE";
-                    //        db.Entry(p).State = EntityState.Modified;
-                    //        db.SaveChanges();
-                    //    }
-                    //}
                     status = true;
                 }
                 else // Alteração
@@ -396,6 +387,18 @@ namespace PedidoWeb.Controllers
             Pedido pedido = db.Pedidoes.Include(p => p.Itens).Where(p => p.PedidoID == id).First();
             db.PedidoItems.RemoveRange(pedido.Itens);
             db.Pedidoes.Remove(pedido);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        [Authorize]  
+        public ActionResult StatusPedido(int? id, string status)
+        {
+            Pedido pedido = db.Pedidoes.Find(id);
+            pedido.Status = status;
+            pedido.StatusSincronismo = "ALTERADO";
+            db.Entry(pedido).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Index");
         }
