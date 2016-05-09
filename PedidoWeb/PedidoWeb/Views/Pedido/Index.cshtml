@@ -159,7 +159,15 @@
                     </td>
                     <td>
                         @Html.ActionLink(" ", "Details", new { id = item.PedidoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
-                        @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil" })
+                        @if((ViewBag.TipoUsuario != "ADMINISTRADOR" && item.Status == "CANCELADO"))
+                        { 
+                            @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil disabled" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil" })
+                        }
+    
                         @Html.ActionLink(" ", "Delete", new { id = item.PedidoID }, new { @class = "btn btn-danger glyphicon glyphicon-remove" })
                     </td>
                 </tr>

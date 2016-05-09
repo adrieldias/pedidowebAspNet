@@ -27,7 +27,8 @@ namespace PedidoWeb.Controllers
             if (currentFilter == null) currentFilter = string.Empty;
 
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.DateParam = sortOrder == "DataEmissao" ? "DataEmissao_desc" : "DataEmissao";            
+            ViewBag.DateParam = sortOrder == "DataEmissao" ? "DataEmissao_desc" : "DataEmissao";
+            ViewBag.TipoUsuario = PedidoHelper.UsuarioCorrente.TipoUsuario;
             
             if (search != string.Empty || searchByDate != string.Empty)
             {

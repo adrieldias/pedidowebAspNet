@@ -192,7 +192,15 @@
 
     <div class="form-group">
         <div>
-            @Html.ActionLink("Editar", "Edit", new { id = Model.PedidoID }, new { @class = "btn btn-primary" })
+            @if(ViewBag.TipoUsuario != "ADMINISTRADOR" && Model.Status == "CANCELADO")
+            {
+                @Html.ActionLink("Editar", "Edit", new { id = Model.PedidoID }, new { @class = "btn btn-primary disabled" })
+            }
+            else
+            {
+                @Html.ActionLink("Editar", "Edit", new { id = Model.PedidoID }, new { @class = "btn btn-primary" })    
+            }
+            
             @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
 
             @if (ViewBag.TipoUsuario == "ADMINISTRADOR")
