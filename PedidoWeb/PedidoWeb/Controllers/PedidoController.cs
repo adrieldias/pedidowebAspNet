@@ -212,6 +212,16 @@ namespace PedidoWeb.Controllers
 
                         Pedido obj = db.Pedidoes.Find(pedido.PedidoID);
 
+                        obj.CadastroID = pedido.CadastroID;
+                        obj.NumeroPedido = pedido.NumeroPedido;
+                        obj.Observacao = pedido.Observacao;
+                        obj.OrdemCompra = pedido.OrdemCompra;
+                        obj.PrazoVencimentoID = pedido.PrazoVencimentoID;
+                        obj.Status = new StatusPedido().CalculaStatus(pedido);
+                        obj.StatusSincronismo = "ALTERADO";
+                        obj.TipoFrete = pedido.TipoFrete;
+                        obj.TransportadorID = pedido.TransportadorID;
+
                         foreach (var i in pedido.Itens)
                         {
                             i.Produto = null;
@@ -220,7 +230,7 @@ namespace PedidoWeb.Controllers
                             i.StatusSincronismo = "ALTERADO";
                             obj.Itens.Add(i);
                         }
-                        obj.StatusSincronismo = "ALTERADO";
+                        
 
                         db.Entry(obj).State = EntityState.Modified;
                         db.SaveChanges();

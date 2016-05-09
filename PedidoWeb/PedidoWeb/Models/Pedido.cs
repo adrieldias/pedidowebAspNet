@@ -55,6 +55,7 @@ namespace PedidoWeb.Models
 
         public int? CodPedidoCab { get; set; }
 
+        [DisplayName("Número do Pedido")]
         public System.Nullable<int> NumeroPedido { get; set; }
 
         public string StatusSincronismo { get; set; }

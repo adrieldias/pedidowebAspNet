@@ -342,6 +342,13 @@
                     $('#PrazoVencimentoID').siblings('span.error').css('visibility', 'hidden');
                 }
 
+                if(isNaN($('#NumeroPedido').val().trim())) {
+                    isValidOrder = false;
+                    $('#NumeroPedido').siblings('span.error').css('visibility', 'visible');
+                } else {
+                    $('#NumeroPedido').siblings('span.error').css('visibility', 'hidden');
+                }
+
                 // Salvar
                 if (isValidOrder) {
                     var data = {
@@ -356,6 +363,7 @@
                         DataEmissao: $('#DataEmissao').val().trim(),
                         CodEmpresa: $('#CodEmpresa').val().trim(),
                         Status: $('#Status').val().trim(),
+                        NumeroPedido : $('#NumeroPedido').val().trim(),
                         Itens: pedidoItens
                     }
 

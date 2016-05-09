@@ -45,6 +45,16 @@
             @Html.DisplayFor(model => model.Cadastro.Nome)
         </dd>
 
+        @if(Model.NumeroPedido != null)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.NumeroPedido)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.NumeroPedido)
+            </dd>
+        }
+
         <dt>
             @Html.DisplayName("Prazo")
         </dt>
