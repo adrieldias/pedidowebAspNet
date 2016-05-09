@@ -404,8 +404,11 @@
                         var $row = $('<tr/>');
                         $row.append($('<td/>').html(val.ProdutoID));
                         $row.append($('<td/>').html(val.DescProduto));
-                        $row.append($('<td/>').html(val.Quantidade));
-                        $row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
+                        $row.append($('<td/>').html(val.Quantidade));            
+                        if (val.ValorDesconto == null || val.ValorDesconto == '')
+                            $row.append($('<td/>').html('0.00'));
+                        else
+                            $row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
                         $row.append($('<td/>').html(val.ValorUnitario));                        
                         $row.append($('<td><button id=excluir class="btn btn-danger">Excluir</button></td>').click(function(){
                             for(var i in pedidoItens)
