@@ -18,12 +18,19 @@
             @Html.TextBox("NumeroPedido", null, new { @class="form-control"})
             <span class="error" style="visibility: hidden">Número inválido</span>
         </div>
-
+        
         <div class="form-group">
             @Html.Label("Cliente")
             @Html.DropDownList("CadastroID", null, string.Empty, new { @class = "form-control" })
             <span class="error" style="visibility: hidden">Cliente é obrigatório</span>
         </div>
+
+        <div class="form-group">
+            @Html.Label("Operação")
+            @Html.DropDownList("OperacaoID", null, string.Empty, new { @Class="form-control"})
+            <span class="error" style="visibility: hidden">Operação é obrigatória</span>
+        </div>
+
         <div class="form-group">
             @Html.Label("Forma de Pagamento")
             @Html.DropDownList("PrazoVencimentoID", null, new { @class = "form-control" })
@@ -312,6 +319,13 @@
                     $('#NumeroPedido').siblings('span.error').css('visibility', 'hidden');
                 }
 
+                if ($('#OperacaoID').val().trim() == '') {
+                    isValidOrder = false;
+                    $('#OperacaoID').siblings('span.error').css('visibility: visible');
+                } else {
+                    $('#OperacaoID').siblings('span.error').css('visibility: hidden');
+                }
+
                 // Salvar
                 if (isValidOrder) {
                     var data = {
@@ -323,6 +337,7 @@
                         OrdemCompra: $('#OrdemCompra').val().trim(),
                         Observacao: $('#Observacao').val().trim(),
                         NumeroPedido: $('#NumeroPedido').val().trim(),
+                        OperacaoID : $('#OperacaoID').val().trim(),
                         Itens: pedidoItens
                     }
 

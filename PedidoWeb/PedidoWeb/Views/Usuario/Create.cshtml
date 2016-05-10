@@ -12,6 +12,12 @@
         <h2>Novo Usuario</h2>
         <hr />
         @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CodEmpresa)
+            @Html.DropDownList("CodEmpresa", (IEnumerable<SelectListItem>)ViewBag.CodEmpresa
+                , string.Empty, new { @class="form-control"})
+        </div>
         
         <div class="form-group">
             @Html.LabelFor(model => model.EMail)

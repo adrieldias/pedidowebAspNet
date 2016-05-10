@@ -103,7 +103,9 @@ namespace PedidoWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Pedido pedido = db.Pedidoes.Include(p => p.Itens).First(p => p.PedidoID == id);
+            Pedido pedido = db.Pedidoes.Include(p => p.Itens)
+                .Include(o => o.Operacao)
+                .First(p => p.PedidoID == id);
             ViewBag.TipoUsuario = PedidoHelper.UsuarioCorrente.TipoUsuario;
             if (pedido == null)
             {
@@ -124,6 +126,9 @@ namespace PedidoWeb.Controllers
             ViewBag.CadastroID = new SelectList(db.Cadastroes, "CadastroID", "Nome");
             ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes, "PrazoVencimentoID", "Descricao");
             ViewBag.TransportadorID = new SelectList(db.Transportadors, "TransportadorID", "Nome");
+            ViewBag.OperacaoID = new SelectList(db.Operacoes, "OperacaoID", "Descricao");
+            ViewBag.ProdutoID = new SelectList(db.Produtoes, "ProdutoID", "Descricao");
+
             if (PedidoHelper.UsuarioCorrente.TipoUsuario == "ADMINISTRADOR")
             {
                 ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome");
@@ -133,7 +138,7 @@ namespace PedidoWeb.Controllers
                 ViewBag.VendedorID = new SelectList(db.Vendedors.Where(v => v.VendedorID == PedidoHelper.UsuarioCorrente.VendedorID)
                     , "VendedorID", "Nome");
             }
-            ViewBag.ProdutoID = new SelectList(db.Produtoes, "ProdutoID", "Descricao");
+            
             return View();            
         }
 
@@ -222,6 +227,7 @@ namespace PedidoWeb.Controllers
                         obj.StatusSincronismo = "ALTERADO";
                         obj.TipoFrete = pedido.TipoFrete;
                         obj.TransportadorID = pedido.TransportadorID;
+                        obj.OperacaoID = pedido.OperacaoID;
 
                         foreach (var i in pedido.Itens)
                         {
@@ -330,6 +336,7 @@ namespace PedidoWeb.Controllers
                 ViewBag.TransportadorID = new SelectList(db.Transportadors, "TransportadorID", "Nome", pedido.TransportadorID);
                 ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", pedido.VendedorID);
                 ViewBag.ProdutoID = new SelectList(db.Produtoes, "ProdutoID", "Descricao");
+                ViewBag.OperacaoID = new SelectList(db.Operacoes, "OperacaoID", "Descricao", pedido.OperacaoID);
                 
                 return View(pedido);
             }

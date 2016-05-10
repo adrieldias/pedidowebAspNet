@@ -33,6 +33,12 @@
     </div>
 
     <div class="form-group">
+        @Html.LabelFor(model => model.OperacaoID)
+        @Html.DropDownList("OperacaoID", null, new { @Class = "form-control" })
+        @Html.ValidationMessageFor(model => model.OperacaoID)
+    </div>
+
+    <div class="form-group">
         @Html.LabelFor(model => model.DataEmissao)
         @Html.TextBoxFor(model => model.DataEmissao, "{0:dd/MM/yyyy}", new { @readonly = "readonly", @class = "form-control" })
         @Html.ValidationMessageFor(model => model.DataEmissao)
@@ -364,6 +370,7 @@
                         CodEmpresa: $('#CodEmpresa').val().trim(),
                         Status: $('#Status').val().trim(),
                         NumeroPedido : $('#NumeroPedido').val().trim(),
+                        OperacaoID : $('#OperacaoID').val().trim(),
                         Itens: pedidoItens
                     }
 

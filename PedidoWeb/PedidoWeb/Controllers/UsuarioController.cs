@@ -68,6 +68,7 @@ namespace PedidoWeb.Controllers
         public ActionResult Create()
         {
             ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome");
+            ViewBag.CodEmpresa = new SelectList(db.Empresas, "CodEmpresa", "Nome");
             return View();
         }
 

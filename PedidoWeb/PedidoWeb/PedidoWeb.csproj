@@ -232,9 +232,18 @@
     <Compile Include="Migrations\201605051234106_teste.Designer.cs">
       <DependentUpon>201605051234106_teste.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605101306193_Operacao.cs" />
+    <Compile Include="Migrations\201605101306193_Operacao.Designer.cs">
+      <DependentUpon>201605101306193_Operacao.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605101425137_PedidoOperacaoID.cs" />
+    <Compile Include="Migrations\201605101425137_PedidoOperacaoID.Designer.cs">
+      <DependentUpon>201605101425137_PedidoOperacaoID.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Empresa.cs" />
+    <Compile Include="Models\Operacao.cs" />
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\PedidoCreate.cs" />
     <Compile Include="Models\Cidade.cs" />
@@ -427,6 +436,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605051234106_teste.resx">
       <DependentUpon>201605051234106_teste.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605101306193_Operacao.resx">
+      <DependentUpon>201605101306193_Operacao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605101425137_PedidoOperacaoID.resx">
+      <DependentUpon>201605101425137_PedidoOperacaoID.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

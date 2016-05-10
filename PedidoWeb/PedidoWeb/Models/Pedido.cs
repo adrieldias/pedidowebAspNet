@@ -63,9 +63,16 @@ namespace PedidoWeb.Models
         
         private string codEmpresa;
 
+        [DisplayName("Operacao")]
+        
+        [ForeignKey("Operacao")]
+        public int OperacaoID { get; set; }
+
         // Lazy Load
         public virtual List<PedidoItem> Itens { get; set; }
         public virtual Empresa Empresa { get; set; }
+
+        public virtual Operacao Operacao { get; set; }
 
         // Properties
 

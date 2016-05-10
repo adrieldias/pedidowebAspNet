@@ -28,6 +28,13 @@ namespace PedidoWeb.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
+            //context.Operacoes.AddOrUpdate(
+            //    new PedidoWeb.Models.Operacao { Descricao = "VENDAS NF-E" }                
+            //);
+            //context.Operacoes.AddOrUpdate(
+            //    new PedidoWeb.Models.Operacao { Descricao = "BONIFICAÇÃO" }
+            //);
         }
     }
 }
