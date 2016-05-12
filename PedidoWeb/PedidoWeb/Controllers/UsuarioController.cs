@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using PedidoWeb.Models;
 using PagedList;
 
+using PedidoWeb.Controllers.Negocio;
+
 namespace PedidoWeb.Controllers
 {
     public class UsuarioController : Controller
@@ -32,14 +34,19 @@ namespace PedidoWeb.Controllers
 
             ViewBag.CurrentFilter = search;
 
-            var usuarios = db.Usuarios.Include(u => u.Vendedor);
+            var usuarios = db.Usuarios.Include(u => u.Vendedor)
+                .Where(u => u.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa);
 
             if (!String.IsNullOrEmpty(search))
-                usuarios = usuarios.Where(s => s.Login.ToUpper().Contains(search.ToUpper()));
-            
+            {
+                if (search.Contains('@'))
+                    usuarios = usuarios.Where(s => s.EMail.ToLower().Contains(search.ToLower()));
+                else
+                    usuarios = usuarios.Where(s => s.Empresa.Nome.ToUpper().Contains(search.ToUpper()));
+            }
             usuarios = usuarios.OrderBy(s => s.Login);            
 
-            int pageSize = 3;
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
 
             ViewBag.mensagem = mensagem;
@@ -67,7 +74,8 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome");
+            ViewBag.VendedorID = new SelectList(
+                db.Vendedors.Where(v => v.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa), "VendedorID", "Nome");
             ViewBag.CodEmpresa = new SelectList(db.Empresas, "CodEmpresa", "Nome");
             return View();
         }

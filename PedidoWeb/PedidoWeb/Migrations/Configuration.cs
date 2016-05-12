@@ -35,6 +35,8 @@ namespace PedidoWeb.Migrations
             //context.Operacoes.AddOrUpdate(
             //    new PedidoWeb.Models.Operacao { Descricao = "BONIFICAÇÃO" }
             //);
+
+            
         }
     }
 }

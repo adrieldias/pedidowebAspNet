@@ -16,5 +16,9 @@ namespace PedidoWeb.Models
 
         [DisplayName("Operação")]
         public string Descricao { get; set; }
+
+        [ForeignKey("Empresa")]
+        public string CodEmpresa { get; set; }
+        public virtual Empresa Empresa { get; set; }
     }
 }

@@ -123,11 +123,21 @@ namespace PedidoWeb.Controllers
                 new PedidoHelper(HttpContext.User.Identity.Name);
             }
 
-            ViewBag.CadastroID = new SelectList(db.Cadastroes, "CadastroID", "Nome");
-            ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes, "PrazoVencimentoID", "Descricao");
-            ViewBag.TransportadorID = new SelectList(db.Transportadors, "TransportadorID", "Nome");
-            ViewBag.OperacaoID = new SelectList(db.Operacoes, "OperacaoID", "Descricao");
-            ViewBag.ProdutoID = new SelectList(db.Produtoes, "ProdutoID", "Descricao");
+            ViewBag.CadastroID = new SelectList(db.Cadastroes
+                .Where(c => c.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                .OrderBy(c => c.Nome), "CadastroID", "Nome");
+            ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes
+                .Where(p => p.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                .OrderBy(p => p.Descricao), "PrazoVencimentoID", "Descricao");
+            ViewBag.TransportadorID = new SelectList(db.Transportadors
+                .Where(t => t.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                .OrderBy(t => t.Nome), "TransportadorID", "Nome");
+            ViewBag.OperacaoID = new SelectList(db.Operacoes
+                .Where(o => o.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                .OrderBy(o => o.Descricao), "OperacaoID", "Descricao");
+            ViewBag.ProdutoID = new SelectList(db.Produtoes
+                .Where(p => p.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa && p.Situacao == "ATIVO")
+                .OrderBy(p => p.Descricao), "ProdutoID", "Descricao");
 
             if (PedidoHelper.UsuarioCorrente.TipoUsuario == "ADMINISTRADOR")
             {
@@ -158,7 +168,7 @@ namespace PedidoWeb.Controllers
 
             if(ModelState.IsValid)
             {
-                if(pedido.PedidoID == null || pedido.PedidoID == 0) // Pedido não existe - Inclusão
+                if(pedido.PedidoID == 0) // Pedido não existe - Inclusão
                 { 
                     Pedido p = new Pedido();
                     p.NumeroPedido = pedido.NumeroPedido;
@@ -330,14 +340,24 @@ namespace PedidoWeb.Controllers
                 // Seta o campo pedido dos itens de pedido para null afim de evitar referência cíclica ao gerar JSON
                 for (var i = 0; i < pedido.Itens.Count; i++)
                     pedido.Itens[i].Pedido = null;
-
-                ViewBag.CadastroID = new SelectList(db.Cadastroes, "CadastroID", "Nome", pedido.CadastroID);
-                ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes, "PrazoVencimentoID", "Descricao", pedido.PrazoVencimentoID);
-                ViewBag.TransportadorID = new SelectList(db.Transportadors, "TransportadorID", "Nome", pedido.TransportadorID);
-                ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", pedido.VendedorID);
-                ViewBag.ProdutoID = new SelectList(db.Produtoes, "ProdutoID", "Descricao");
-                ViewBag.OperacaoID = new SelectList(db.Operacoes, "OperacaoID", "Descricao", pedido.OperacaoID);
                 
+                ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", pedido.VendedorID);
+                ViewBag.CadastroID = new SelectList(db.Cadastroes
+                .Where(c => c.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                .OrderBy(c => c.Nome), "CadastroID", "Nome", pedido.CadastroID);
+                ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes
+                    .Where(p => p.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                    .OrderBy(p => p.Descricao), "PrazoVencimentoID", "Descricao", pedido.PrazoVencimentoID);
+                ViewBag.TransportadorID = new SelectList(db.Transportadors
+                    .Where(t => t.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                    .OrderBy(t => t.Nome), "TransportadorID", "Nome", pedido.TransportadorID);
+                ViewBag.OperacaoID = new SelectList(db.Operacoes
+                    .Where(o => o.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                    .OrderBy(o => o.Descricao), "OperacaoID", "Descricao", pedido.OperacaoID);                
+                ViewBag.ProdutoID = new SelectList(db.Produtoes
+                    .Where(p => p.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa && p.Situacao == "ATIVO")
+                    .OrderBy(p => p.Descricao), "ProdutoID", "Descricao");
+
                 return View(pedido);
             }
             

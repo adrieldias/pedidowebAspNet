@@ -240,6 +240,10 @@
     <Compile Include="Migrations\201605101425137_PedidoOperacaoID.Designer.cs">
       <DependentUpon>201605101425137_PedidoOperacaoID.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605121823391_Operacao1.cs" />
+    <Compile Include="Migrations\201605121823391_Operacao1.Designer.cs">
+      <DependentUpon>201605121823391_Operacao1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Empresa.cs" />
@@ -442,6 +446,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605101425137_PedidoOperacaoID.resx">
       <DependentUpon>201605101425137_PedidoOperacaoID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605121823391_Operacao1.resx">
+      <DependentUpon>201605121823391_Operacao1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

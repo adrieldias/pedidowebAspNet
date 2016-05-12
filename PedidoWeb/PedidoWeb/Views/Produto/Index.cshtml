@@ -73,7 +73,10 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model[0].PrecoVarejo)
-                </th>                
+                </th>            
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Situacao)
+                </th>    
                 
                 <th></th>
             </tr>
@@ -92,6 +95,10 @@
                         @Html.DisplayFor(modelItem => item.PrecoVarejo)
                     </td>                   
                     
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Situacao)
+                    </td>
+
                     <td>
                         @Html.ActionLink(" ", "Details", new { id = item.ProdutoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
                     </td>

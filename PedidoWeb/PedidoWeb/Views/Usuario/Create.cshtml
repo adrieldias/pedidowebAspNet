@@ -48,10 +48,14 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.TipoUsuario)            
-            @Html.TextBoxFor(model => model.TipoUsuario, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.TipoUsuario)
-            
+            @Html.LabelFor(model => model.TipoUsuario)
+            @Html.DropDownList("TipoUsuario",
+                new List<SelectListItem>() { 
+                    new SelectListItem(){Text="VENDEDOR", Value="VENDEDOR"}
+                    , new SelectListItem(){Text="ADMINISTRADOR", Value="ADMINISTRADOR" }
+                    , new SelectListItem(){Text="MASTER", Value="MASTER"}
+                }, string.Empty, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.TipoUsuario)            
         </div>
 
         <div class="form-group">
