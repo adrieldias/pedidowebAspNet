@@ -27,13 +27,13 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.CadastroID, "Cliente")
+        * @Html.LabelFor(model => model.CadastroID, "Cliente")
         @Html.DropDownList("CadastroID", null, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.CadastroID)
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.OperacaoID)
+        * @Html.LabelFor(model => model.OperacaoID)
         @Html.DropDownList("OperacaoID", null, new { @Class = "form-control" })
         @Html.ValidationMessageFor(model => model.OperacaoID)
     </div>
@@ -45,7 +45,7 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.PrazoVencimentoID, "Forma de Pagamento")
+        * @Html.LabelFor(model => model.PrazoVencimentoID, "Forma de Pagamento")
         @Html.DropDownList("PrazoVencimentoID", null, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.PrazoVencimentoID)
     </div>       
@@ -101,7 +101,7 @@
         @using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
         {
             <div class="form-group">
-                @Html.Label("Produto")                  
+                * @Html.Label("Produto")                  
                 @Html.DropDownList("ProdutoID", null, string.Empty, new { @class = "form-control", onchange = "buscaValor()" })
                 <span class="error" style="visibility: hidden">Produto é obrigatório</span>
             </div>
@@ -123,13 +123,13 @@
         }
 
         <div class="form-group">
-            @Html.Label("Quantidade")
+            * @Html.Label("Quantidade")
             <input type="text" id="Quantidade" class="form-control" />
             <span class="error" style="visibility: hidden">Quantidade é obrigatória</span>
         </div>
 
         <div class="form-group">
-            @Html.Label("Valor Unitário")
+            * @Html.Label("Valor Unitário")
             <input type="text" id="ValorUnitario" name="ValorUnitario" class="form-control" />
             <span class="error" style="visibility: hidden">Valor Unitário é obrigatório</span>
         </div>
@@ -207,6 +207,7 @@
             $("#VendedorID").prop("disabled", true);
             $("#DataEmissao").prop("disabled", true);
             $("#Status").prop("disabled", true);
+            $("#ValorUnitario").prop("disabled", true);
 
             var itens = @Html.Raw(Json.Encode(@Model.Itens));
 
@@ -353,8 +354,16 @@
                 if(isNaN($('#NumeroPedido').val().trim())) {
                     isValidOrder = false;
                     $('#NumeroPedido').siblings('span.error').css('visibility', 'visible');
+                    $('#NumeroPedido').focus();
                 } else {
                     $('#NumeroPedido').siblings('span.error').css('visibility', 'hidden');
+                }
+
+                if ($('#OperacaoID').val().trim() == '') {
+                    isValidOrder = false;
+                    $('#OperacaoID').siblings('span.error').css('visibility', 'visible');                    
+                } else {
+                    $('#OperacaoID').siblings('span.error').css('visibility', 'hidden');
                 }
 
                 // Salvar

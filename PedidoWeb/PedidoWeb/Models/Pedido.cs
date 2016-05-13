@@ -60,19 +60,20 @@ namespace PedidoWeb.Models
 
         public string StatusSincronismo { get; set; }
 
-
+        
         private string codEmpresa;
 
         [DisplayName("Operacao")]
-
+        
         [ForeignKey("Operacao")]
         public int OperacaoID { get; set; }
+        public virtual Operacao Operacao { get; set; }
 
         public virtual Operacao Operacao { get; set; }
 
         // Lazy Load
         public virtual List<PedidoItem> Itens { get; set; }
-        public virtual Empresa Empresa { get; set; }        
+        public virtual Empresa Empresa { get; set; }
 
         // Properties
 

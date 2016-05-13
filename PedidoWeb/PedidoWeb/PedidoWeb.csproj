@@ -265,7 +265,7 @@
     <Compile Include="Models\Cidade.cs" />
     <Compile Include="Models\PrazoVencimento.cs" />
     <Compile Include="Models\Log.cs" />
-    <Compile Include="Models\PeditoItem.cs" />
+    <Compile Include="Models\PedidoItem.cs" />
     <Compile Include="Models\Transportador.cs" />
     <Compile Include="Models\Produto.cs" />
     <Compile Include="Models\IdentityModels.cs" />

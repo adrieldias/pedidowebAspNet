@@ -183,6 +183,7 @@ namespace PedidoWeb.Controllers
                     p.Status = new StatusPedido().CalculaStatus(pedido);
                     p.CodEmpresa = PedidoHelper.UsuarioCorrente.CodEmpresa;
                     p.StatusSincronismo = "NOVO";
+                    p.OperacaoID = pedido.OperacaoID;
                     db.Pedidoes.Add(p);
                     db.SaveChanges();
                     
