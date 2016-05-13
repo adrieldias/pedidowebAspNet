@@ -132,7 +132,7 @@ namespace PedidoWeb.Controllers
             ViewBag.TransportadorID = new SelectList(db.Transportadors
                 .Where(t => t.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
                 .OrderBy(t => t.Nome), "TransportadorID", "Nome");
-            ViewBag.OperacaoID = new SelectList(db.Operacoes
+            ViewBag.OperacaoID = new SelectList(db.Operacaos
                 .Where(o => o.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
                 .OrderBy(o => o.Descricao), "OperacaoID", "Descricao");
             ViewBag.ProdutoID = new SelectList(db.Produtoes
@@ -351,7 +351,7 @@ namespace PedidoWeb.Controllers
                 ViewBag.TransportadorID = new SelectList(db.Transportadors
                     .Where(t => t.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
                     .OrderBy(t => t.Nome), "TransportadorID", "Nome", pedido.TransportadorID);
-                ViewBag.OperacaoID = new SelectList(db.Operacoes
+                ViewBag.OperacaoID = new SelectList(db.Operacaos
                     .Where(o => o.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
                     .OrderBy(o => o.Descricao), "OperacaoID", "Descricao", pedido.OperacaoID);                
                 ViewBag.ProdutoID = new SelectList(db.Produtoes

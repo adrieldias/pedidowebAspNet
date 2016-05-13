@@ -41,7 +41,7 @@ namespace PedidoWeb.Models
 
         public System.Data.Entity.DbSet<PedidoWeb.Models.Cidade> Cidades { get; set; }
 
-        public System.Data.Entity.DbSet<PedidoWeb.Models.Operacao> Operacoes { get; set; }
+        public System.Data.Entity.DbSet<PedidoWeb.Models.Operacao> Operacaos { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
