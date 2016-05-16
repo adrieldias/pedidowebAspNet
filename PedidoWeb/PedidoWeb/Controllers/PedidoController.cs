@@ -268,12 +268,12 @@ namespace PedidoWeb.Controllers
                             }
                         }
                         status = false;
-                        return new JsonResult { Data = new { status = status } };
+                        return new JsonResult { Data = new { status = status, errorMessage = errorMessages} };
                     }
                     catch(Exception e)
                     {
                         status = false;
-                        return new JsonResult { Data = new { status = status } };
+                        return new JsonResult { Data = new { status = status, errorMessage = string.Empty } };
                     }
                 }
             }
@@ -282,7 +282,7 @@ namespace PedidoWeb.Controllers
                 status = false;
             }
 
-            return new JsonResult { Data = new { status = status } };
+            return new JsonResult { Data = new { status = status, errorMessage = "Pedido Inválido" } };
         }
 
         // POST: /Pedido/Create
