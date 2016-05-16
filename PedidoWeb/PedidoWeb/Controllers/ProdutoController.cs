@@ -18,7 +18,7 @@ namespace PedidoWeb.Controllers
         // GET: /Produto/
         [Authorize]
         public ActionResult Index(string sortOrder, string currentFilter, string search, int? page)
-        {
+        {            
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NomeParam = sortOrder == "Descricao" ? "Descricao_desc" : "Descricao";
 

@@ -66,6 +66,13 @@
 
     <br />
     
+    @if (@ViewBag.Message != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Message            
+        </div>        
+    }
+    
     <div>
         @using (Html.BeginForm("Index", "Pedido", FormMethod.Get))
         {
@@ -83,7 +90,7 @@
         }
         
 
-    </div>
+    </div>    
 
     <h2>Pedidos</h2>
     <br>

@@ -20,8 +20,14 @@ namespace PedidoWeb.Controllers
 
         // GET: /Pedido/
         [Authorize]
-        public ViewResult Index(string sortOrder, string currentFilter, string search, string searchByDate, int? page)
+        public ViewResult Index(string sortOrder, string currentFilter, string search, string searchByDate, int? page,
+            string mensagem)
         {
+            if (mensagem != string.Empty)
+                ViewBag.Message = mensagem;
+            else
+                ViewBag.Message = null;            
+
             if (search == null) search = string.Empty;
             if (searchByDate == null) searchByDate = string.Empty;
             if (currentFilter == null) currentFilter = string.Empty;

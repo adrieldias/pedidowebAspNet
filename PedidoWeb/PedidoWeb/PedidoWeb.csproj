@@ -172,6 +172,7 @@
     <Compile Include="Controllers\Negocio\Login.cs" />
     <Compile Include="Controllers\Negocio\PedidoHelper.cs" />
     <Compile Include="Controllers\Negocio\StatusPedido.cs" />
+    <Compile Include="Controllers\Negocio\ValidaFuncoesUsuario.cs" />
     <Compile Include="Controllers\PedidoController.cs" />
     <Compile Include="Controllers\PedidoItemController.cs" />
     <Compile Include="Controllers\PrazoVencimentoController.cs" />
