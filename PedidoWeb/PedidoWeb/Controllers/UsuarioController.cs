@@ -117,6 +117,7 @@ namespace PedidoWeb.Controllers
                 return HttpNotFound();
             }
             ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", usuario.VendedorID);
+            ViewBag.CodEmpresa = new SelectList(db.Empresas, "CodEmpresa", "Nome", usuario.CodEmpresa);
             return View(usuario);
         }
 
