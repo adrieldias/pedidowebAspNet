@@ -23,7 +23,7 @@ namespace PedidoWeb.Controllers
         {
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.UsuarioCorrente
+                PedidoHelper.BuscaUsuario()
                 , "Usuario"
                 , "Index"))
             {
@@ -43,8 +43,9 @@ namespace PedidoWeb.Controllers
 
             ViewBag.CurrentFilter = search;
 
+            var codEmpresa = PedidoHelper.BuscaUsuario().CodEmpresa;
             var usuarios = db.Usuarios.Include(u => u.Vendedor)
-                .Where(u => u.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa);
+                .Where(u => u.CodEmpresa == codEmpresa);
 
             if (!String.IsNullOrEmpty(search))
             {
@@ -69,7 +70,7 @@ namespace PedidoWeb.Controllers
         {
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.UsuarioCorrente
+                PedidoHelper.BuscaUsuario()
                 , "Usuario"
                 , "Details"))
             {
@@ -94,15 +95,17 @@ namespace PedidoWeb.Controllers
         {
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.UsuarioCorrente
+                PedidoHelper.BuscaUsuario()
                 , "Usuario"
                 , "Create"))
             {
                 return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
             }
 
+            var usuario = PedidoHelper.BuscaUsuario();
+
             ViewBag.VendedorID = new SelectList(
-                db.Vendedors.Where(v => v.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa), "VendedorID", "Nome");
+                db.Vendedors.Where(v => v.CodEmpresa == usuario.CodEmpresa), "VendedorID", "Nome");
             ViewBag.CodEmpresa = new SelectList(db.Empresas, "CodEmpresa", "Nome");
             return View();
         }
@@ -118,7 +121,7 @@ namespace PedidoWeb.Controllers
 
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.UsuarioCorrente
+                PedidoHelper.BuscaUsuario()
                 , "Usuario"
                 , "Create"))
             {
@@ -131,10 +134,20 @@ namespace PedidoWeb.Controllers
                     "E-mail", usuario.EMail, "já cadastrado em outro usuário")});
             if (ModelState.IsValid)
             {
-                db.Usuarios.Add(usuario);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Usuarios.Add(usuario);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch(Exception ex)
+                {
+                    PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), ex.Message);
+                    ViewBag.Message = ex.Message;
+                    return View(PedidoHelper.BuscaUsuario());
+                }
             }
+            PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), "Modelo Inválido ao criar usuário");
 
             ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", usuario.VendedorID);
             return View(usuario);
@@ -146,7 +159,7 @@ namespace PedidoWeb.Controllers
         {
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.UsuarioCorrente
+                PedidoHelper.BuscaUsuario()
                 , "Usuario"
                 , "Edit"))
             {
@@ -178,7 +191,7 @@ namespace PedidoWeb.Controllers
 
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.UsuarioCorrente
+                PedidoHelper.BuscaUsuario()
                 , "Usuario"
                 , "Edit"))
             {
@@ -187,9 +200,23 @@ namespace PedidoWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                db.Entry(usuario).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(usuario).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch(Exception ex)
+                {
+                    PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), ex.Message);
+                    ViewBag.Message = ex.Message;
+                    return View(usuario);
+                }
+            }
+            else
+            {
+                ViewBag.Message = "Modelo inválido ao editar usuário";
+                PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), "Modelo inválido ao editar usuário");                
             }
             ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", usuario.VendedorID);
             ViewBag.CodEmpresa = new SelectList(db.Empresas, "CodEmpresa", "Nome", usuario.CodEmpresa);
@@ -202,7 +229,7 @@ namespace PedidoWeb.Controllers
         {
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.UsuarioCorrente
+                PedidoHelper.BuscaUsuario()
                 , "Usuario"
                 , "Edit"))
             {
@@ -229,17 +256,25 @@ namespace PedidoWeb.Controllers
         {
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.UsuarioCorrente
+                PedidoHelper.BuscaUsuario()
                 , "Usuario"
                 , "Edit"))
             {
                 return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
             }
 
-            Usuario usuario = db.Usuarios.Find(id);
-            db.Usuarios.Remove(usuario);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                Usuario usuario = db.Usuarios.Find(id);
+                db.Usuarios.Remove(usuario);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch(Exception ex)
+            {
+                PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), ex.Message);                
+                return RedirectToAction("Index", "Pedido", new { mensagem = ex.Message });
+            }
         }
 
         protected override void Dispose(bool disposing)

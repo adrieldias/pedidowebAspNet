@@ -9,6 +9,14 @@
     @Html.AntiForgeryToken()
     
     <div class="principal1coluna">
+        
+        @if(ViewBag.Message != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.Message
+            </div>    
+        }
+        
         <h2>Novo Usuario</h2>
         <hr />
         @Html.ValidationSummary(true)

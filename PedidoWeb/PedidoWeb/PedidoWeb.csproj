@@ -169,6 +169,7 @@
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\Negocio\Log.cs" />
     <Compile Include="Controllers\Negocio\Login.cs" />
     <Compile Include="Controllers\Negocio\PedidoHelper.cs" />
     <Compile Include="Controllers\Negocio\StatusPedido.cs" />

@@ -34,7 +34,7 @@ namespace PedidoWeb.Controllers
 
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateParam = sortOrder == "DataEmissao" ? "DataEmissao_desc" : "DataEmissao";
-            ViewBag.TipoUsuario = PedidoHelper.UsuarioCorrente.TipoUsuario;
+            ViewBag.TipoUsuario = PedidoHelper.BuscaUsuario().TipoUsuario;
             
             if (search != string.Empty || searchByDate != string.Empty)
             {
@@ -47,8 +47,11 @@ namespace PedidoWeb.Controllers
 
             ViewBag.CurrentFilter = search;
 
+            var vendedorID = PedidoHelper.BuscaUsuario().VendedorID;
+            var tipoUsuario = PedidoHelper.BuscaUsuario().TipoUsuario;
+
             var pedidos = from s in db.Pedidoes
-                .Where(p => p.VendedorID == PedidoHelper.UsuarioCorrente.VendedorID || PedidoHelper.UsuarioCorrente.TipoUsuario == "ADMINISTRADOR")
+                .Where(p => p.VendedorID == vendedorID || tipoUsuario == "ADMINISTRADOR")
                  select s;
 
             if (search != string.Empty)
@@ -112,7 +115,7 @@ namespace PedidoWeb.Controllers
             Pedido pedido = db.Pedidoes.Include(p => p.Itens)
                 .Include(o => o.Operacao)
                 .First(p => p.PedidoID == id);
-            ViewBag.TipoUsuario = PedidoHelper.UsuarioCorrente.TipoUsuario;
+            ViewBag.TipoUsuario = PedidoHelper.BuscaUsuario().TipoUsuario;
             if (pedido == null)
             {
                 return HttpNotFound();
@@ -124,34 +127,35 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            if(PedidoHelper.UsuarioCorrente == null)
+            if (PedidoHelper.BuscaUsuario() == null)
             {
                 new PedidoHelper(HttpContext.User.Identity.Name);
             }
 
+            var usuario = PedidoHelper.BuscaUsuario();
             ViewBag.CadastroID = new SelectList(db.Cadastroes
-                .Where(c => c.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                .Where(c => c.CodEmpresa == usuario.CodEmpresa)
                 .OrderBy(c => c.Nome), "CadastroID", "Nome");
             ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes
-                .Where(p => p.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                .Where(p => p.CodEmpresa == usuario.CodEmpresa)
                 .OrderBy(p => p.Descricao), "PrazoVencimentoID", "Descricao");
             ViewBag.TransportadorID = new SelectList(db.Transportadors
-                .Where(t => t.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                .Where(t => t.CodEmpresa == usuario.CodEmpresa)
                 .OrderBy(t => t.Nome), "TransportadorID", "Nome");
             ViewBag.OperacaoID = new SelectList(db.Operacaos
-                .Where(o => o.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                .Where(o => o.CodEmpresa == usuario.CodEmpresa)
                 .OrderBy(o => o.Descricao), "OperacaoID", "Descricao");
             ViewBag.ProdutoID = new SelectList(db.Produtoes
-                .Where(p => p.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa && p.Situacao == "ATIVO")
+                .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
                 .OrderBy(p => p.Descricao), "ProdutoID", "Descricao");
 
-            if (PedidoHelper.UsuarioCorrente.TipoUsuario == "ADMINISTRADOR")
+            if (usuario.TipoUsuario == "ADMINISTRADOR")
             {
                 ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome");
             }
             else
             {
-                ViewBag.VendedorID = new SelectList(db.Vendedors.Where(v => v.VendedorID == PedidoHelper.UsuarioCorrente.VendedorID)
+                ViewBag.VendedorID = new SelectList(db.Vendedors.Where(v => v.VendedorID == usuario.VendedorID)
                     , "VendedorID", "Nome");
             }
             
@@ -187,7 +191,7 @@ namespace PedidoWeb.Controllers
                     p.TransportadorID = pedido.TransportadorID;
                     p.VendedorID = pedido.VendedorID;
                     p.Status = new StatusPedido().CalculaStatus(pedido);
-                    p.CodEmpresa = PedidoHelper.UsuarioCorrente.CodEmpresa;
+                    p.CodEmpresa = PedidoHelper.BuscaUsuario().CodEmpresa;
                     p.StatusSincronismo = "NOVO";
                     p.OperacaoID = pedido.OperacaoID;
                     db.Pedidoes.Add(p);
@@ -274,17 +278,20 @@ namespace PedidoWeb.Controllers
                             }
                         }
                         status = false;
+                        PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), errorMessages);
                         return new JsonResult { Data = new { status = status, errorMessage = errorMessages} };
                     }
                     catch(Exception e)
                     {
                         status = false;
-                        return new JsonResult { Data = new { status = status, errorMessage = string.Empty } };
+                        PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), e.Message);
+                        return new JsonResult { Data = new { status = status, errorMessage = e.Message } };
                     }
                 }
             }
             else
             {
+                PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), "Erro ao salvar pedido. Modelo inválido");
                 status = false;
             }
 
@@ -320,7 +327,7 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Edit(int? id)
         {
-            if (PedidoHelper.UsuarioCorrente == null)
+            if (PedidoHelper.BuscaUsuario() == null)
             {
                 new PedidoHelper(HttpContext.User.Identity.Name);
             }
@@ -347,22 +354,24 @@ namespace PedidoWeb.Controllers
                 // Seta o campo pedido dos itens de pedido para null afim de evitar referência cíclica ao gerar JSON
                 for (var i = 0; i < pedido.Itens.Count; i++)
                     pedido.Itens[i].Pedido = null;
-                
+
+                var usuario = PedidoHelper.BuscaUsuario();
+
                 ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", pedido.VendedorID);
                 ViewBag.CadastroID = new SelectList(db.Cadastroes
-                .Where(c => c.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                .Where(c => c.CodEmpresa == usuario.CodEmpresa)
                 .OrderBy(c => c.Nome), "CadastroID", "Nome", pedido.CadastroID);
                 ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes
-                    .Where(p => p.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                    .Where(p => p.CodEmpresa == usuario.CodEmpresa)
                     .OrderBy(p => p.Descricao), "PrazoVencimentoID", "Descricao", pedido.PrazoVencimentoID);
                 ViewBag.TransportadorID = new SelectList(db.Transportadors
-                    .Where(t => t.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                    .Where(t => t.CodEmpresa == usuario.CodEmpresa)
                     .OrderBy(t => t.Nome), "TransportadorID", "Nome", pedido.TransportadorID);
                 ViewBag.OperacaoID = new SelectList(db.Operacaos
-                    .Where(o => o.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa)
+                    .Where(o => o.CodEmpresa == usuario.CodEmpresa)
                     .OrderBy(o => o.Descricao), "OperacaoID", "Descricao", pedido.OperacaoID);                
                 ViewBag.ProdutoID = new SelectList(db.Produtoes
-                    .Where(p => p.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa && p.Situacao == "ATIVO")
+                    .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
                     .OrderBy(p => p.Descricao), "ProdutoID", "Descricao");
 
                 return View(pedido);
@@ -379,7 +388,7 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Edit([Bind(Include="PedidoID,Status,CadastroID,PrazoVencimentoID,Observacao,VendedorID,TipoFrete,TransportadorID,OrdemCompra,DataEmissao")] Pedido pedido)
         {
-            if (PedidoHelper.UsuarioCorrente == null)
+            if (PedidoHelper.BuscaUsuario() == null)
             {
                 new PedidoHelper(HttpContext.User.Identity.Name);
             }
@@ -401,7 +410,7 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Delete(int? id)
         {
-            if (PedidoHelper.UsuarioCorrente == null)
+            if (PedidoHelper.BuscaUsuario() == null)
             {
                 new PedidoHelper(HttpContext.User.Identity.Name);
             }
@@ -424,16 +433,26 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
-            if (PedidoHelper.UsuarioCorrente == null)
+            if (PedidoHelper.BuscaUsuario() == null)
             {
                 new PedidoHelper(HttpContext.User.Identity.Name);
             }
 
-            Pedido pedido = db.Pedidoes.Include(p => p.Itens).Where(p => p.PedidoID == id).First();
-            db.PedidoItems.RemoveRange(pedido.Itens);
-            db.Pedidoes.Remove(pedido);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+
+                Pedido pedido = db.Pedidoes.Include(p => p.Itens).Where(p => p.PedidoID == id).First();
+                db.PedidoItems.RemoveRange(pedido.Itens);
+                db.Pedidoes.Remove(pedido);
+                db.SaveChanges();
+                return RedirectToAction("Index");                
+            }
+            catch(Exception ex)
+            {
+                PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), ex.Message);
+                ViewBag.Message = ex.Message;
+                return RedirectToAction("Delete", new { @id = id});
+            }
         }
 
         [HttpGet]

@@ -33,7 +33,8 @@ namespace PedidoWeb.Controllers
 
             ViewBag.CurrentFilter = search;
 
-            var produtos = db.Produtoes.Where(p => p.CodEmpresa == PedidoHelper.UsuarioCorrente.CodEmpresa);
+            var codEmpresa = PedidoHelper.BuscaUsuario().CodEmpresa;
+            var produtos = db.Produtoes.Where(p => p.CodEmpresa == codEmpresa);
             
 
             if (!String.IsNullOrEmpty(search))
