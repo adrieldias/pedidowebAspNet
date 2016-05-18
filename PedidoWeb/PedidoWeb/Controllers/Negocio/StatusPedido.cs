@@ -28,7 +28,7 @@ namespace PedidoWeb.Controllers.Negocio
                 else                
                 {
                     var produtoPadrao = db.Produtoes.Find(item.ProdutoID);
-                    if(item.ValorUnitario < produtoPadrao.PrecoVarejo)
+                    if((item.ValorUnitario - Convert.ToDecimal(item.ValorDesconto)) < produtoPadrao.PrecoVarejo)
                     {
                         var percDesc = 100 - (item.ValorUnitario * 100 / produtoPadrao.PrecoVarejo);
                         if (item.PercentualDesconto != null && item.PercentualDesconto > 0)

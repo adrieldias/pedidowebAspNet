@@ -206,8 +206,19 @@
             
             $("#VendedorID").prop("disabled", true);
             $("#DataEmissao").prop("disabled", true);
-            $("#Status").prop("disabled", true);
-            $("#ValorUnitario").prop("disabled", true);
+            $("#Status").prop("disabled", true);            
+
+            var valorUnitario = '@(ViewBag.Empresa.AlteraValorUnitario)';
+            var percDesconto = '@(ViewBag.Empresa.DescontoInformado)'; 
+            
+            if(valorUnitario.toString() === 'True')
+                $("#ValorUnitario").prop("disabled", false);
+            else
+                $("#ValorUnitario").prop("disabled", true);
+            if(percDesconto.toString() === 'True')
+                $("#PercDesconto").prop("disabled", false);
+            else
+                $("#PercDesconto").prop("disabled", true);
 
             var itens = @Html.Raw(Json.Encode(@Model.Itens));
 
@@ -382,6 +393,7 @@
                         Status: $('#Status').val().trim(),
                         NumeroPedido : $('#NumeroPedido').val().trim(),
                         OperacaoID : $('#OperacaoID').val().trim(),
+                        CodEmpresa: '@(ViewBag.Empresa.CodEmpresa)',
                         Itens: pedidoItens
                     }
 

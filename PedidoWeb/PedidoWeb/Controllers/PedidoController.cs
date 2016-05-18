@@ -145,13 +145,13 @@ namespace PedidoWeb.Controllers
                 .Where(c => c.CodEmpresa == usuario.CodEmpresa)
                 .OrderBy(c => c.Nome), "CadastroID", "Nome");
             ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes
-                .Where(p => p.CodEmpresa == usuario.CodEmpresa)
+                .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
                 .OrderBy(p => p.Descricao), "PrazoVencimentoID", "Descricao");
             ViewBag.TransportadorID = new SelectList(db.Transportadors
                 .Where(t => t.CodEmpresa == usuario.CodEmpresa)
                 .OrderBy(t => t.Nome), "TransportadorID", "Nome");
             ViewBag.OperacaoID = new SelectList(db.Operacaos
-                .Where(o => o.CodEmpresa == usuario.CodEmpresa)
+                .Where(o => o.CodEmpresa == usuario.CodEmpresa && o.Situacao == "ATIVO")
                 .OrderBy(o => o.Descricao), "OperacaoID", "Descricao");
             ViewBag.ProdutoID = new SelectList(db.Produtoes
                 .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
@@ -356,7 +356,7 @@ namespace PedidoWeb.Controllers
                 //.Include(t => t.Transportador)
                 //.Include(c => c.Cadastro)
                 .Where(p => p.PedidoID == id).ToList();
-
+            ViewBag.Empresa = new PedidoHelper().BuscaEmpresa();
             foreach(var pedido in pedidos)
             {
                 // Seta o campo pedido dos itens de pedido para null afim de evitar referência cíclica ao gerar JSON
@@ -370,18 +370,17 @@ namespace PedidoWeb.Controllers
                 .Where(c => c.CodEmpresa == usuario.CodEmpresa)
                 .OrderBy(c => c.Nome), "CadastroID", "Nome", pedido.CadastroID);
                 ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes
-                    .Where(p => p.CodEmpresa == usuario.CodEmpresa)
+                    .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
                     .OrderBy(p => p.Descricao), "PrazoVencimentoID", "Descricao", pedido.PrazoVencimentoID);
                 ViewBag.TransportadorID = new SelectList(db.Transportadors
                     .Where(t => t.CodEmpresa == usuario.CodEmpresa)
                     .OrderBy(t => t.Nome), "TransportadorID", "Nome", pedido.TransportadorID);
                 ViewBag.OperacaoID = new SelectList(db.Operacaos
-                    .Where(o => o.CodEmpresa == usuario.CodEmpresa)
+                    .Where(o => o.CodEmpresa == usuario.CodEmpresa && o.Situacao == "ATIVO")
                     .OrderBy(o => o.Descricao), "OperacaoID", "Descricao", pedido.OperacaoID);                
                 ViewBag.ProdutoID = new SelectList(db.Produtoes
                     .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
                     .OrderBy(p => p.Descricao), "ProdutoID", "Descricao");
-
                 return View(pedido);
             }
             

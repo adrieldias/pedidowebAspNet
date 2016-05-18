@@ -22,5 +22,6 @@ namespace PedidoWeb.Models
         [ForeignKey("Empresa")]
         public string CodEmpresa { get; set; }
         public virtual Empresa Empresa { get; set; }
+        public string Situacao { get; set; }
     }
 }

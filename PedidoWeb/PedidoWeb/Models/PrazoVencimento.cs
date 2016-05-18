@@ -22,6 +22,8 @@ namespace PedidoWeb.Models
         
         private string codEmpresa;
 
+        public string Situacao { get; set; }
+
 
         // Properties
 
