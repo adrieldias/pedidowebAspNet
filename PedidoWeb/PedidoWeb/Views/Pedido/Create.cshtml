@@ -190,18 +190,19 @@
 
 
             $("#VendedorID").prop("disabled", true);
+            $("#ValorDesconto").prop("disabled", true);
             
             var valorUnitario = '@(ViewBag.Empresa.AlteraValorUnitario)';
-            var valorDesconto = '@(ViewBag.Empresa.DescontoInformado)'; 
+            var percDesconto = '@(ViewBag.Empresa.DescontoInformado)'; 
             
             if(valorUnitario.toString() === 'True')
                 $("#ValorUnitario").prop("disabled", false);
             else
                 $("#ValorUnitario").prop("disabled", true);
-            if(valorDesconto.toString() === 'True')
-                $("#ValorDesconto").prop("disabled", false);
+            if(percDesconto.toString() === 'True')
+                $("#PercDesconto").prop("disabled", false);
             else
-                $("#ValorDesconto").prop("disabled", true);
+                $("#PercDesconto").prop("disabled", true);
 
             var pedidoItens = [];
             var totalPedido = 0;
@@ -352,7 +353,8 @@
                         OrdemCompra: $('#OrdemCompra').val().trim(),
                         Observacao: $('#Observacao').val().trim(),
                         NumeroPedido: $('#NumeroPedido').val().trim(),
-                        OperacaoID : $('#OperacaoID').val().trim(),
+                        OperacaoID: $('#OperacaoID').val().trim(),
+                        CodEmpresa: '@(ViewBag.Empresa.CodEmpresa)',
                         Itens: pedidoItens
                     }
 
