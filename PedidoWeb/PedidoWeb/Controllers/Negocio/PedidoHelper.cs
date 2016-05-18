@@ -11,8 +11,7 @@ namespace PedidoWeb.Controllers.Negocio
     {
         private static PedidoWebContext dbStatic = new PedidoWebContext();
         private PedidoWebContext db = new PedidoWebContext();
-
-        private static Usuario usuarioCorrente;        
+        private static Usuario usuarioCorrente;       
 
         public static Usuario BuscaUsuario()
         {
@@ -30,6 +29,15 @@ namespace PedidoWeb.Controllers.Negocio
             else
                 mail = HttpContext.Current.User.Identity.Name;
             usuarioCorrente = this.db.Usuarios.Single(u => u.EMail == mail); 
+        }
+
+        public PedidoHelper() { }
+
+        public Empresa BuscaEmpresa()
+        {
+            if (usuarioCorrente == null)
+                BuscaUsuario();
+            return db.Empresas.Find(usuarioCorrente.CodEmpresa);
         }
     }
 }

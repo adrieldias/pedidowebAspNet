@@ -186,12 +186,23 @@
     @Scripts.Render("~/bundles/jqueryui")   
     
     <script>
-
-        $("#VendedorID").prop("disabled", true);
-        $("#ValorDesconto").prop("disabled", true);
-        $("#ValorUnitario").prop("disabled", true);
-
         $("document").ready(function () {
+
+
+            $("#VendedorID").prop("disabled", true);
+            
+            var valorUnitario = '@(ViewBag.Empresa.AlteraValorUnitario)';
+            var valorDesconto = '@(ViewBag.Empresa.DescontoInformado)'; 
+            
+            if(valorUnitario.toString() === 'True')
+                $("#ValorUnitario").prop("disabled", false);
+            else
+                $("#ValorUnitario").prop("disabled", true);
+            if(valorDesconto.toString() === 'True')
+                $("#ValorDesconto").prop("disabled", false);
+            else
+                $("#ValorDesconto").prop("disabled", true);
+
             var pedidoItens = [];
             var totalPedido = 0;
 

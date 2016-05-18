@@ -156,7 +156,7 @@ namespace PedidoWeb.Controllers
             ViewBag.ProdutoID = new SelectList(db.Produtoes
                 .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
                 .OrderBy(p => p.Descricao), "ProdutoID", "Descricao");
-
+            ViewBag.Empresa = new PedidoHelper().BuscaEmpresa();
             if (usuario.TipoUsuario == "ADMINISTRADOR")
             {
                 ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome");
