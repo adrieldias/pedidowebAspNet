@@ -4,38 +4,57 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
-
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     
-    <div class="form-horizontal">
-        <h4>Empresa</h4>
+    <div class="principal1coluna">
+
+        <h3>Configurações por Empresa</h3>
         <hr />
+
         @Html.ValidationSummary(true)
         @Html.HiddenFor(model => model.CodEmpresa)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Nome, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Nome)
-                @Html.ValidationMessageFor(model => model.Nome)
-            </div>
+            @Html.LabelFor(model => model.Nome, new { @class = "control-label col-md-2" })            
+            @Html.TextBoxFor(model => model.Nome, new { @class="form-control"})
+            @Html.ValidationMessageFor(model => model.Nome)
+           
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+            @Html.LabelFor(model => model.CodEmpresa, new { @class = "control-label col-md-2"})
+            @Html.TextBoxFor(model => model.CodEmpresa, new { @class="form-control"})
+            @Html.ValidationMessageFor(model => model.CodEmpresa)
         </div>
+
+        <br />
+        <div class="form-group">
+            <p>
+                @Html.CheckBoxFor(model => model.AlteraValorUnitario)
+                @Html.LabelFor(model => model.AlteraValorUnitario)
+                @Html.ValidationMessageFor(model => model.AlteraValorUnitario)
+            </p>
+            <p>
+                @Html.CheckBoxFor(model => model.DescontoInformado)
+                @Html.LabelFor(model => model.DescontoInformado)
+                @Html.ValidationMessageFor(model => model.DescontoInformado)
+            </p>      
+        </div>
+
+        <div class="clearfix"></div>
+        <br />
+        <div class="form-group">           
+            <input type="submit" value="Salvar" class="btn btn-primary" />            
+            @Html.ActionLink("Voltar", "Index", "Pedido", null, new { @class="btn btn-default"})            
+        </div>
+
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

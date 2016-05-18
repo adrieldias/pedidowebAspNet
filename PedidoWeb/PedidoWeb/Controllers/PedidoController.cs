@@ -35,6 +35,14 @@ namespace PedidoWeb.Controllers
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateParam = sortOrder == "DataEmissao" ? "DataEmissao_desc" : "DataEmissao";
             ViewBag.TipoUsuario = PedidoHelper.BuscaUsuario().TipoUsuario;
+            if(ViewBag.TipoUsuario == "ADMINISTRADOR")
+            {
+                ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + PedidoHelper.BuscaUsuario().CodEmpresa;
+            }
+            else
+            {
+                ViewBag.UrlConfEmpresa = null;
+            }
             
             if (search != string.Empty || searchByDate != string.Empty)
             {

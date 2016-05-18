@@ -1,33 +1,124 @@
-﻿@model IEnumerable<PedidoWeb.Models.Empresa>
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<PedidoWeb.Models.Empresa>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<aside role="complementary" class="col-md-2">
+    <ul class="nav nav-pills nav-stacked">
+        <li role="presentation" class="menulateral">
+            @*@Html.ActionLink("Novo Cadastro", "Create", "Cadastro")*@
+            <a href="~/Pedido/Index">
+                <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+                Pedido
+            </a>
+        </li>
+        <li role="presentation" class="menulateral">
+            <a href="~/Cadastro/Index">
+                <span class="glyphicon glyphicon-user" aria-hidden="false"></span>
+                Lista de Clientes
+            </a>
+        </li>
+        <li role="presentation" class="menulateral">
+            <a href="~/Produto/Index">
+                <span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>
+                Lista de Produtos
+            </a>
+        </li>
+        @if (ViewBag.TipoUsuario == "MASTER")
+        {
+            <li role="presentation" class="menulateral">
+                <a href="~/Usuario/Index">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    Usuário
+                </a>
+            </li>
+        }
+    </ul>
+    <br />
+</aside>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Nome)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nome)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CodEmpresa }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CodEmpresa }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CodEmpresa })
-        </td>
-    </tr>
-}
+<div role="main" class="col-md-10 principal">
+    <br />
 
-</table>
+    @if (@ViewBag.Message != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Message
+        </div>
+    }
+    <div>
+        @using (Html.BeginForm("Index", "Empresa", FormMethod.Get))
+        {
+            <div class="input-group" style="padding-left: 0px; padding-right: 0px">
+                @Html.TextBox("Search", null, new
+        {
+            onchange = "$(this.form).submit();",
+            placeholder = "Pesquisar pelo Nome da Empresa",
+            @class = "form-control"
+        })
+                <span class="input-group-btn">
+                    <input type="submit" value="Procurar" class="btn btn-default" />
+                </span>
+            </div>
+        }
+
+    </div> 
+    <br />
+    <a href="@Url.Action("Create")" class="btn btn-primary">
+        <span class="glyphicon glyphicon-plus"></span>
+        Nova Empresa
+    </a>
+
+    <div>
+        <p style="text-align: right">
+            <br />
+            Legendas:&nbsp;
+            <label class="text-info">
+                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Info&nbsp;
+            </label>
+            <label class="text-primary">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editar&nbsp;
+            </label>
+            <label class="text-danger">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir
+            </label>
+        </p>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <tr>
+                <th>
+                    @Html.DisplayName("Empresa")
+                </th>
+                <th>
+                    @Html.DisplayName("Código")
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CodEmpresa)
+                    </td>
+                    <td>
+                        @Html.ActionLink(" ", "Details", new { id = item.CodEmpresa }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
+                        @Html.ActionLink(" ", "Edit", new { id = item.CodEmpresa }, new { @class = "btn btn-primary glyphicon glyphicon-pencil" })                        
+                        @Html.ActionLink(" ", "Delete", new { id = item.CodEmpresa }, new { @class = "btn btn-danger glyphicon glyphicon-remove" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+</div>
+<div class="clearfix"></div>

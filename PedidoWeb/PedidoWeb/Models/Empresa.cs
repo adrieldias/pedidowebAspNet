@@ -15,6 +15,13 @@ namespace PedidoWeb.Models
     {
         private string nome;
         private string codEmpresa;
+        
+        [DisplayName("Permite Alterar Valor Unitário")]
+        public bool AlteraValorUnitario { get; set; }
+
+        [DisplayName("Permite Informar Desconto")]
+        public bool DescontoInformado { get; set; }
+
 
         // Properties
 

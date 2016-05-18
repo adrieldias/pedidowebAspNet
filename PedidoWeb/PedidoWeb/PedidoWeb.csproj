@@ -258,6 +258,10 @@
     <Compile Include="Migrations\201605131444553_201605101425137_PedidoOperacaoID.Designer.cs">
       <DependentUpon>201605131444553_201605101425137_PedidoOperacaoID.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605171238091_Empresa.cs" />
+    <Compile Include="Migrations\201605171238091_Empresa.Designer.cs">
+      <DependentUpon>201605171238091_Empresa.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Empresa.cs" />
@@ -472,6 +476,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605131444553_201605101425137_PedidoOperacaoID.resx">
       <DependentUpon>201605131444553_201605101425137_PedidoOperacaoID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605171238091_Empresa.resx">
+      <DependentUpon>201605171238091_Empresa.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

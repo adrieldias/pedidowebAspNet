@@ -7,6 +7,9 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using PedidoWeb.Models;
+using PagedList;
+
+using PedidoWeb.Controllers.Negocio;
 
 namespace PedidoWeb.Controllers
 {
@@ -16,15 +19,60 @@ namespace PedidoWeb.Controllers
 
         // GET: /Empresa/
         [Authorize]
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string currentFilter, string search, int? page)
         {
-            return View(db.Empresas.ToList());
+            ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
+            if (!valida.PermiteAcesso(
+                PedidoHelper.BuscaUsuario()
+                , "Empresa"
+                , "Index"))
+            {
+                return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
+            }
+
+            ViewBag.CurrentSort = sortOrder;
+
+            if (search != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                search = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = search;
+
+
+            var codEmpresa = PedidoHelper.BuscaUsuario().CodEmpresa;
+            List<Empresa> empresas = db.Empresas.ToList();
+
+
+            if (!String.IsNullOrEmpty(search))
+            {   
+                empresas = empresas.Where(e => e.Nome.ToUpper().Contains(search.ToUpper())).ToList();
+            }
+            empresas = empresas.OrderBy(e => e.Nome).ToList();
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);            
+
+            return View(empresas.ToPagedList(pageNumber, pageSize));            
         }
 
         // GET: /Empresa/Details/5
         [Authorize]
         public ActionResult Details(string id)
         {
+            ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
+            if (!valida.PermiteAcesso(
+                PedidoHelper.BuscaUsuario()
+                , "Empresa"
+                , "Details"))
+            {
+                return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -41,6 +89,15 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
+            if (!valida.PermiteAcesso(
+                PedidoHelper.BuscaUsuario()
+                , "Empresa"
+                , "Create"))
+            {
+                return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
+            }
+
             return View();
         }
 
@@ -50,8 +107,17 @@ namespace PedidoWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include="CodEmpresa,Nome")] Empresa empresa)
+        public ActionResult Create([Bind(Include = "CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado")] Empresa empresa)
         {
+            ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
+            if (!valida.PermiteAcesso(
+                PedidoHelper.BuscaUsuario()
+                , "Empresa"
+                , "Create"))
+            {
+                return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
+            }
+
             if (ModelState.IsValid)
             {
                 db.Empresas.Add(empresa);
@@ -66,6 +132,15 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Edit(string id)
         {
+            ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
+            if (!valida.PermiteAcesso(
+                PedidoHelper.BuscaUsuario()
+                , "Empresa"
+                , "Edit"))
+            {
+                return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -84,8 +159,17 @@ namespace PedidoWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Include="CodEmpresa,Nome")] Empresa empresa)
+        public ActionResult Edit([Bind(Include="CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado")] Empresa empresa)
         {
+            ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
+            if (!valida.PermiteAcesso(
+                PedidoHelper.BuscaUsuario()
+                , "Empresa"
+                , "Edit"))
+            {
+                return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(empresa).State = EntityState.Modified;
@@ -99,6 +183,15 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Delete(string id)
         {
+            ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
+            if (!valida.PermiteAcesso(
+                PedidoHelper.BuscaUsuario()
+                , "Empresa"
+                , "Delete"))
+            {
+                return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -117,6 +210,15 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult DeleteConfirmed(string id)
         {
+            ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
+            if (!valida.PermiteAcesso(
+                PedidoHelper.BuscaUsuario()
+                , "Empresa"
+                , "Delete"))
+            {
+                return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
+            }
+
             Empresa empresa = db.Empresas.Find(id);
             db.Empresas.Remove(empresa);
             db.SaveChanges();
