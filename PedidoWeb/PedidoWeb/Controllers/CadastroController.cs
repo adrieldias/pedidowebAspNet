@@ -23,6 +23,15 @@ namespace PedidoWeb.Controllers
         {            
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NomeParam = sortOrder == "Nome" ? "Nome_desc" : "Nome";
+            ViewBag.TipoUsuario = PedidoHelper.BuscaUsuario().TipoUsuario;
+            if (ViewBag.TipoUsuario == "ADMINISTRADOR")
+            {
+                ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + PedidoHelper.BuscaUsuario().CodEmpresa;
+            }
+            else
+            {
+                ViewBag.UrlConfEmpresa = null;
+            }
 
             if (search != null)
             {

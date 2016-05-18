@@ -25,6 +25,32 @@
                 Lista de Produtos
             </a>
         </li>
+        @if (ViewBag.TipoUsuario == "MASTER")
+        {
+            <li role="presentation" class="menulateral">
+                <a href="~/Usuario/Index">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    Usuário
+                </a>
+            </li>
+
+            <li role="presentation" class="menulateral">
+                <a href="~/Empresa/Index">
+                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                    Config. Empresa
+                </a>
+            </li>
+        }
+        else
+        if (ViewBag.TipoUsuario == "ADMINISTRADOR")
+        {
+            <li role="presentation" class="menulateral">
+                <a href=@ViewBag.UrlConfEmpresa>
+                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                    Config. Empresa
+                </a>
+            </li>
+        }
     </ul>
     <br />
 </aside>
