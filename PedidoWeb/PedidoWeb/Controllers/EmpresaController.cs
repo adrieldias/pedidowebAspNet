@@ -31,6 +31,7 @@ namespace PedidoWeb.Controllers
             }
 
             ViewBag.CurrentSort = sortOrder;
+            ViewBag.TipoUsuario = PedidoHelper.BuscaUsuario().TipoUsuario;
 
             if (search != null)
             {

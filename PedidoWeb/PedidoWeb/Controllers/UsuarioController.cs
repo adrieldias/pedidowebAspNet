@@ -30,7 +30,8 @@ namespace PedidoWeb.Controllers
                 return RedirectToAction("Index", "Pedido", new{ mensagem = "Usuário não liberado para esta ação" });
             }
 
-            ViewBag.CurrentSort = sortOrder;            
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.TipoUsuario = PedidoHelper.BuscaUsuario().TipoUsuario;
 
             if (search != null)
             {
