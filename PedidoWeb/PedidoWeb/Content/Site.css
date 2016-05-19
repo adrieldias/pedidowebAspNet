@@ -1,7 +1,8 @@
 ﻿body {
     /*padding-top: 50px;*/
     padding-bottom: 20px;
-    background-color: #666666;
+    /*background-color: #666666;*/
+    background-image: linear-gradient(90deg, #194d33, #1a344c);
 }
 
 footer{
