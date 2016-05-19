@@ -15,8 +15,8 @@ namespace PedidoWeb.Controllers.Negocio
 
         public static Usuario BuscaUsuario()
         {
-            if(usuarioCorrente == null)
-                usuarioCorrente = dbStatic.Usuarios.Single(u => u.EMail == HttpContext.Current.User.Identity.Name);
+            //if(usuarioCorrente == null)
+            //    usuarioCorrente = dbStatic.Usuarios.Single(u => u.EMail == HttpContext.Current.User.Identity.Name);
             return usuarioCorrente;
         }
 
