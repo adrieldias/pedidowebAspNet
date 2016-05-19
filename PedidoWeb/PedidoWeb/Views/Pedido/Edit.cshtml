@@ -206,7 +206,8 @@
             
             $("#VendedorID").prop("disabled", true);
             $("#DataEmissao").prop("disabled", true);
-            $("#Status").prop("disabled", true);            
+            $("#Status").prop("disabled", true);    
+            $('#ValorDesconto').prop('disabled', true);
 
             var valorUnitario = '@(ViewBag.Empresa.AlteraValorUnitario)';
             var percDesconto = '@(ViewBag.Empresa.DescontoInformado)'; 
