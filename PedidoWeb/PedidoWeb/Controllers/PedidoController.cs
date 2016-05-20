@@ -26,18 +26,18 @@ namespace PedidoWeb.Controllers
             if (mensagem != string.Empty)
                 ViewBag.Message = mensagem;
             else
-                ViewBag.Message = null;            
-
+                ViewBag.Message = null;
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             if (search == null) search = string.Empty;
             if (searchByDate == null) searchByDate = string.Empty;
             if (currentFilter == null) currentFilter = string.Empty;
 
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateParam = sortOrder == "DataEmissao" ? "DataEmissao_desc" : "DataEmissao";
-            ViewBag.TipoUsuario = PedidoHelper.BuscaUsuario().TipoUsuario;
+            ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
             if(ViewBag.TipoUsuario == "ADMINISTRADOR")
             {
-                ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + PedidoHelper.BuscaUsuario().CodEmpresa;
+                ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + pedidoHelper.UsuarioCorrente.CodEmpresa;
             }
             else
             {
@@ -55,8 +55,8 @@ namespace PedidoWeb.Controllers
 
             ViewBag.CurrentFilter = search;
 
-            var vendedorID = PedidoHelper.BuscaUsuario().VendedorID;
-            var tipoUsuario = PedidoHelper.BuscaUsuario().TipoUsuario;
+            var vendedorID = pedidoHelper.UsuarioCorrente.VendedorID;
+            var tipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
 
             var pedidos = from s in db.Pedidoes
                 .Where(p => p.VendedorID == vendedorID || tipoUsuario == "ADMINISTRADOR")
@@ -119,11 +119,11 @@ namespace PedidoWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             Pedido pedido = db.Pedidoes.Include(p => p.Itens)
                 .Include(o => o.Operacao)
                 .First(p => p.PedidoID == id);
-            ViewBag.TipoUsuario = PedidoHelper.BuscaUsuario().TipoUsuario;
+            ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
             if (pedido == null)
             {
                 return HttpNotFound();
@@ -135,12 +135,8 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            if (PedidoHelper.BuscaUsuario() == null)
-            {
-                new PedidoHelper(HttpContext.User.Identity.Name);
-            }
-
-            var usuario = PedidoHelper.BuscaUsuario();
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
+            var usuario = pedidoHelper.UsuarioCorrente;
             ViewBag.CadastroID = new SelectList(db.Cadastroes
                 .Where(c => c.CodEmpresa == usuario.CodEmpresa)
                 .OrderBy(c => c.Nome), "CadastroID", "Nome");
@@ -156,7 +152,7 @@ namespace PedidoWeb.Controllers
             ViewBag.ProdutoID = new SelectList(db.Produtoes
                 .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
                 .OrderBy(p => p.Descricao), "ProdutoID", "Descricao");
-            ViewBag.Empresa = new PedidoHelper().BuscaEmpresa();
+            ViewBag.Empresa = pedidoHelper.BuscaEmpresa();
             if (usuario.TipoUsuario == "ADMINISTRADOR")
             {
                 ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome");
@@ -183,12 +179,13 @@ namespace PedidoWeb.Controllers
         public JsonResult SalvaPedido(Pedido pedido)
         {
             bool status = false;
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
 
             if(ModelState.IsValid)
-            {
+            {                
                 if(pedido.PedidoID == 0) // Pedido não existe - Inclusão
                 { 
-                    Pedido p = new Pedido();
+                    Pedido p = new Pedido();                    
                     p.NumeroPedido = pedido.NumeroPedido;
                     p.CadastroID = pedido.CadastroID;
                     p.DataEmissao = System.DateTime.Now.Date;
@@ -199,7 +196,7 @@ namespace PedidoWeb.Controllers
                     p.TransportadorID = pedido.TransportadorID;
                     p.VendedorID = pedido.VendedorID;
                     p.Status = new StatusPedido().CalculaStatus(pedido);
-                    p.CodEmpresa = PedidoHelper.BuscaUsuario().CodEmpresa;
+                    p.CodEmpresa = pedidoHelper.UsuarioCorrente.CodEmpresa;
                     p.StatusSincronismo = "NOVO";
                     p.OperacaoID = pedido.OperacaoID;
                     db.Pedidoes.Add(p);
@@ -286,20 +283,20 @@ namespace PedidoWeb.Controllers
                             }
                         }
                         status = false;
-                        PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), errorMessages);
+                        PedidoWeb.Controllers.Negocio.Log.SalvaLog(pedidoHelper.UsuarioCorrente, errorMessages);
                         return new JsonResult { Data = new { status = status, errorMessage = errorMessages} };
                     }
                     catch(Exception e)
                     {
                         status = false;
-                        PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), e.Message);
+                        PedidoWeb.Controllers.Negocio.Log.SalvaLog(pedidoHelper.UsuarioCorrente, e.Message);
                         return new JsonResult { Data = new { status = status, errorMessage = e.Message } };
                     }
                 }
             }
             else
             {
-                PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), "Erro ao salvar pedido. Modelo inválido");
+                PedidoWeb.Controllers.Negocio.Log.SalvaLog(pedidoHelper.UsuarioCorrente, "Erro ao salvar pedido. Modelo inválido");
                 status = false;
             }
 
@@ -335,11 +332,8 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Edit(int? id)
         {
-            if (PedidoHelper.BuscaUsuario() == null)
-            {
-                new PedidoHelper(HttpContext.User.Identity.Name);
-            }
-
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -356,14 +350,14 @@ namespace PedidoWeb.Controllers
                 //.Include(t => t.Transportador)
                 //.Include(c => c.Cadastro)
                 .Where(p => p.PedidoID == id).ToList();
-            ViewBag.Empresa = new PedidoHelper().BuscaEmpresa();
+            ViewBag.Empresa = pedidoHelper.BuscaEmpresa();
             foreach(var pedido in pedidos)
             {
                 // Seta o campo pedido dos itens de pedido para null afim de evitar referência cíclica ao gerar JSON
                 for (var i = 0; i < pedido.Itens.Count; i++)
                     pedido.Itens[i].Pedido = null;
 
-                var usuario = PedidoHelper.BuscaUsuario();
+                var usuario = pedidoHelper.UsuarioCorrente;
 
                 ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", pedido.VendedorID);
                 ViewBag.CadastroID = new SelectList(db.Cadastroes
@@ -395,11 +389,8 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Edit([Bind(Include="PedidoID,Status,CadastroID,PrazoVencimentoID,Observacao,VendedorID,TipoFrete,TransportadorID,OrdemCompra,DataEmissao")] Pedido pedido)
         {
-            if (PedidoHelper.BuscaUsuario() == null)
-            {
-                new PedidoHelper(HttpContext.User.Identity.Name);
-            }
-
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
+            
             if (ModelState.IsValid)
             {
                 db.Entry(pedido).State = EntityState.Modified;
@@ -417,11 +408,8 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Delete(int? id)
         {
-            if (PedidoHelper.BuscaUsuario() == null)
-            {
-                new PedidoHelper(HttpContext.User.Identity.Name);
-            }
-
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -440,11 +428,8 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
-            if (PedidoHelper.BuscaUsuario() == null)
-            {
-                new PedidoHelper(HttpContext.User.Identity.Name);
-            }
-
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
+            
             try
             {
 
@@ -456,7 +441,7 @@ namespace PedidoWeb.Controllers
             }
             catch(Exception ex)
             {
-                PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), ex.Message);
+                PedidoWeb.Controllers.Negocio.Log.SalvaLog(pedidoHelper.UsuarioCorrente, ex.Message);
                 ViewBag.Message = ex.Message;
                 return RedirectToAction("Delete", new { @id = id});
             }
@@ -466,9 +451,14 @@ namespace PedidoWeb.Controllers
         [Authorize]  
         public ActionResult StatusPedido(int? id, string status)
         {
-            Pedido pedido = db.Pedidoes.Find(id);
+            Pedido pedido = db.Pedidoes.Include(p => p.Itens).First(p => p.PedidoID == id);
             pedido.Status = status;
             pedido.StatusSincronismo = "ALTERADO";
+            
+            foreach(var item in pedido.Itens)
+            {
+                item.StatusSincronismo = "ALTERADO";
+            }
             db.Entry(pedido).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Index");

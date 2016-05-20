@@ -20,13 +20,14 @@ namespace PedidoWeb.Controllers
         // GET: /Cadastro/
         [Authorize]
         public ViewResult Index(string sortOrder, string currentFilter, string search, int? page)
-        {            
+        {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NomeParam = sortOrder == "Nome" ? "Nome_desc" : "Nome";
-            ViewBag.TipoUsuario = PedidoHelper.BuscaUsuario().TipoUsuario;
+            ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
             if (ViewBag.TipoUsuario == "ADMINISTRADOR")
             {
-                ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + PedidoHelper.BuscaUsuario().CodEmpresa;
+                ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + pedidoHelper.UsuarioCorrente.CodEmpresa;
             }
             else
             {

@@ -21,9 +21,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Index(string sortOrder, string currentFilter, string search, int? page, string mensagem)
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Usuario"
                 , "Index"))
             {
@@ -31,7 +32,7 @@ namespace PedidoWeb.Controllers
             }
 
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.TipoUsuario = PedidoHelper.BuscaUsuario().TipoUsuario;
+            ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
 
             if (search != null)
             {
@@ -44,7 +45,7 @@ namespace PedidoWeb.Controllers
 
             ViewBag.CurrentFilter = search;
 
-            var codEmpresa = PedidoHelper.BuscaUsuario().CodEmpresa;
+            var codEmpresa = pedidoHelper.UsuarioCorrente.CodEmpresa;
             var usuarios = db.Usuarios.Include(u => u.Vendedor)
                 .Where(u => u.CodEmpresa == codEmpresa);
 
@@ -69,9 +70,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Details(int? id)
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Usuario"
                 , "Details"))
             {
@@ -94,16 +96,17 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Usuario"
                 , "Create"))
             {
                 return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
             }
 
-            var usuario = PedidoHelper.BuscaUsuario();
+            var usuario = pedidoHelper.UsuarioCorrente;
 
             ViewBag.VendedorID = new SelectList(
                 db.Vendedors.Where(v => v.CodEmpresa == usuario.CodEmpresa), "VendedorID", "Nome");
@@ -119,10 +122,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Create([Bind(Include="UsuarioID,Login,Senha,TipoUsuario,VendedorID,EMail,CodEmpresa")] Usuario usuario)
         {
-
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Usuario"
                 , "Create"))
             {
@@ -143,12 +146,12 @@ namespace PedidoWeb.Controllers
                 }
                 catch(Exception ex)
                 {
-                    PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), ex.Message);
+                    PedidoWeb.Controllers.Negocio.Log.SalvaLog(pedidoHelper.UsuarioCorrente, ex.Message);
                     ViewBag.Message = ex.Message;
-                    return View(PedidoHelper.BuscaUsuario());
+                    return View(pedidoHelper.UsuarioCorrente);
                 }
             }
-            PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), "Modelo Inválido ao criar usuário");
+            PedidoWeb.Controllers.Negocio.Log.SalvaLog(pedidoHelper.UsuarioCorrente, "Modelo Inválido ao criar usuário");
 
             ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", usuario.VendedorID);
             return View(usuario);
@@ -158,9 +161,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Edit(int? id)
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Usuario"
                 , "Edit"))
             {
@@ -189,10 +193,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Edit([Bind(Include="UsuarioID,Login,Senha,TipoUsuario,VendedorID,EMail,CodEmpresa")] Usuario usuario)
         {
-
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Usuario"
                 , "Edit"))
             {
@@ -209,7 +213,7 @@ namespace PedidoWeb.Controllers
                 }
                 catch(Exception ex)
                 {
-                    PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), ex.Message);
+                    PedidoWeb.Controllers.Negocio.Log.SalvaLog(pedidoHelper.UsuarioCorrente, ex.Message);
                     ViewBag.Message = ex.Message;
                     return View(usuario);
                 }
@@ -217,7 +221,7 @@ namespace PedidoWeb.Controllers
             else
             {
                 ViewBag.Message = "Modelo inválido ao editar usuário";
-                PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), "Modelo inválido ao editar usuário");                
+                PedidoWeb.Controllers.Negocio.Log.SalvaLog(pedidoHelper.UsuarioCorrente, "Modelo inválido ao editar usuário");                
             }
             ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", usuario.VendedorID);
             ViewBag.CodEmpresa = new SelectList(db.Empresas, "CodEmpresa", "Nome", usuario.CodEmpresa);
@@ -228,9 +232,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Delete(int? id)
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Usuario"
                 , "Edit"))
             {
@@ -255,9 +260,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Usuario"
                 , "Edit"))
             {
@@ -273,7 +279,7 @@ namespace PedidoWeb.Controllers
             }
             catch(Exception ex)
             {
-                PedidoWeb.Controllers.Negocio.Log.SalvaLog(PedidoHelper.BuscaUsuario(), ex.Message);                
+                PedidoWeb.Controllers.Negocio.Log.SalvaLog(pedidoHelper.UsuarioCorrente, ex.Message);                
                 return RedirectToAction("Index", "Pedido", new { mensagem = ex.Message });
             }
         }

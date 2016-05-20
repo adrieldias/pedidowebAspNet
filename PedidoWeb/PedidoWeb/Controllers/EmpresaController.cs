@@ -21,9 +21,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Index(string sortOrder, string currentFilter, string search, int? page)
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Empresa"
                 , "Index"))
             {
@@ -31,7 +32,7 @@ namespace PedidoWeb.Controllers
             }
 
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.TipoUsuario = PedidoHelper.BuscaUsuario().TipoUsuario;
+            ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
 
             if (search != null)
             {
@@ -44,8 +45,17 @@ namespace PedidoWeb.Controllers
 
             ViewBag.CurrentFilter = search;
 
+            if (ViewBag.TipoUsuario == "ADMINISTRADOR")
+            {
+                ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + pedidoHelper.UsuarioCorrente.CodEmpresa;
+            }
+            else
+            {
+                ViewBag.UrlConfEmpresa = null;
+            }
 
-            var codEmpresa = PedidoHelper.BuscaUsuario().CodEmpresa;
+
+            var codEmpresa = pedidoHelper.UsuarioCorrente.CodEmpresa;
             List<Empresa> empresas = db.Empresas.ToList();
 
 
@@ -65,9 +75,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Details(string id)
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Empresa"
                 , "Details"))
             {
@@ -90,9 +101,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Empresa"
                 , "Create"))
             {
@@ -110,9 +122,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Create([Bind(Include = "CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado")] Empresa empresa)
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Empresa"
                 , "Create"))
             {
@@ -133,9 +146,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Edit(string id)
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Empresa"
                 , "Edit"))
             {
@@ -162,9 +176,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Edit([Bind(Include="CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado")] Empresa empresa)
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Empresa"
                 , "Edit"))
             {
@@ -175,7 +190,16 @@ namespace PedidoWeb.Controllers
             {
                 db.Entry(empresa).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                if (pedidoHelper.UsuarioCorrente.TipoUsuario == "ADMINISTRADOR")
+                {
+                    ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + pedidoHelper.UsuarioCorrente.CodEmpresa;
+                    return RedirectToAction("Index", "Pedido");
+                }
+                else
+                {
+                    ViewBag.UrlConfEmpresa = null;
+                    return RedirectToAction("Index");
+                }                
             }
             return View(empresa);
         }
@@ -184,9 +208,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult Delete(string id)
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Empresa"
                 , "Delete"))
             {
@@ -211,9 +236,10 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public ActionResult DeleteConfirmed(string id)
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
             if (!valida.PermiteAcesso(
-                PedidoHelper.BuscaUsuario()
+                pedidoHelper.UsuarioCorrente
                 , "Empresa"
                 , "Delete"))
             {

@@ -21,10 +21,11 @@ namespace PedidoWeb.Controllers
         {            
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NomeParam = sortOrder == "Descricao" ? "Descricao_desc" : "Descricao";
-            ViewBag.TipoUsuario = PedidoHelper.BuscaUsuario().TipoUsuario;
+            var pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
+            ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
             if (ViewBag.TipoUsuario == "ADMINISTRADOR")
             {
-                ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + PedidoHelper.BuscaUsuario().CodEmpresa;
+                ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + pedidoHelper.UsuarioCorrente.CodEmpresa;
             }
             else
             {
@@ -42,7 +43,7 @@ namespace PedidoWeb.Controllers
 
             ViewBag.CurrentFilter = search;
 
-            var codEmpresa = PedidoHelper.BuscaUsuario().CodEmpresa;
+            var codEmpresa = pedidoHelper.UsuarioCorrente.CodEmpresa;
             var produtos = db.Produtoes.Where(p => p.CodEmpresa == codEmpresa);
             
 
