@@ -424,8 +424,6 @@
             })
 
 
-            
-            
             // Function for show added items in table
             function GeneratedItemsTable() {   
                 if (pedidoItens.length > 0) {
@@ -444,7 +442,7 @@
                             $row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
                         $row.append($('<td/>').html(val.ValorUnitario));                        
                         $row.append($('<td><button id=excluir class="btn btn-danger">Excluir</button></td>').click(function(){
-                            for (var i in pedidoItens)
+                            for(var i in pedidoItens)
                             {                                
                                 if(pedidoItens[i].ProdutoID == val.ProdutoID
                                     && pedidoItens[i].Quantidade == val.Quantidade
@@ -453,21 +451,21 @@
                                     && pedidoItens[i].ValorDesconto == val.ValorDesconto)
                                 {                                    
                                     pedidoItens.splice(i, 1);                                    
-                                    totalPedido -= ((val.Quantidade.trim().replace(',', '.')
-                                        * val.ValorUnitario.trim().replace(',', '.'))
-                                        - (val.Quantidade.trim().replace(',', '.') * val.ValorDesconto.trim().replace(',', '.')));                                    
+                                    totalPedido -= ((val.Quantidade
+                                        * val.ValorUnitario)
+                                        - (val.Quantidade 
+                                        * val.ValorDesconto));                                    
                                     GeneratedItemsTable();
                                 }
                             }
                         }));
-
                         $tbody.append($row);
                     });
                     $table.append($tbody);
                     $div.append($table);
                     $('#pedidoItens').html($div);
                 }
-                else {
+                else{
                     $('#pedidoItens').html('');
                 }
 
@@ -488,5 +486,6 @@
                 }
             }
         });
+
     </script>
 }
