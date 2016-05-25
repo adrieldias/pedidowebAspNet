@@ -402,12 +402,14 @@
                             $row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
                         $row.append($('<td/>').html(val.ValorUnitario));
                         $row.append($('<td><button id=excluir class="btn btn-danger">Excluir</button></td>').click(function () {
-                            for (var i in pedidoItens) {
-                                if (pedidoItens[i].ProdutoID == val.ProdutoID
+                            for (var i in pedidoItens)
+                            {
+                                if(pedidoItens[i].ProdutoID == val.ProdutoID
                                     && pedidoItens[i].Quantidade == val.Quantidade
                                     && pedidoItens[i].ValorUnitario == val.ValorUnitario
                                     && pedidoItens[i].Observacao == val.Observacao
-                                    && pedidoItens[i].ValorDesconto == val.ValorDesconto) {
+                                    && pedidoItens[i].ValorDesconto == val.ValorDesconto)
+                                {
                                     pedidoItens.splice(i, 1);
                                     totalPedido -= ((val.Quantidade.trim().replace(',', '.')
                                         * val.ValorUnitario.trim().replace(',', '.'))
@@ -416,7 +418,6 @@
                                 }
                             }
                         }));
-
 
                         $tbody.append($row);
                     });
@@ -444,7 +445,6 @@
                         );
                 }
             }
-
         });
     </script>
 }
