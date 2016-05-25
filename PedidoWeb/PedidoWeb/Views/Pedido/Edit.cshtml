@@ -52,7 +52,7 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.TransportadorID, "Transportador (opcional)")
-        @Html.DropDownList("TransportadorID", null, new { @class = "form-control" })
+        @Html.DropDownList("TransportadorID", null, string.Empty, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.TransportadorID)
     </div>
 
