@@ -353,6 +353,8 @@ namespace PedidoWeb.Controllers
             ViewBag.Empresa = pedidoHelper.BuscaEmpresa();
             foreach(var pedido in pedidos)
             {
+                if (pedido.Status != "EM ANALISE" && pedido.Status != "APROVADO")
+                    return RedirectToAction("Index", "Pedido", new { mensagem = "Pedido com situação \""+pedido.Status+"\" não pode ser alterado." });
                 // Seta o campo pedido dos itens de pedido para null afim de evitar referência cíclica ao gerar JSON
                 for (var i = 0; i < pedido.Itens.Count; i++)
                     pedido.Itens[i].Pedido = null;
@@ -419,6 +421,8 @@ namespace PedidoWeb.Controllers
             {
                 return HttpNotFound();
             }
+            if (pedido.Status != "EM ANALISE" && pedido.Status != "APROVADO")
+                return RedirectToAction("Index", "Pedido", new { mensagem = "Pedido com situação \"" + pedido.Status + "\" não pode ser excluído." });
             return View(pedido);
         }
 

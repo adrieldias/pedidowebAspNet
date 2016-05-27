@@ -29,12 +29,12 @@ namespace PedidoWeb.Migrations
             //    );
             //
 
-            context.Operacaos.AddOrUpdate(
-                new PedidoWeb.Models.Operacao { Descricao = "VENDAS NF-E", CodEmpresa = "NIR" }
-            );
-            context.Operacaos.AddOrUpdate(
-                new PedidoWeb.Models.Operacao { Descricao = "BONIFICAÇÃO", CodEmpresa = "NIR" }
-            );
+            //context.Operacaos.AddOrUpdate(
+            //    new PedidoWeb.Models.Operacao { Descricao = "VENDAS NF-E", CodEmpresa = "NIR" }
+            //);
+            //context.Operacaos.AddOrUpdate(
+            //    new PedidoWeb.Models.Operacao { Descricao = "BONIFICAÇÃO", CodEmpresa = "NIR" }
+            //);
 
             
         }
