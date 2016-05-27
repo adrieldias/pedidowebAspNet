@@ -239,15 +239,22 @@
             var pedidoItens = itens;
             var totalPedido = 0;
 
-            for(var i = 0; i < itens.length; i++)
-            {
-                totalPedido += Number(
-                    Number(itens[i].Quantidade) 
-                    * Number(itens[i].ValorUnitario) 
-                    - Number(itens[i].Quantidade) 
-                    * Number(itens[i].ValorDesconto)
-                );           
-            }
+            var calulaTotal = function()
+            {                
+                for(var i = 0; i < itens.length; i++)
+                {
+                    var d = 0;
+                    if(!isNaN(Number(String(itens[i].ValorDesconto).replace(',','.'))))
+                        d = Number(String(itens[i].ValorDesconto).replace(',','.')) 
+                            * Number(String(itens[i].Quantidade).replace(',','.'));                            
+                    
+                    totalPedido += Number(
+                        Number(String(itens[i].Quantidade).replace(',','.')) 
+                        * Number(String(itens[i].ValorUnitario).replace(',','.'))
+                        - Number(d)
+                    );
+                }
+            };
 
             GeneratedItemsTable(); 
 
@@ -449,12 +456,12 @@
                                     && pedidoItens[i].ValorUnitario == val.ValorUnitario
                                     && pedidoItens[i].Observacao == val.Observacao
                                     && pedidoItens[i].ValorDesconto == val.ValorDesconto)
-                                {                                    
+                                {  
+                                    //totalPedido -= ((Number(String(val.Quantidade).replace(',','.'))
+                                    //    * Number(String(val.ValorUnitario).replace(',','.')))
+                                    //    - (Number(String(val.Quantidade).replace(',','.')) 
+                                    //    * Number(String(val.ValorDesconto).replace(',','.'))));                                    
                                     pedidoItens.splice(i, 1);                                    
-                                    totalPedido -= ((val.Quantidade
-                                        * val.ValorUnitario)
-                                        - (val.Quantidade 
-                                        * val.ValorDesconto));                                    
                                     GeneratedItemsTable();
                                 }
                             }
@@ -469,13 +476,15 @@
                     $('#pedidoItens').html('');
                 }
 
+                calulaTotal();
+
                 if (isNaN(totalPedido)) {
                     $('#totalPedido').html(
                         '<p class="label label-default">'
                         + 'Total do Pedido R$: 0.00'
                         + '</p>'
                         );
-                    totalPedido = 0;
+                    
                 } else {
                     $('#totalPedido').html(
                         '<p class="label label-default">'
@@ -484,6 +493,8 @@
                         + '</p>'
                         );
                 }
+
+                totalPedido = 0;
             }
         });
 
