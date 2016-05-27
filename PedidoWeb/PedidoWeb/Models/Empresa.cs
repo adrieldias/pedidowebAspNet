@@ -22,6 +22,11 @@ namespace PedidoWeb.Models
         [DisplayName("Permite Informar Desconto")]
         public bool DescontoInformado { get; set; }
 
+        [DisplayName("Operação Padrão")]
+        public int? OperacaoPadrao { get; set; }        
+
+        [DisplayName("Prazo de Vencimento Padrão")]
+        public int? PrazoVencimentoPadrao { get; set; }        
 
         // Properties
 

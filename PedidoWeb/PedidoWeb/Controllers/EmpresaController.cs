@@ -111,6 +111,14 @@ namespace PedidoWeb.Controllers
                 return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
             }
 
+            ViewBag.OperacaoPadrao = new SelectList(
+                db.Operacaos.Where(o => o.Situacao == "ATIVO" && o.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                , "OperacaoID", "Descricao");
+
+            ViewBag.PrazoVencimentoPadrao = new SelectList(
+                db.PrazoVencimentoes.Where(p => p.Situacao == "ATIVO" && p.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                , "PrazoVencimentoID", "Descricao");
+
             return View();
         }
 
@@ -120,7 +128,7 @@ namespace PedidoWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include = "CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado")] Empresa empresa)
+        public ActionResult Create([Bind(Include = "CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado,PrazoVencimentoPadrao,OperacaoPadrao")] Empresa empresa)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
@@ -138,6 +146,14 @@ namespace PedidoWeb.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
+            ViewBag.OperacaoPadrao = new SelectList(
+                 db.Operacaos.Where(o => o.Situacao == "ATIVO" && o.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                 , "OperacaoID", "Descricao");
+
+            ViewBag.PrazoVencimentoPadrao = new SelectList(
+                db.PrazoVencimentoes.Where(p => p.Situacao == "ATIVO" && p.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                , "PrazoVencimentoID", "Descricao");
 
             return View(empresa);
         }
@@ -165,6 +181,15 @@ namespace PedidoWeb.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.OperacaoPadrao = new SelectList(
+                db.Operacaos.Where(o => o.Situacao == "ATIVO" && o.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                , "OperacaoID", "Descricao", empresa.OperacaoPadrao);
+
+            ViewBag.PrazoVencimentoPadrao = new SelectList(
+                db.PrazoVencimentoes.Where(p => p.Situacao == "ATIVO" && p.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                , "PrazoVencimentoID", "Descricao", empresa.PrazoVencimentoPadrao);
+
             return View(empresa);
         }
 
@@ -174,7 +199,7 @@ namespace PedidoWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Include="CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado")] Empresa empresa)
+        public ActionResult Edit([Bind(Include="CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado,PrazoVencimentoPadrao,OperacaoPadrao")] Empresa empresa)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
@@ -201,6 +226,17 @@ namespace PedidoWeb.Controllers
                     return RedirectToAction("Index");
                 }                
             }
+
+            ViewBag.OperacaoPadrao = new SelectList(
+                db.Operacaos.Where(o => o.Situacao == "ATIVO" && o.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                , "OperacaoID", "Descricao"
+                , empresa.OperacaoPadrao);
+
+            ViewBag.PrazoVencimentoPadrao = new SelectList(
+                db.PrazoVencimentoes.Where(p => p.Situacao == "ATIVO" && p.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                , "PrazoVencimentoID", "Descricao"
+                , empresa.PrazoVencimentoPadrao);
+
             return View(empresa);
         }
 

@@ -30,6 +30,16 @@
             @Html.ValidationMessageFor(model => model.CodEmpresa)
         </div>
 
+        <div class="form-group">
+            @Html.LabelFor(model => model.OperacaoPadrao, new { @class = "control-label" })
+            @Html.DropDownList("OperacaoPadrao", null, string.Empty, new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PrazoVencimentoPadrao, new { @class = "control-label" })
+            @Html.DropDownList("PrazoVencimentoPadrao", null, string.Empty, new { @class = "form-control" })
+        </div>
+
         <br />
         <div class="form-group">
             <p>

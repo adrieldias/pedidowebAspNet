@@ -9,21 +9,31 @@
 {
     @Html.AntiForgeryToken()
     
-    <div class="form-horizontal">
+    <div class="principal1coluna">
         <h3>Nova Empresa</h3>
         <hr />
         @Html.ValidationSummary(true)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Nome, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Nome, new { @class = "control-label" })
             @Html.TextBoxFor(model => model.Nome, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Nome)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.CodEmpresa, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.CodEmpresa, new { @class = "control-label" })
             @Html.TextBoxFor(model => model.CodEmpresa, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.CodEmpresa)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.OperacaoPadrao, new { @class="control-label"})
+            @Html.DropDownList("OperacaoPadrao", null, string.Empty, new { @class = "form-control"})
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PrazoVencimentoPadrao, new { @class = "control-label" })
+            @Html.DropDownList("PrazoVencimentoPadrao", null, string.Empty, new { @class = "form-control" })
         </div>
 
         <br />

@@ -138,17 +138,23 @@ namespace PedidoWeb.Controllers
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             var usuario = pedidoHelper.UsuarioCorrente;
             ViewBag.CadastroID = new SelectList(db.Cadastroes
-                .Where(c => c.CodEmpresa == usuario.CodEmpresa)
+                .Where(c => c.CodEmpresa == usuario.CodEmpresa && c.Situacao == "ATIVO")
                 .OrderBy(c => c.Nome), "CadastroID", "Nome");
             ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes
                 .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
-                .OrderBy(p => p.Descricao), "PrazoVencimentoID", "Descricao");
+                .OrderBy(p => p.Descricao)
+                , "PrazoVencimentoID"
+                , "Descricao"
+                , db.Empresas.Find(usuario.CodEmpresa).PrazoVencimentoPadrao);
             ViewBag.TransportadorID = new SelectList(db.Transportadors
                 .Where(t => t.CodEmpresa == usuario.CodEmpresa)
                 .OrderBy(t => t.Nome), "TransportadorID", "Nome");
             ViewBag.OperacaoID = new SelectList(db.Operacaos
                 .Where(o => o.CodEmpresa == usuario.CodEmpresa && o.Situacao == "ATIVO")
-                .OrderBy(o => o.Descricao), "OperacaoID", "Descricao");
+                .OrderBy(o => o.Descricao)
+                , "OperacaoID"
+                , "Descricao"
+                , db.Empresas.Find(usuario.CodEmpresa).OperacaoPadrao);
             ViewBag.ProdutoID = new SelectList(db.Produtoes
                 .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
                 .OrderBy(p => p.Descricao), "ProdutoID", "Descricao");
