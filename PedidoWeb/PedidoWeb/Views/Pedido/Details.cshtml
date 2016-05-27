@@ -201,7 +201,7 @@
 
     <div class="form-group">
         <div>
-            @if(ViewBag.TipoUsuario != "ADMINISTRADOR" && Model.Status == "CANCELADO")
+            @if(Model.Status != "APROVADO" && Model.Status != "EM ANALISE")
             {
                 @Html.ActionLink("Editar", "Edit", new { id = Model.PedidoID }, new { @class = "btn btn-primary disabled" })
             }
@@ -212,11 +212,11 @@
             
             @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
 
-            @if (ViewBag.TipoUsuario == "ADMINISTRADOR")
+            @if (ViewBag.TipoUsuario == "ADMINISTRADOR" && Model.Status == "EM ANALISE")
             {
                 @Html.ActionLink("Aceitar", "StatusPedido", new { id = Model.PedidoID, status = "APROVADO" }, new { @class = "btn btn-success" })
             }
-            @if (ViewBag.TipoUsuario == "ADMINISTRADOR")
+            @if (ViewBag.TipoUsuario == "ADMINISTRADOR" && Model.Status == "EM ANALISE")
             {
                 @Html.ActionLink("Recusar", "StatusPedido", new { id = Model.PedidoID, status = "CANCELADO" }, new { @class = "btn btn-danger" })
             }

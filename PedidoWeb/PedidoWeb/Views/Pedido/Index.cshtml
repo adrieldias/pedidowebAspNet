@@ -192,15 +192,16 @@
                     </td>
                     <td>
                         @Html.ActionLink(" ", "Details", new { id = item.PedidoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
-                        @if((ViewBag.TipoUsuario != "ADMINISTRADOR" && item.Status == "CANCELADO"))
+                        @if(item.Status != "APROVADO" && item.Status != "EM ANALISE")
                         { 
                             @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil disabled" })
+                            @Html.ActionLink(" ", "Delete", new { id = item.PedidoID }, new { @class = "btn btn-danger glyphicon glyphicon-remove disabled" })
                         }
                         else
                         {
                             @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil" })
-                        }
-                        @Html.ActionLink(" ", "Delete", new { id = item.PedidoID }, new { @class = "btn btn-danger glyphicon glyphicon-remove" })
+                            @Html.ActionLink(" ", "Delete", new { id = item.PedidoID }, new { @class = "btn btn-danger glyphicon glyphicon-remove" })
+                        }                        
                     </td>
                 </tr>
             }
