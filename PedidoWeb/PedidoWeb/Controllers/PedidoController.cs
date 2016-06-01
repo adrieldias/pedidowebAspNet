@@ -447,6 +447,13 @@ namespace PedidoWeb.Controllers
                 db.PedidoItems.RemoveRange(pedido.Itens);
                 db.Pedidoes.Remove(pedido);
                 db.SaveChanges();
+                Sincronismo sincronismo = new Sincronismo();
+                sincronismo.CodEmpresa = pedido.CodEmpresa;
+                sincronismo.CodRegistro = pedido.PedidoID;
+                sincronismo.Data = DateTime.Now;
+                sincronismo.Operacao = "EXCLUIDO";
+                sincronismo.Tipo = "PEDIDO";
+                
                 return RedirectToAction("Index");                
             }
             catch(Exception ex)
