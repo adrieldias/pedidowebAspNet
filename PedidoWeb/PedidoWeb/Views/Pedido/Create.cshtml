@@ -67,6 +67,10 @@
             <hr />
             <br />
 
+            <div id="MsgAddItem" class="alert alert-success">
+                <p>Item adicionado com sucesso. Você pode adicionar mais itens ao pedido.</p>
+            </div>
+
             @{AjaxOptions ajaxOptions = new AjaxOptions() {
                   UpdateTargetId = "ValorUnitario",
                   OnSuccess = "SuccessRequest",
@@ -191,6 +195,7 @@
 
             $("#VendedorID").prop("disabled", true);
             $("#ValorDesconto").prop("disabled", true);
+            $("#MsgAddItem").hide();
             
             var valorUnitario = '@(ViewBag.Empresa.AlteraValorUnitario)';
             var percDesconto = '@(ViewBag.Empresa.DescontoInformado)'; 
@@ -291,14 +296,15 @@
                         * Number($('#ValorUnitario').val().trim().replace(',', '.')))
                         - (Number($('#Quantidade').val().trim().replace(',', '.'))
                         * Number($('#ValorDesconto').val().trim().replace(',', '.')));
-
+                    
                     $('#ProdutoID').val('').focus();
                     $('#Quantidade').val('');
                     $('#ValorUnitario').val('');
                     $('#ObservacaoItem').val('');
                     $('#PercDesconto').val('');
                     $('#ValorDesconto').val('');
-                    //setTimeout("alert('Item incluído com sucesso')", 3000);
+                    $("#MsgAddItem").show();                    
+                    setTimeout("$('#MsgAddItem').hide()", 3500);
                 }
                 GeneratedItemsTable();
             });

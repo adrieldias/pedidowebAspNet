@@ -45,7 +45,7 @@ namespace PedidoWeb.Controllers
 
             ViewBag.CurrentFilter = search;
 
-            var cadastros = from s in db.Cadastroes
+            var cadastros = from s in db.Cadastroes.Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
                           select s;
 
             if (!String.IsNullOrEmpty(search))

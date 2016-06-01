@@ -46,8 +46,7 @@ namespace PedidoWeb.Controllers
             ViewBag.CurrentFilter = search;
 
             var codEmpresa = pedidoHelper.UsuarioCorrente.CodEmpresa;
-            var usuarios = db.Usuarios.Include(u => u.Vendedor)
-                .Where(u => u.CodEmpresa == codEmpresa);
+            var usuarios = db.Usuarios.Include(u => u.Vendedor);
 
             if (!String.IsNullOrEmpty(search))
             {
@@ -109,7 +108,7 @@ namespace PedidoWeb.Controllers
             var usuario = pedidoHelper.UsuarioCorrente;
 
             ViewBag.VendedorID = new SelectList(
-                db.Vendedors.Where(v => v.CodEmpresa == usuario.CodEmpresa), "VendedorID", "Nome");
+                db.Vendedors, "VendedorID", "Nome");
             ViewBag.CodEmpresa = new SelectList(db.Empresas, "CodEmpresa", "Nome");
             return View();
         }
