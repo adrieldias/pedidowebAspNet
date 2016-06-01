@@ -37,6 +37,12 @@ namespace PedidoWeb.Controllers.Negocio
                             return "EM ANALISE";
                     }
                 }
+
+                Cadastro cadastro = db.Cadastroes.Find(p.CadastroID);
+                if (cadastro.AtrasoPagamento) 
+                    return "EM ANALISE";
+                if (cadastro.Classificacao.Contains("RUIM") || cadastro.Classificacao.Contains("MAU") /*MAU PAGADOR*/)
+                    return "EM ANALISE";
             }
             return "APROVADO";
         }

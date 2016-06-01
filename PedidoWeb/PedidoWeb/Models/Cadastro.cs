@@ -112,6 +112,16 @@ namespace PedidoWeb.Models
 
         private string codEmpresa;
 
+        private string classificacao;
+        [DisplayName("Classificação")]
+        public string Classificacao 
+        {
+            get { return this.classificacao == null ? string.Empty : this.classificacao.ToUpper(); }
+            set { this.classificacao = value == null ? string.Empty : value.ToUpper(); }
+        }
+
+        public bool AtrasoPagamento { get; set; }
+
         // Properties
 
         [ForeignKey("Empresa")]

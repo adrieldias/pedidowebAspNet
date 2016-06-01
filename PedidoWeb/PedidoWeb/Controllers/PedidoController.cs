@@ -138,7 +138,7 @@ namespace PedidoWeb.Controllers
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             var usuario = pedidoHelper.UsuarioCorrente;
             ViewBag.CadastroID = new SelectList(db.Cadastroes
-                .Where(c => c.CodEmpresa == usuario.CodEmpresa && c.Situacao == "ATIVO")
+                .Where(c => c.CodEmpresa == usuario.CodEmpresa && c.Situacao == "ATIVO" && c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID)
                 .OrderBy(c => c.Nome), "CadastroID", "Nome");
             ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes
                 .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
