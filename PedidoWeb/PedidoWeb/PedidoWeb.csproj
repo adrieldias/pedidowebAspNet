@@ -274,6 +274,10 @@
     <Compile Include="Migrations\201606012016376_Cadastro_classificacao.Designer.cs">
       <DependentUpon>201606012016376_Cadastro_classificacao.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606021206360_Sincronismo.cs" />
+    <Compile Include="Migrations\201606021206360_Sincronismo.Designer.cs">
+      <DependentUpon>201606021206360_Sincronismo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Sincronismo.cs" />
@@ -502,6 +506,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606012016376_Cadastro_classificacao.resx">
       <DependentUpon>201606012016376_Cadastro_classificacao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606021206360_Sincronismo.resx">
+      <DependentUpon>201606021206360_Sincronismo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
