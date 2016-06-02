@@ -22,8 +22,13 @@ namespace PedidoWeb.Controllers.Negocio
             {
                 if(NomeController.ToUpper() == "USUARIO")
                 {
-                    // Vendedor não acessa ações do usuário
-                    return false;
+                    if (NomeAction.ToUpper() == "CREATE"
+                        || NomeAction.ToUpper() == "DELETE"
+                        || NomeAction.ToUpper() == "DETAILS")
+                    {
+                        // Usuário não acessa essas ações
+                        return false;
+                    }
                 }
 
                 if(NomeController.ToUpper() == "EMPRESA")
@@ -37,8 +42,13 @@ namespace PedidoWeb.Controllers.Negocio
             {
                 if(NomeController.ToUpper() == "USUARIO")
                 {
-                    // Administrador não acessa ações do usuário
-                    return false;
+                    if (NomeAction.ToUpper() == "CREATE"
+                        || NomeAction.ToUpper() == "DELETE"
+                        || NomeAction.ToUpper() == "DETAILS")
+                    {
+                        // Administrador não acessa essas ações
+                        return false;
+                    }
                 }
 
                 if(NomeController.ToUpper() == "EMPRESA")

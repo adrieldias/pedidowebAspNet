@@ -35,6 +35,7 @@ namespace PedidoWeb.Controllers
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateParam = sortOrder == "DataEmissao" ? "DataEmissao_desc" : "DataEmissao";
             ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
+            ViewBag.UrlConfUsuario = "/Usuario/Edit/" + pedidoHelper.UsuarioCorrente.UsuarioID;
             if(ViewBag.TipoUsuario == "ADMINISTRADOR")
             {
                 ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + pedidoHelper.UsuarioCorrente.CodEmpresa;

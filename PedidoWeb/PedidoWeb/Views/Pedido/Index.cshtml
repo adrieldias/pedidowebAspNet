@@ -49,9 +49,25 @@
         if(ViewBag.TipoUsuario == "ADMINISTRADOR")
         {
             <li role="presentation" class="menulateral">
+                <a href=@ViewBag.UrlConfUsuario>
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    Usuário
+                </a>
+            </li>
+            
+            <li role="presentation" class="menulateral">
                 <a href=@ViewBag.UrlConfEmpresa>                    
                     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                     Config. Empresa
+                </a>
+            </li>
+        }
+        else
+        {
+            <li role="presentation" class="menulateral">
+                <a href=@ViewBag.UrlConfUsuario>
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    Usuário
                 </a>
             </li>
         }
