@@ -150,7 +150,7 @@
         </p>
     </div>
     <div class="table-responsive">
-        <table class="table table-responsive table-striped">
+        <table class="table table-responsive table-striped" id="tablePedidos">
             <tr class="cabecalho-tabela">
                 <th>
                     @Html.DisplayNameFor(model => model[0].Status)
@@ -169,61 +169,61 @@
                 </th>
                 <th></th>
             </tr>
-            @foreach (var item in Model)
+                        @foreach (var item in Model)
+{
+    <tr class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Pedido", new { id = item.PedidoID }))'">
+        <td>
+            @if (item.Status == "EM ANALISE")
             {
-                <tr>
-                    <td>
-                        @if(item.Status == "EM ANALISE")
-                        { 
-                            <div class="label label-warning">
-                                @Html.DisplayFor(modelItem => item.Status)
-                            </div>
-                        }                       
-                        else                 
-                        if(item.Status == "CANCELADO")
-                        {
-                            <div class="label label-danger">
-                                @Html.DisplayFor(modelItem => item.Status)
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="label label-success">
-                                @Html.DisplayFor(modelItem => item.Status)
-                            </div>
-                        }
-                        
-                    </td>
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PedidoID)
-                    </td>
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Cadastro.Nome)
-                    </td>                    
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DataEmissao)
-                    </td>
-                    <td>
-                        @Html.ActionLink(" ", "Details", new { id = item.PedidoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
-                        @if(item.Status != "APROVADO" && item.Status != "EM ANALISE")
-                        { 
-                            @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil disabled" })
-                            @Html.ActionLink(" ", "Delete", new { id = item.PedidoID }, new { @class = "btn btn-danger glyphicon glyphicon-remove disabled" })
-                        }
-                        else
-                        {
-                            @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil" })
-                            @Html.ActionLink(" ", "Delete", new { id = item.PedidoID }, new { @class = "btn btn-danger glyphicon glyphicon-remove" })
-                        }                        
-                    </td>
-                </tr>
+                <div class="label label-warning">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </div>
             }
+            else
+                if (item.Status == "CANCELADO")
+                {
+                    <div class="label label-danger">
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </div>
+                }
+                else
+                {
+                    <div class="label label-success">
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </div>
+                }
 
-        </table>
-    </div>
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.PedidoID)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Cadastro.Nome)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.DataEmissao)
+        </td>
+        <td>
+            @Html.ActionLink(" ", "Details", new { id = item.PedidoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
+            @if (item.Status != "APROVADO" && item.Status != "EM ANALISE")
+            {
+                @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil disabled" })
+                @Html.ActionLink(" ", "Delete", new { id = item.PedidoID }, new { @class = "btn btn-danger glyphicon glyphicon-remove disabled" })
+            }
+            else
+            {
+                @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil" })
+                @Html.ActionLink(" ", "Delete", new { id = item.PedidoID }, new { @class = "btn btn-danger glyphicon glyphicon-remove" })
+            }
+        </td>
+    </tr>
+}
+
+</table>
+</div>
 
     Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

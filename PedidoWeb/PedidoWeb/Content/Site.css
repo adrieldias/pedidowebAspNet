@@ -74,3 +74,7 @@ input[type="checkbox"].input-validation-error {
     padding-right: 0px;
 }
 
+.cursor-hover{
+    cursor:pointer;
+}
+
