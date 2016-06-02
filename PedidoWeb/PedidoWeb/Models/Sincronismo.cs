@@ -16,7 +16,7 @@ namespace PedidoWeb.Models
         [Key]
         public int SincronismoID { get; set; }
         public string Tipo { get; set; }
-        public int CodRegistro { get; set; }
+        public int? CodRegistro { get; set; }
         public DateTime Data { get; set; }
         public string Operacao { get; set; }
 
