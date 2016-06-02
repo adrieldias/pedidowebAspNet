@@ -170,6 +170,13 @@ namespace PedidoWeb.Controllers
                 return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
             }
 
+            if(!valida.LiberaEdicao(pedidoHelper.UsuarioCorrente.UsuarioID, Convert.ToInt32(id)))
+            {
+                return RedirectToAction("Index", "Pedido", new { mensagem = "Não é possível alterar usuário distinto" });
+            }
+
+            ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -201,6 +208,8 @@ namespace PedidoWeb.Controllers
             {
                 return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
             }
+
+            ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
 
             if (ModelState.IsValid)
             {

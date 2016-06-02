@@ -72,9 +72,9 @@
 
     <script>
         $(document).ready(
-            function () {
-                var tipoUsuario = '@(Model.TipoUsuario)';
-                if(tipoUsuario === "MASTER") {
+            function () {                
+                var tipoUsuario = '@(ViewBag.TipoUsuario)';                
+                if(tipoUsuario === 'MASTER') {
                     $('#CodEmpresa').prop('disabled', false)
                     $('#TipoUsuario').prop('disabled', false)
                     $('#VendedorID').prop('disabled', false)
