@@ -68,4 +68,27 @@
 }
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+
+    <script>
+        $(document).ready(
+            function () {
+                var tipoUsuario = '@(Model.TipoUsuario)';
+                if(tipoUsuario === "MASTER") {
+                    $('#CodEmpresa').prop('disabled', false)
+                    $('#TipoUsuario').prop('disabled', false)
+                    $('#VendedorID').prop('disabled', false)
+                }
+                else {
+                    $('#CodEmpresa').prop('disabled', true)
+                    $('#TipoUsuario').prop('disabled', true)
+                    $('#VendedorID').prop('disabled', true)
+                }
+            }
+        );
+
+    </script>
+
 }
+
+
