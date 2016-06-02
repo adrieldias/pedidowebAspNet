@@ -10,7 +10,7 @@ namespace PedidoWeb.Controllers.Negocio
     public class ValidaFuncoesUsuario
     {
         /// <summary>
-        /// Classe que evita usuários não autorizados acessarem ações por meio de URL
+        /// Método que evita usuários não autorizados acessarem ações por meio de URL
         /// </summary>
         /// <param name="usuario">Usuário logado</param>
         /// <param name="NomeController">Controller que se deseja proteger</param>
@@ -64,6 +64,11 @@ namespace PedidoWeb.Controllers.Negocio
             }
 
             return true;
+        }
+
+        public bool LiberaEdicao(int CodUsuarioCorrente, int CodUsuarioEdicao)
+        {
+            return (CodUsuarioCorrente == CodUsuarioEdicao);
         }
     }
 }
