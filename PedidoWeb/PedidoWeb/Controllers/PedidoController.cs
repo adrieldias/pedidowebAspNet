@@ -60,7 +60,9 @@ namespace PedidoWeb.Controllers
             var tipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
 
             var pedidos = from s in db.Pedidoes
-                .Where(p => p.VendedorID == vendedorID || tipoUsuario == "ADMINISTRADOR")
+                .Where(p => p.VendedorID == vendedorID || 
+                    (tipoUsuario == "ADMINISTRADOR" && p.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa) ||
+                    (tipoUsuario == "MASTER"))
                  select s;
 
             if (search != string.Empty)
