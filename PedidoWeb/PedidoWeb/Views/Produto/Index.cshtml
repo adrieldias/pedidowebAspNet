@@ -108,28 +108,28 @@
             </tr>
 
             @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Descricao)
-                    </td>
-                    
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UnidadeMedida)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PrecoVarejo)
-                    </td>                   
-                    
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Situacao)
-                    </td>
+{
+    <tr class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Produto", new { id = item.ProdutoID }))'">
+        <td>
+            @Html.DisplayFor(modelItem => item.Descricao)
+        </td>
 
-                    <td>
-                        @Html.ActionLink(" ", "Details", new { id = item.ProdutoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
-                    </td>
-                </tr>
-            }
+        <td>
+            @Html.DisplayFor(modelItem => item.UnidadeMedida)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PrecoVarejo)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Situacao)
+        </td>
+
+        <td>
+            @Html.ActionLink(" ", "Details", new { id = item.ProdutoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
+        </td>
+    </tr>
+}
 
         </table>
     </div>

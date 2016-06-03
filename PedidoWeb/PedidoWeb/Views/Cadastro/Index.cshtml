@@ -117,28 +117,28 @@
             </tr>
 
             @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nome)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Fantasia)
-                    </td>                    
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CpfCnpj)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Fone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>                       
-                    <td>
-                        @Html.ActionLink(" ", "Details", new { id = item.CadastroID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })                        
-                    </td>
-                </tr>
-            }
+{
+    <tr class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Cadastro", new { id = item.CadastroID }))'">
+        <td>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Fantasia)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CpfCnpj)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Fone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.ActionLink(" ", "Details", new { id = item.CadastroID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
+        </td>
+    </tr>
+}
         </table>
     </div>
     Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
