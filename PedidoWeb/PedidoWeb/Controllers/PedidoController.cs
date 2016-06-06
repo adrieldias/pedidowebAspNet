@@ -524,14 +524,15 @@ namespace PedidoWeb.Controllers
             if (int.TryParse(term, out codigo))
             {
                 cadastros = db.Cadastroes.Where(c => c.Nome.Contains(term) || c.CodCadastro == codigo)
-                    .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
+                    .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                    .Where(c => c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID).ToList();
             }
             else
             {
                 cadastros = db.Cadastroes.Where(c => c.Nome.Contains(term))
-                    .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
+                    .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                    .Where(c => c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID).ToList();
             }
-
 
             foreach (var p in cadastros)
             {
