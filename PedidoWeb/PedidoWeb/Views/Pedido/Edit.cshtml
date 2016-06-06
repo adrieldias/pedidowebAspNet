@@ -26,10 +26,16 @@
         <span class="error" style="visibility: hidden">Número inválido</span>
     </div>
 
-    <div class="form-group">
+    @*<div class="form-group">
         * @Html.LabelFor(model => model.CadastroID, "Cliente")
         @Html.DropDownList("CadastroID", null, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.CadastroID)
+    </div>*@
+
+    <div class="form-group">
+        * @Html.Label("Cliente")
+        @Html.TextBox("CadastroAux", null, string.Empty, new { @class = "form-control" })
+        <span class="error" style="visibility: hidden">Cliente é obrigatório</span>
     </div>
 
     <div class="form-group">
@@ -89,7 +95,11 @@
         <hr />
         <br />
 
-        @{AjaxOptions ajaxOptions = new AjaxOptions()
+        <div id="MsgAddItem" class="alert alert-success">
+            <p>Item adicionado com sucesso. Você pode adicionar mais itens ao pedido.</p>
+        </div>
+
+        @*@{AjaxOptions ajaxOptions = new AjaxOptions()
         {
             UpdateTargetId = "ValorUnitario",
             OnSuccess = "SuccessRequest",
@@ -120,7 +130,13 @@
                     alert("Não foi possível buscar o preço do produto");
                 }
             </script>
-        }
+        }*@
+
+        <div class="form-group">
+            @Html.Label("* Produto")
+            @Html.TextBox("ProdutoAux", null, string.Empty, new { @class = "form-control" })
+            <span class="error" style="visibility: hidden">Produto é obrigatório</span>
+        </div>
 
         <div class="form-group">
             * @Html.Label("Quantidade")
@@ -199,15 +215,90 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")    
-    @Scripts.Render("~/bundles/jqueryui");
+    @Scripts.Render("~/bundles/jqueryui")
     
     <script>
         $("document").ready(function () {
             
+            var produtoSelecionado = 0;
+            var cadastroSelecionado = 0;
+            var descProdutoSelecionado = '';
+
+            $('#ProdutoAux').autocomplete({
+                source: function (request, response) {
+                    // prepare url : for example '/api/artistapi?query=sonu
+                    var autocompleteUrl = '/Pedido/ProdutoAutoComplete' + '?term=' + request.term;
+                    $.ajax({
+                        url: autocompleteUrl,
+                        type: 'GET',
+                        cache: false,
+                        dataType: 'json',
+                        success: function (json) {                            
+                            var autoc = [];
+                            $.each(json, function (id, data) {                                
+                                autoc.push({
+                                    label: data.Descricao,                                                                   
+                                    value: data.ProdutoID,
+                                    valor: data.PrecoVarejo
+                                });
+                            });
+                            response(autoc);
+                        },
+                        error: function (xmlHttpRequest, textStatus, errorThrown) {
+                            alert('Erro', textStatus, errorThrown);
+                        }
+                    });
+                },
+                minLength: 0,
+                select: function (event, ui, json) {                    
+                    //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value + 'Valor ' + ui.item.valor );
+                    $('#ProdutoAux').val(ui.item.label);
+                    $('#ValorUnitario').val(ui.item.valor);
+                    descProdutoSelecionado = ui.item.label;
+                    produtoSelecionado = ui.item.value;                    
+                    return false;
+                }
+            });           
+
+            $('#CadastroAux').autocomplete({
+                source: function (request, response) {
+                    // prepare url : for example '/api/artistapi?query=sonu
+                    var autocompleteUrl = '/Pedido/CadastroAutoComplete' + '?term=' + request.term;
+                    $.ajax({
+                        url: autocompleteUrl,
+                        type: 'GET',
+                        cache: false,
+                        dataType: 'json',
+                        success: function (json) {
+                            var autoc = [];
+                            $.each(json, function (id, data) {
+                                autoc.push({
+                                    label: data.Nome,
+                                    value: data.CadastroID                                    
+                                });
+                            });
+                            response(autoc);
+                        },
+                        error: function (xmlHttpRequest, textStatus, errorThrown) {
+                            alert('Erro', textStatus, errorThrown);
+                        }
+                    });
+                },
+                minLength: 0,
+                select: function (event, ui, json) {
+                    //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value);
+                    $('#CadastroAux').val(ui.item.label);
+                    cadastroSelecionado = ui.item.value;                    
+                    return false;
+                }
+            });
+
             $("#VendedorID").prop("disabled", true);
             $("#DataEmissao").prop("disabled", true);
             $("#Status").prop("disabled", true);    
-            $('#ValorDesconto').prop('disabled', true);
+            $('#ValorDesconto').prop('disabled', true);            
+            $("#MsgAddItem").hide();
+
 
             var valorUnitario = '@(ViewBag.Empresa.AlteraValorUnitario)';
             var percDesconto = '@(ViewBag.Empresa.DescontoInformado)'; 
@@ -222,8 +313,9 @@
                 $("#PercDesconto").prop("disabled", true);
 
             var itens = @Html.Raw(Json.Encode(@Model.Itens));
-
             var produtos = @Html.Raw(Json.Encode(@ViewBag.ProdutoID));
+            $('#CadastroAux').val('@Model.Cadastro.Nome');
+            cadastroSelecionado = '@Model.CadastroID';
             
             
             for(var i = 0; i < produtos.length; i++)
@@ -273,7 +365,7 @@
 
             // Add  CancelaItem change function
             $('#del').click(function () {
-                $('#ProdutoID').val('').focus();
+                $('#ProdutoAux').val('').focus();
                 $('#Quantidade').val('');
                 $('#ValorUnitario').val('');
                 $('#ObservacaoItem').val('');
@@ -285,12 +377,12 @@
             $('#add').click(function () {
                 // Validações
                 var isValidItem = true;
-                if ($('#ProdutoID').val().trim() == '') {
+                if ($('#ProdutoAux').val().trim() == '' || produtoSelecionado == 0) {
                     isValidItem = false;
-                    $('#ProdutoID').siblings('span.error').css('visibility', 'visible');
+                    $('#ProdutoAux').siblings('span.error').css('visibility', 'visible');
                 }
                 else {
-                    $('#ProdutoID').siblings('span.error').css('visibility', 'hidden');
+                    $('#ProdutoAux').siblings('span.error').css('visibility', 'hidden');
                 }
 
                 if ($('#Quantidade').val().trim() == '' || isNaN($('#Quantidade').val().trim().replace(',', '.'))) {
@@ -324,25 +416,30 @@
                     $('#PercDesconto').siblings('span.error').css('visibility', 'hidden');
                 }
 
-                // Add item to list if valid
+                // Add item to list if valid                
                 if (isValidItem) {
-                    var el = document.getElementById('ProdutoID');
+                    //var el = document.getElementById('ProdutoID');
                     pedidoItens.push({
-                        ProdutoID: $('#ProdutoID').val().trim(),
+                        //ProdutoID: $('#ProdutoID').val().trim(),
+                        ProdutoID: produtoSelecionado,
                         Quantidade: $('#Quantidade').val().trim(),
                         ValorUnitario: $('#ValorUnitario').val().trim(),
                         Observacao: $('#ObservacaoItem').val().trim(),
-                        DescProduto: el.options[el.selectedIndex].text,
+                        //DescProduto: el.options[el.selectedIndex].text,
+                        DescProduto: descProdutoSelecionado,
                         ValorDesconto : $('#ValorDesconto').val().trim(),
                         PercentualDesconto : $('#PercDesconto').val().trim()
                     });
 
-                    $('#ProdutoID').val('').focus();
+                    $('#ProdutoAux').val('').focus();
                     $('#Quantidade').val('');
                     $('#ValorUnitario').val('');
                     $('#ObservacaoItem').val('');
                     $('#PercDesconto').val('');
                     $('#ValorDesconto').val('');
+                    produtoSelecionado = 0;
+                    $("#MsgAddItem").show();                    
+                    setTimeout("$('#MsgAddItem').hide()", 3500);
                 }
                 GeneratedItemsTable();
 
@@ -354,12 +451,13 @@
                 // Validação do pedido
                 var isValidOrder = true;
 
-                if ($('#CadastroID').val().trim() == '') {
+                if ($('#CadastroAux').val().trim() == '' || cadastroSelecionado == 0) {
                     isValidOrder = false;
-                    $('#CadastroID').siblings('span.error').css('visibility', 'visible');
+                    $('#CadastroAux').siblings('span.error').css('visibility', 'visible');
+                    $('#CadastroAux').focus();
                 }
                 else {
-                    $('#CadastroID').siblings('span.error').css('visibility', 'hidden');
+                    $('#CadastroAux').siblings('span.error').css('visibility', 'hidden');
                 }
 
                 if ($('#PrazoVencimentoID').val().trim() == '') {
@@ -389,7 +487,8 @@
                 if (isValidOrder) {
                     var data = {
                         PedidoID: $('#PedidoID').val().trim(),
-                        CadastroID: $('#CadastroID').val().trim(),
+                        //CadastroID: $('#CadastroID').val().trim(),
+                        CadastroID: cadastroSelecionado,
                         PrazoVencimentoID: $('#PrazoVencimentoID').val().trim(),
                         VendedorID: $('#VendedorID').val().trim(),
                         TransportadorID: $('#TransportadorID').val().trim(),
@@ -404,7 +503,7 @@
                         CodEmpresa: '@(ViewBag.Empresa.CodEmpresa)',
                         Itens: pedidoItens
                     }
-
+                    cadastroSelecionado = 0;
                     $(this).val('Por favor aguarde...');
 
                     $.ajax({

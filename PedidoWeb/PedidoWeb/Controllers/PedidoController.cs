@@ -355,7 +355,7 @@ namespace PedidoWeb.Controllers
                 .Include(i => i.Itens)
                 //.Include(p => p.PrazoVencimento)
                 //.Include(t => t.Transportador)
-                //.Include(c => c.Cadastro)
+                .Include(c => c.Cadastro)
                 .Where(p => p.PedidoID == id).ToList();
             ViewBag.Empresa = pedidoHelper.BuscaEmpresa();
             foreach(var pedido in pedidos)
@@ -480,6 +480,56 @@ namespace PedidoWeb.Controllers
             db.Entry(pedido).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        public JsonResult ProdutoAutoComplete(string term)
+        {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
+            int codigo = 0;
+            List<Produto> produtos;
+            if(int.TryParse(term, out codigo))
+            {
+                produtos = db.Produtoes.Where(c => c.Descricao.Contains(term) || c.CodProduto == codigo)
+                    .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
+            }
+            else
+            {
+                produtos = db.Produtoes.Where(c => c.Descricao.Contains(term))
+                    .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
+            }
+
+            
+            foreach(var p in produtos)
+            {
+                p.Descricao = string.Format("{0} - {1}", p.CodProduto, p.Descricao);
+            }
+            return Json(produtos, JsonRequestBehavior.AllowGet);
+        }
+
+        [Authorize]
+        public JsonResult CadastroAutoComplete(string term)
+        {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
+            int codigo = 0;
+            List<Cadastro> cadastros;
+            if (int.TryParse(term, out codigo))
+            {
+                cadastros = db.Cadastroes.Where(c => c.Nome.Contains(term) || c.CodCadastro == codigo)
+                    .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
+            }
+            else
+            {
+                cadastros = db.Cadastroes.Where(c => c.Nome.Contains(term))
+                    .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
+            }
+
+
+            foreach (var p in cadastros)
+            {
+                p.Nome = string.Format("{0} - {1}", p.CodCadastro, p.Nome);
+            }
+            return Json(cadastros, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)
