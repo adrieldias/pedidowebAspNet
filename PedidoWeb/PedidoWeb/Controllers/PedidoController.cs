@@ -60,7 +60,9 @@ namespace PedidoWeb.Controllers
             var tipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
 
             var pedidos = from s in db.Pedidoes
-                .Where(p => p.VendedorID == vendedorID || tipoUsuario == "ADMINISTRADOR")
+                .Where(p => p.VendedorID == vendedorID || 
+                    (tipoUsuario == "ADMINISTRADOR" && p.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa) ||
+                    (tipoUsuario == "MASTER"))
                  select s;
 
             if (search != string.Empty)
@@ -446,15 +448,21 @@ namespace PedidoWeb.Controllers
 
                 Pedido pedido = db.Pedidoes.Include(p => p.Itens).Where(p => p.PedidoID == id).First();
                 db.PedidoItems.RemoveRange(pedido.Itens);
+
+                if (pedido.CodPedidoCab != null && pedido.CodPedidoCab > 0)
+                {
+                    Sincronismo sincronismo = new Sincronismo();
+                    sincronismo.CodEmpresa = pedido.CodEmpresa;
+                    sincronismo.CodRegistro = pedido.CodPedidoCab;
+                    sincronismo.Data = DateTime.Now;
+                    sincronismo.Operacao = "EXCLUIDO";
+                    sincronismo.Tipo = "PEDIDO";
+                    db.Sincronismoes.Add(sincronismo);
+                }
+                
                 db.Pedidoes.Remove(pedido);
                 db.SaveChanges();
-                Sincronismo sincronismo = new Sincronismo();
-                sincronismo.CodEmpresa = pedido.CodEmpresa;
-                sincronismo.CodRegistro = pedido.PedidoID;
-                sincronismo.Data = DateTime.Now;
-                sincronismo.Operacao = "EXCLUIDO";
-                sincronismo.Tipo = "PEDIDO";
-                
+
                 return RedirectToAction("Index");                
             }
             catch(Exception ex)
