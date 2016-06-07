@@ -422,13 +422,13 @@
                     pedidoItens.push({
                         //ProdutoID: $('#ProdutoID').val().trim(),
                         ProdutoID: produtoSelecionado,
-                        Quantidade: $('#Quantidade').val().trim(),
-                        ValorUnitario: $('#ValorUnitario').val().trim(),
+                        Quantidade: $('#Quantidade').val().trim().replace('.',','),
+                        ValorUnitario: $('#ValorUnitario').val().trim().replace('.',','),
                         Observacao: $('#ObservacaoItem').val().trim(),
                         //DescProduto: el.options[el.selectedIndex].text,
                         DescProduto: descProdutoSelecionado,
-                        ValorDesconto : $('#ValorDesconto').val().trim(),
-                        PercentualDesconto : $('#PercDesconto').val().trim()
+                        ValorDesconto : $('#ValorDesconto').val().trim().replace('.',','),
+                        PercentualDesconto : $('#PercDesconto').val().trim().replace('.',',')
                     });
 
                     $('#ProdutoAux').val('').focus();
