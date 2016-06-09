@@ -162,15 +162,9 @@ namespace PedidoWeb.Controllers
                 .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
                 .OrderBy(p => p.Descricao), "ProdutoID", "Descricao");
             ViewBag.Empresa = pedidoHelper.BuscaEmpresa();
-            if (usuario.TipoUsuario == "ADMINISTRADOR")
-            {
-                ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome");
-            }
-            else
-            {
-                ViewBag.VendedorID = new SelectList(db.Vendedors.Where(v => v.VendedorID == usuario.VendedorID)
-                    , "VendedorID", "Nome");
-            }
+            
+            ViewBag.VendedorID = new SelectList(db.Vendedors.Where(v => v.VendedorID == usuario.VendedorID)
+                , "VendedorID", "Nome");            
             
             return View();            
         }
