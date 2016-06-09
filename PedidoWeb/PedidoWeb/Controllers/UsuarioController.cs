@@ -170,7 +170,7 @@ namespace PedidoWeb.Controllers
                 return RedirectToAction("Index", "Pedido", new { mensagem = "Usuário não liberado para esta ação" });
             }
 
-            if(!valida.LiberaEdicao(pedidoHelper.UsuarioCorrente.UsuarioID, Convert.ToInt32(id)))
+            if (!valida.LiberaEdicao(pedidoHelper.UsuarioCorrente.UsuarioID, Convert.ToInt32(id), pedidoHelper.UsuarioCorrente.TipoUsuario))
             {
                 return RedirectToAction("Index", "Pedido", new { mensagem = "Não é possível alterar usuário distinto" });
             }

@@ -24,7 +24,8 @@ namespace PedidoWeb.Controllers.Negocio
                 {
                     if (NomeAction.ToUpper() == "CREATE"
                         || NomeAction.ToUpper() == "DELETE"
-                        || NomeAction.ToUpper() == "DETAILS")
+                        || NomeAction.ToUpper() == "DETAILS"
+                        || NomeAction.ToUpper() == "INDEX")                        
                     {
                         // Usuário não acessa essas ações
                         return false;
@@ -44,7 +45,8 @@ namespace PedidoWeb.Controllers.Negocio
                 {
                     if (NomeAction.ToUpper() == "CREATE"
                         || NomeAction.ToUpper() == "DELETE"
-                        || NomeAction.ToUpper() == "DETAILS")
+                        || NomeAction.ToUpper() == "DETAILS"
+                        || NomeAction.ToUpper() == "INDEX")
                     {
                         // Administrador não acessa essas ações
                         return false;
@@ -66,9 +68,9 @@ namespace PedidoWeb.Controllers.Negocio
             return true;
         }
 
-        public bool LiberaEdicao(int CodUsuarioCorrente, int CodUsuarioEdicao)
+        public bool LiberaEdicao(int CodUsuarioCorrente, int CodUsuarioEdicao, string TipoUsuario)
         {
-            return (CodUsuarioCorrente == CodUsuarioEdicao);
+            return TipoUsuario.ToUpper() == "MASTER" ? true : (CodUsuarioCorrente == CodUsuarioEdicao);
         }
     }
 }
