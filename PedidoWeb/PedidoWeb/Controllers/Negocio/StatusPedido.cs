@@ -41,6 +41,8 @@ namespace PedidoWeb.Controllers.Negocio
                 Cadastro cadastro = db.Cadastroes.Find(p.CadastroID);
                 if (cadastro.AtrasoPagamento) 
                     return "EM ANALISE";
+                if (string.IsNullOrEmpty(cadastro.Classificacao))
+                    return "EM ANALISE";
                 if (!cadastro.Classificacao.Contains("BOM"))
                     return "EM ANALISE";
             }
