@@ -14,7 +14,7 @@ namespace PedidoWeb.Models
         [Key]
         public int FilialID { get; set; }
 
-        public int CodEmpresa { get; set; }
+        public string CodEmpresa { get; set; }
 
         public int CodFilial { get; set; }
 
