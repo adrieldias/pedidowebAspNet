@@ -12,12 +12,6 @@
             * @Html.Label("Vendedor")
             @Html.DropDownList("VendedorID", null, new { @disabled = true, @class = "form-control" })
         </div>
-
-        <div>
-            @Html.Label("Número (opcional)")
-            @Html.TextBox("NumeroPedido", null, new { @class="form-control"})
-            <span class="error" style="visibility: hidden">Número inválido</span>
-        </div>
         
         @*<div class="form-group">
             * @Html.Label("Cliente")
@@ -41,29 +35,49 @@
             * @Html.Label("Forma de Pagamento")
             @Html.DropDownList("PrazoVencimentoID", null, string.Empty, new { @class = "form-control" })
             <span class="error" style="visibility: hidden">Prazo de Vencimento</span>
-        </div>        
+        </div> 
+        
+        <button type="button" class="btn btn-default" onclick="toggleDiv('opcionais')">
+            <div class="dl-horizontal">
+                <dt>
+                    Informações Opcionais
+                </dt>
+                <dd>
+                    <span id="testeglyph1" class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                    <span id="testeglyph2" class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                </dd>
+            </div>
+        </button>   
+        
+        <div id="opcionais" class="opcionais" style="display: none">
+            
+            <div>
+                @Html.Label("Número (opcional)")
+                @Html.TextBox("NumeroPedido", null, new { @class = "form-control" })
+                <span class="error" style="visibility: hidden">Número inválido</span>
+            </div>
+            <div class="form-group">
+                @Html.Label("Transportador (opcional)")
+                @Html.DropDownList("TransportadorID", null, string.Empty, new { @class = "form-control" })
+            </div>
 
-        <div class="form-group">
-            @Html.Label("Transportador (opcional)")
-            @Html.DropDownList("TransportadorID", null, string.Empty, new { @class = "form-control" })            
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Tipo de Frete (opcional)")
-            @Html.DropDownList("TipoFrete",
+            <div class="form-group">
+                @Html.Label("Tipo de Frete (opcional)")
+                @Html.DropDownList("TipoFrete",
                 new List<SelectListItem>() { new SelectListItem(){Text="CIF", Value="CIF"},
-                    new SelectListItem(){Text="FOB", Value="FOB" }}, string.Empty, new { @class = "form-control" })            
-        </div>
+                    new SelectListItem(){Text="FOB", Value="FOB" }}, string.Empty, new { @class = "form-control" })
+            </div>
 
+            <div class="form-group">
+                @Html.Label("Ordem de Compra (opcional)")
+                <input type="text" id="OrdemCompra" class="form-control" />
+            </div>
 
-        <div class="form-group">
-            @Html.Label("Ordem de Compra (opcional)")            
-            <input type="text" id="OrdemCompra" class="form-control"/>
-        </div>
+            <div class="form-group">
+                @Html.Label("Observação (opcional)")
+                <textarea id="Observacao" class="form-control"></textarea>
+            </div>
 
-        <div class="form-group">
-            @Html.Label("Observação (opcional)")                        
-            <textarea id="Observacao" class="form-control"></textarea>       
         </div>
 
         <br />        
@@ -202,8 +216,21 @@
     @Scripts.Render("~/bundles/jqueryui")   
     @Scripts.Render("~/bundles/jqueryui/stylesheet")
         
-    <script>
-        $("document").ready(function () {
+    <script>       
+
+        function toggleDiv(divid) {
+            var div = document.getElementById(divid);
+            var disp = div.style.display;
+            div.style.display = disp == 'none' ? 'block' : 'none';
+
+            var glyph = document.getElementById('testeglyph1');
+            var glyph2 = document.getElementById('testeglyph2');            
+            
+            glyph.style.display = disp == 'none' ? 'none' : 'block';
+            glyph2.style.display = disp == 'none' ? 'block' : 'none';
+        };
+
+        $("document").ready(function () {           
 
             var produtoSelecionado = 0;
             var cadastroSelecionado = 0;
@@ -281,6 +308,7 @@
             $("#VendedorID").prop("disabled", true);
             $("#ValorDesconto").prop("disabled", true);
             $("#MsgAddItem").hide();
+            $("#testeglyph2").hide();
             
             var valorUnitario = '@(ViewBag.Empresa.AlteraValorUnitario)';
             var percDesconto = '@(ViewBag.Empresa.DescontoInformado)'; 
@@ -493,21 +521,19 @@
                         var $row = $('<tr/>');
                         $row.append($('<td/>').html(val.ProdutoID));
                         $row.append($('<td/>').html(val.DescProduto));
-                        $row.append($('<td/>').html(val.Quantidade));                        
+                        $row.append($('<td/>').html(val.Quantidade));
                         if (val.ValorDesconto == '')
                             $row.append($('<td/>').html('0.00'));
                         else
                             $row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
                         $row.append($('<td/>').html(val.ValorUnitario));
                         $row.append($('<td><button id=excluir class="btn btn-danger">Excluir</button></td>').click(function () {
-                            for (var i in pedidoItens)
-                            {
-                                if(pedidoItens[i].ProdutoID == val.ProdutoID
+                            for (var i in pedidoItens) {
+                                if (pedidoItens[i].ProdutoID == val.ProdutoID
                                     && pedidoItens[i].Quantidade == val.Quantidade
                                     && pedidoItens[i].ValorUnitario == val.ValorUnitario
                                     && pedidoItens[i].Observacao == val.Observacao
-                                    && pedidoItens[i].ValorDesconto == val.ValorDesconto)
-                                {
+                                    && pedidoItens[i].ValorDesconto == val.ValorDesconto) {
                                     pedidoItens.splice(i, 1);
                                     totalPedido -= ((val.Quantidade.trim().replace(',', '.')
                                         * val.ValorUnitario.trim().replace(',', '.'))
@@ -542,7 +568,7 @@
                         + '</p>'
                         );
                 }
-            }
+            };
         });
     </script>
 }

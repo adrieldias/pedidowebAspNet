@@ -278,8 +278,13 @@
     <Compile Include="Migrations\201606021206360_Sincronismo.Designer.cs">
       <DependentUpon>201606021206360_Sincronismo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606102048017_Filial.cs" />
+    <Compile Include="Migrations\201606102048017_Filial.Designer.cs">
+      <DependentUpon>201606102048017_Filial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Filial.cs" />
     <Compile Include="Models\Sincronismo.cs" />
     <Compile Include="Models\Empresa.cs" />
     <Compile Include="Models\Operacao.cs" />
@@ -510,6 +515,9 @@
     <EmbeddedResource Include="Migrations\201606021206360_Sincronismo.resx">
       <DependentUpon>201606021206360_Sincronismo.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606102048017_Filial.resx">
+      <DependentUpon>201606102048017_Filial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -528,7 +536,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1229</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

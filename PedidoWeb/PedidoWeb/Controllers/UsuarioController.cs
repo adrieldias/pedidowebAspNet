@@ -217,7 +217,14 @@ namespace PedidoWeb.Controllers
                 {
                     db.Entry(usuario).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    if (ViewBag.TipoUsuario == "MASTER")
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Pedido");
+                    }
                 }
                 catch(Exception ex)
                 {
