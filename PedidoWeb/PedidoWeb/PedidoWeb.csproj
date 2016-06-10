@@ -282,6 +282,10 @@
     <Compile Include="Migrations\201606102048017_Filial.Designer.cs">
       <DependentUpon>201606102048017_Filial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606102054103_Filial_CodEmpresa.cs" />
+    <Compile Include="Migrations\201606102054103_Filial_CodEmpresa.Designer.cs">
+      <DependentUpon>201606102054103_Filial_CodEmpresa.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Filial.cs" />
@@ -517,6 +521,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606102048017_Filial.resx">
       <DependentUpon>201606102048017_Filial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606102054103_Filial_CodEmpresa.resx">
+      <DependentUpon>201606102054103_Filial_CodEmpresa.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
