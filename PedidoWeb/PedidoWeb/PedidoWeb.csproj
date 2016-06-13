@@ -286,6 +286,14 @@
     <Compile Include="Migrations\201606102054103_Filial_CodEmpresa.Designer.cs">
       <DependentUpon>201606102054103_Filial_CodEmpresa.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606102101598_Empresa_CodFilial.cs" />
+    <Compile Include="Migrations\201606102101598_Empresa_CodFilial.Designer.cs">
+      <DependentUpon>201606102101598_Empresa_CodFilial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606102113396_Empresa_FilialID.cs" />
+    <Compile Include="Migrations\201606102113396_Empresa_FilialID.Designer.cs">
+      <DependentUpon>201606102113396_Empresa_FilialID.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Filial.cs" />
@@ -524,6 +532,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606102054103_Filial_CodEmpresa.resx">
       <DependentUpon>201606102054103_Filial_CodEmpresa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606102101598_Empresa_CodFilial.resx">
+      <DependentUpon>201606102101598_Empresa_CodFilial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606102113396_Empresa_FilialID.resx">
+      <DependentUpon>201606102113396_Empresa_FilialID.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

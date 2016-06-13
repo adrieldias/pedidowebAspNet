@@ -119,6 +119,10 @@ namespace PedidoWeb.Controllers
                 db.PrazoVencimentoes.Where(p => p.Situacao == "ATIVO" && p.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
                 , "PrazoVencimentoID", "Descricao");
 
+            ViewBag.FilialPadrao = new SelectList(
+                db.Filials.Where(f => f.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                , "FilialID", "Descricao");
+
             return View();
         }
 
@@ -128,7 +132,7 @@ namespace PedidoWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include = "CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado,PrazoVencimentoPadrao,OperacaoPadrao")] Empresa empresa)
+        public ActionResult Create([Bind(Include = "CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado,PrazoVencimentoPadrao,OperacaoPadrao,FilialID")] Empresa empresa)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
@@ -154,6 +158,10 @@ namespace PedidoWeb.Controllers
             ViewBag.PrazoVencimentoPadrao = new SelectList(
                 db.PrazoVencimentoes.Where(p => p.Situacao == "ATIVO" && p.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
                 , "PrazoVencimentoID", "Descricao");
+
+            ViewBag.FilialPadrao = new SelectList(
+                db.Filials.Where(f => f.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                , "FilialID", "DescFilial");
 
             return View(empresa);
         }
@@ -190,6 +198,10 @@ namespace PedidoWeb.Controllers
                 db.PrazoVencimentoes.Where(p => p.Situacao == "ATIVO" && p.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
                 , "PrazoVencimentoID", "Descricao", empresa.PrazoVencimentoPadrao);
 
+            ViewBag.FilialPadrao = new SelectList(
+                db.Filials.Where(f => f.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                , "FilialID", "DescFilial");
+
             return View(empresa);
         }
 
@@ -199,7 +211,7 @@ namespace PedidoWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Include="CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado,PrazoVencimentoPadrao,OperacaoPadrao")] Empresa empresa)
+        public ActionResult Edit([Bind(Include="CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado,PrazoVencimentoPadrao,OperacaoPadrao,FilialID")] Empresa empresa)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
@@ -236,6 +248,10 @@ namespace PedidoWeb.Controllers
                 db.PrazoVencimentoes.Where(p => p.Situacao == "ATIVO" && p.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
                 , "PrazoVencimentoID", "Descricao"
                 , empresa.PrazoVencimentoPadrao);
+
+            ViewBag.FilialPadrao = new SelectList(
+                db.Filials.Where(f => f.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                , "FilialID", "Descricao");
 
             return View(empresa);
         }
