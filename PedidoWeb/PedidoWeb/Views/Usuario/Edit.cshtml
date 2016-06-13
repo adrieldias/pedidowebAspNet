@@ -20,7 +20,7 @@
         <h3>Editar Usuario</h3>
         <hr />
         @Html.ValidationSummary(true)
-        @Html.HiddenFor(model => model.UsuarioID)
+        @Html.HiddenFor(model => model.UsuarioID)       
 
         <div class="form-group">
             @Html.LabelFor(model => model.CodEmpresa)
@@ -71,6 +71,14 @@
                 @Html.ActionLink("Voltar", "Index", null, new {@class="btn btn-default"})            
             }
         </div>
+
+        @if (ViewBag.TipoUsuario != "MASTER")
+        {
+            @Html.HiddenFor(model => model.CodEmpresa)
+            @Html.HiddenFor(model => model.VendedorID)
+            @Html.HiddenFor(model => model.TipoUsuario)
+        }
+        
     </div>
 }
 @section Scripts {

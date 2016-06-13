@@ -26,7 +26,8 @@ namespace PedidoWeb.Models
         public int? OperacaoPadrao { get; set; }        
 
         [DisplayName("Prazo de Vencimento Padrão")]
-        public int? PrazoVencimentoPadrao { get; set; }        
+        public int? PrazoVencimentoPadrao { get; set; }
+        
 
         // Properties
 

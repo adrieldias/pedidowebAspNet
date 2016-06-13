@@ -61,7 +61,7 @@ namespace PedidoWeb.Controllers
 
             var pedidos = from s in db.Pedidoes
                 .Where(p => p.VendedorID == vendedorID || 
-                    (tipoUsuario == "ADMINISTRADOR" && p.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa) ||
+                    (tipoUsuario == "ADMINISTRADOR" && p.CodEmpresa.ToUpper().Trim() == pedidoHelper.UsuarioCorrente.CodEmpresa.ToUpper().Trim()) ||
                     (tipoUsuario == "MASTER"))
                  select s;
 

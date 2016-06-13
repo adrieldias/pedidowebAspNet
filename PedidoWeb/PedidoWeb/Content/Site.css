@@ -78,3 +78,7 @@ input[type="checkbox"].input-validation-error {
     cursor:pointer;
 }
 
+.opcionais{
+    padding: 10px 15px 10px 15px;
+    background-color: #d9d9d9;
+}
