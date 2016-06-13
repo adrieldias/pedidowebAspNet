@@ -69,6 +69,11 @@ namespace PedidoWeb.Models
         public int OperacaoID { get; set; }
         public virtual Operacao Operacao { get; set; }
 
+        [DisplayName("Empresa")]
+        [ForeignKey("Filial")]
+        public int FilialID { get; set; }
+        public virtual Filial Filial { get; set; }
+
         // Lazy Load
         public virtual List<PedidoItem> Itens { get; set; }
         public virtual Empresa Empresa { get; set; }
