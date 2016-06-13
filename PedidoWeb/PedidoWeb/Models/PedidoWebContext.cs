@@ -44,6 +44,7 @@ namespace PedidoWeb.Models
         public System.Data.Entity.DbSet<PedidoWeb.Models.Operacao> Operacaos { get; set; }
 
         public System.Data.Entity.DbSet<PedidoWeb.Models.Sincronismo> Sincronismoes { get; set; }
+        public System.Data.Entity.DbSet<PedidoWeb.Models.HistoricoPedido> HistoricoPedidoes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

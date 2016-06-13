@@ -280,6 +280,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\HistoricoPedido.cs" />
     <Compile Include="Models\Sincronismo.cs" />
     <Compile Include="Models\Empresa.cs" />
     <Compile Include="Models\Operacao.cs" />
