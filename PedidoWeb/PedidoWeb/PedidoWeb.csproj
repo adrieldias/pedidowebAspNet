@@ -286,13 +286,9 @@
     <Compile Include="Migrations\201606102054103_Filial_CodEmpresa.Designer.cs">
       <DependentUpon>201606102054103_Filial_CodEmpresa.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201606102101598_Empresa_CodFilial.cs" />
-    <Compile Include="Migrations\201606102101598_Empresa_CodFilial.Designer.cs">
-      <DependentUpon>201606102101598_Empresa_CodFilial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201606102113396_Empresa_FilialID.cs" />
-    <Compile Include="Migrations\201606102113396_Empresa_FilialID.Designer.cs">
-      <DependentUpon>201606102113396_Empresa_FilialID.cs</DependentUpon>
+    <Compile Include="Migrations\201606132030257_DeployFTP.cs" />
+    <Compile Include="Migrations\201606132030257_DeployFTP.Designer.cs">
+      <DependentUpon>201606132030257_DeployFTP.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -534,11 +530,8 @@
     <EmbeddedResource Include="Migrations\201606102054103_Filial_CodEmpresa.resx">
       <DependentUpon>201606102054103_Filial_CodEmpresa.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201606102101598_Empresa_CodFilial.resx">
-      <DependentUpon>201606102101598_Empresa_CodFilial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201606102113396_Empresa_FilialID.resx">
-      <DependentUpon>201606102113396_Empresa_FilialID.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201606132030257_DeployFTP.resx">
+      <DependentUpon>201606132030257_DeployFTP.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

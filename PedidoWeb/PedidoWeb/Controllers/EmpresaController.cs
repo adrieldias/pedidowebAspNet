@@ -121,7 +121,7 @@ namespace PedidoWeb.Controllers
 
             ViewBag.FilialPadrao = new SelectList(
                 db.Filials.Where(f => f.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
-                , "FilialID", "Descricao");
+                , "FilialID", "DescFilial");
 
             return View();
         }
@@ -198,9 +198,9 @@ namespace PedidoWeb.Controllers
                 db.PrazoVencimentoes.Where(p => p.Situacao == "ATIVO" && p.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
                 , "PrazoVencimentoID", "Descricao", empresa.PrazoVencimentoPadrao);
 
-            ViewBag.FilialPadrao = new SelectList(
+            ViewBag.FilialID = new SelectList(
                 db.Filials.Where(f => f.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
-                , "FilialID", "DescFilial");
+                , "FilialID", "DescFilial", empresa.FilialID);
 
             return View(empresa);
         }
@@ -249,7 +249,7 @@ namespace PedidoWeb.Controllers
                 , "PrazoVencimentoID", "Descricao"
                 , empresa.PrazoVencimentoPadrao);
 
-            ViewBag.FilialPadrao = new SelectList(
+            ViewBag.FilialID = new SelectList(
                 db.Filials.Where(f => f.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
                 , "FilialID", "Descricao");
 

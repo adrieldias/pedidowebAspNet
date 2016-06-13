@@ -7,18 +7,18 @@ namespace PedidoWeb.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.0.0-20911")]
-    public sealed partial class Empresa_CodFilial : IMigrationMetadata
+    public sealed partial class DeployFTP : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Empresa_CodFilial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(DeployFTP));
         
         string IMigrationMetadata.Id
         {
-            get { return "201606102101598_Empresa_CodFilial"; }
+            get { return "201606132030257_DeployFTP"; }
         }
         
         string IMigrationMetadata.Source
         {
-            get { return null; }
+            get { return Resources.GetString("Source"); }
         }
         
         string IMigrationMetadata.Target

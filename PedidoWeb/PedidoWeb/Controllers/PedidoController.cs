@@ -125,6 +125,7 @@ namespace PedidoWeb.Controllers
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             Pedido pedido = db.Pedidoes.Include(p => p.Itens)
                 .Include(o => o.Operacao)
+                .Include(f => f.Filial)
                 .First(p => p.PedidoID == id);
             ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
             if (pedido == null)
@@ -164,7 +165,11 @@ namespace PedidoWeb.Controllers
             ViewBag.Empresa = pedidoHelper.BuscaEmpresa();
             
             ViewBag.VendedorID = new SelectList(db.Vendedors.Where(v => v.VendedorID == usuario.VendedorID)
-                , "VendedorID", "Nome");            
+                , "VendedorID", "Nome");
+
+            ViewBag.FilialID = new SelectList(db.Filials.Where(f => f.CodEmpresa == usuario.CodEmpresa)
+                , "FilialID", "DescFilial"
+                , db.Filials.Find(pedidoHelper.BuscaEmpresa().FilialID).FilialID);
             
             return View();            
         }
@@ -202,6 +207,7 @@ namespace PedidoWeb.Controllers
                     p.CodEmpresa = pedidoHelper.UsuarioCorrente.CodEmpresa;
                     p.StatusSincronismo = "NOVO";
                     p.OperacaoID = pedido.OperacaoID;
+                    p.FilialID = pedido.FilialID;
                     db.Pedidoes.Add(p);
                     db.SaveChanges();
                     
@@ -257,6 +263,7 @@ namespace PedidoWeb.Controllers
                         obj.TipoFrete = pedido.TipoFrete;
                         obj.TransportadorID = pedido.TransportadorID;
                         obj.OperacaoID = pedido.OperacaoID;
+                        obj.FilialID = pedido.FilialID;
 
                         foreach (var i in pedido.Itens)
                         {
@@ -353,7 +360,8 @@ namespace PedidoWeb.Controllers
                 //.Include(t => t.Transportador)
                 .Include(c => c.Cadastro)
                 .Where(p => p.PedidoID == id).ToList();
-            ViewBag.Empresa = pedidoHelper.BuscaEmpresa();
+            var empresa = pedidoHelper.BuscaEmpresa();
+            ViewBag.Empresa = empresa;
             foreach(var pedido in pedidos)
             {
                 if (pedido.Status != "EM ANALISE" && pedido.Status != "APROVADO")
@@ -380,6 +388,9 @@ namespace PedidoWeb.Controllers
                 ViewBag.ProdutoID = new SelectList(db.Produtoes
                     .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
                     .OrderBy(p => p.Descricao), "ProdutoID", "Descricao");
+                ViewBag.FilialID = new SelectList(db.Filials.Where(f => f.CodEmpresa == usuario.CodEmpresa)
+                , "FilialID", "DescFilial"
+                , pedido.FilialID);
                 return View(pedido);
             }
             

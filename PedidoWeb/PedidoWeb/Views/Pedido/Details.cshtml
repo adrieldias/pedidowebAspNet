@@ -19,6 +19,12 @@
     }
 
     <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Empresa")
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Filial.DescFilial)
+        </dd>
 
         <dt>
             @Html.DisplayName("Código")

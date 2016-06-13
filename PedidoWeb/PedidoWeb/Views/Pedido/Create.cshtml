@@ -12,6 +12,11 @@
             * @Html.Label("Vendedor")
             @Html.DropDownList("VendedorID", null, new { @disabled = true, @class = "form-control" })
         </div>
+
+        <div class="form-group">
+            * @Html.Label("Filial")
+            @Html.DropDownList("FilialID", null, string.Empty, new { @class="form-control"})
+        </div>
         
         @*<div class="form-group">
             * @Html.Label("Cliente")
@@ -48,7 +53,7 @@
                 </dd>
             </div>
         </button>   
-        
+                
         <div id="opcionais" class="opcionais" style="display: none">
             
             <div>
@@ -404,7 +409,7 @@
                         //DescProduto: el.options[el.selectedIndex].text,
                         DescProduto: descProdutoSelecionado,
                         ValorDesconto: $('#ValorDesconto').val().trim().replace('.', ','),
-                        PercentualDesconto: $('#PercDesconto').val().trim().replace('.', ',')
+                        PercentualDesconto: $('#PercDesconto').val().trim().replace('.', ',')                        
                     });
                     
                     totalPedido += (Number($('#Quantidade').val().trim().replace(',', '.'))
@@ -465,6 +470,14 @@
                     $('#OperacaoID').siblings('span.error').css('visibility', 'hidden');
                 }
 
+                if ($('#FilialID').val().trim() == '') {
+                    isValidOrder = false;
+                    $('#FilialID').siblings('span.error').css('visibility', 'visible');
+                    $('#FilialID').focus();
+                } else {
+                    $('#FilialID').siblings('span.error').css('visibility', 'hidden');
+                }
+
                 // Salvar
                 if (isValidOrder) {
                     var data = {
@@ -478,7 +491,8 @@
                         Observacao: $('#Observacao').val().trim(),
                         NumeroPedido: $('#NumeroPedido').val().trim(),
                         OperacaoID: $('#OperacaoID').val().trim(),
-                        CodEmpresa: '@(ViewBag.Empresa.CodEmpresa)',                        
+                        CodEmpresa: '@(ViewBag.Empresa.CodEmpresa)',
+                        FilialID: $('#FilialID').val().trim(),
                         Itens: pedidoItens
                     }
 
