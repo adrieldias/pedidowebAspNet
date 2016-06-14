@@ -62,16 +62,9 @@
         @Html.ValidationMessageFor(model => model.Status)
     </div>       
     <br />
-    <button type="button" class="btn btn-default" onclick="toggleDiv('opcionais')">
-        <div class="dl-horizontal">
-            <dt>
-                Informações Opcionais
-            </dt>
-            <dd>
-                <span id="testeglyph1" class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
-                <span id="testeglyph2" class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-            </dd>
-        </div>
+    <button type="button" style="min-width:160px" id="btOpcionais" class="btn btn-default" onclick="toggleDiv('opcionais')">
+        @*<span id="testeglyph2" class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>*@
+        Mais Informações
     </button>
 
 
@@ -247,12 +240,21 @@
             var div = document.getElementById(divid);
             var disp = div.style.display;
             div.style.display = disp == 'none' ? 'block' : 'none';
-
-            var glyph = document.getElementById('testeglyph1');
-            var glyph2 = document.getElementById('testeglyph2');            
             
-            glyph.style.display = disp == 'none' ? 'none' : 'block';
-            glyph2.style.display = disp == 'none' ? 'block' : 'none';
+            //var glyph = document.getElementById('testeglyph1');
+            //var glyph2 = document.getElementById('testeglyph2');            
+            
+            //glyph.style.display = disp == 'none' ? 'none' : 'block';
+            //glyph2.style.display = disp == 'none' ? 'block' : 'none';
+            
+            var bt = document.getElementById('btOpcionais');
+            
+            if (disp == 'none') {                
+                bt.innerText = 'Menos Informações';
+            }
+            if (disp == 'block') {
+                bt.innerText = 'Mais Informações';
+            }
         };
 
         $("document").ready(function () {
