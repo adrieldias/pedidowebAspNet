@@ -290,6 +290,10 @@
     <Compile Include="Migrations\201606132030257_DeployFTP.Designer.cs">
       <DependentUpon>201606132030257_DeployFTP.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606141205188_atualizações_migracao_ftp.cs" />
+    <Compile Include="Migrations\201606141205188_atualizações_migracao_ftp.Designer.cs">
+      <DependentUpon>201606141205188_atualizações_migracao_ftp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Filial.cs" />
@@ -532,6 +536,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606132030257_DeployFTP.resx">
       <DependentUpon>201606132030257_DeployFTP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606141205188_atualizações_migracao_ftp.resx">
+      <DependentUpon>201606141205188_atualizações_migracao_ftp.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

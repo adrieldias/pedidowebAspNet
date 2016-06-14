@@ -167,11 +167,15 @@ namespace PedidoWeb.Controllers
             ViewBag.VendedorID = new SelectList(db.Vendedors.Where(v => v.VendedorID == usuario.VendedorID)
                 , "VendedorID", "Nome");
 
-            ViewBag.FilialID = new SelectList(db.Filials.Where(f => f.CodEmpresa == usuario.CodEmpresa)
-                , "FilialID", "DescFilial"
-                , db.Filials.Find(pedidoHelper.BuscaEmpresa().FilialID).FilialID);
+            if (pedidoHelper.BuscaEmpresa().FilialID > 0)
+                ViewBag.FilialID = new SelectList(db.Filials.Where(f => f.CodEmpresa == usuario.CodEmpresa)
+                    , "FilialID", "DescFilial"
+                    , db.Filials.Find(pedidoHelper.BuscaEmpresa().FilialID).FilialID);
+            else
+                ViewBag.FilialID = new SelectList(db.Filials.Where(f => f.CodEmpresa == usuario.CodEmpresa)
+                , "FilialID", "DescFilial");
             
-            return View();            
+            return View();
         }
 
         [Authorize]

@@ -16,6 +16,7 @@
         <div class="form-group">
             * @Html.Label("Filial")
             @Html.DropDownList("FilialID", null, string.Empty, new { @class="form-control"})
+            <span class="error" style="visibility: hidden">Filial é obrigatória</span>        
         </div>
         
         @*<div class="form-group">
@@ -42,17 +43,12 @@
             <span class="error" style="visibility: hidden">Prazo de Vencimento</span>
         </div> 
         
-        <button type="button" class="btn btn-default" onclick="toggleDiv('opcionais')">
-            <div class="dl-horizontal">
-                <dt>
-                    Informações Opcionais
-                </dt>
-                <dd>
-                    <span id="testeglyph1" class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
-                    <span id="testeglyph2" class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-                </dd>
-            </div>
-        </button>   
+        
+            
+        <button type="button" style="min-width:160px" id="btOpcionais" class="btn btn-default" onclick="toggleDiv('opcionais')">
+            @*<span id="testeglyph2" class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>*@
+            Mais Informações
+        </button>
                 
         <div id="opcionais" class="opcionais" style="display: none">
             
@@ -227,12 +223,21 @@
             var div = document.getElementById(divid);
             var disp = div.style.display;
             div.style.display = disp == 'none' ? 'block' : 'none';
-
-            var glyph = document.getElementById('testeglyph1');
-            var glyph2 = document.getElementById('testeglyph2');            
             
-            glyph.style.display = disp == 'none' ? 'none' : 'block';
-            glyph2.style.display = disp == 'none' ? 'block' : 'none';
+            //var glyph = document.getElementById('testeglyph1');
+            //var glyph2 = document.getElementById('testeglyph2');            
+            
+            //glyph.style.display = disp == 'none' ? 'none' : 'block';
+            //glyph2.style.display = disp == 'none' ? 'block' : 'none';
+            
+            var bt = document.getElementById('btOpcionais');
+            
+            if (disp == 'none') {                
+                bt.innerText = 'Menos Informações';
+            }
+            if (disp == 'block') {
+                bt.innerText = 'Mais Informações';
+            }
         };
 
         $("document").ready(function () {           
@@ -240,7 +245,7 @@
             var produtoSelecionado = 0;
             var cadastroSelecionado = 0;
             var descProdutoSelecionado = '';
-
+            
             $('#ProdutoAux').autocomplete({
                 source: function (request, response) {
                     // prepare url : for example '/api/artistapi?query=sonu
