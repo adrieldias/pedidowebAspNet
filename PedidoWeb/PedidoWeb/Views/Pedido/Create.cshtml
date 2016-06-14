@@ -150,7 +150,7 @@
             <div class="form-group col-md-2">
                 
             </div>
-            @if (ViewBag.Empresa != "BISSOLOTTI")
+            @if (ViewBag.Empresa.CodEmpresa != "BISSOLOTTI")
             {
                 <div class="form-group col-md-5" style="padding: 0 0 0 0">                
                     @Html.Label("Valor de Desconto")
@@ -164,11 +164,8 @@
                     <textarea id="ObservacaoItem" class="form-control"></textarea>
                     <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>               
                 </div>  
-            }
-            else
-            {            
-                <div class="clearfix"></div> 
-            }          
+            }      
+            <div class="clearfix"></div>      
             
             <div class="col-md-6">
                 @*<input type="button" id="add" value="Salvar Item" class="btn btn-default btn-group-justified" />*@
@@ -340,7 +337,7 @@
 
             var pedidoItens = [];
             var totalPedido = 0;
-
+            
             // Add desconto change function        
             $('#PercDesconto').change(function () {
                 var percDesconto = Number($('#PercDesconto').val().replace(',', '.'));
@@ -353,7 +350,7 @@
                     $('#ValorDesconto').val(parseFloat(percDesconto * valUnitario / 100).toFixed(2).replace('.', ','));
                 }
             })
-
+            
             // Add  CancelaItem change function
             $('#del').click(function () {
                 $('#ProdutoAux').val('').focus();
@@ -363,7 +360,6 @@
                 $('#PercDesconto').val('');
                 $('#ValorDesconto').val('');
             });
-
             // Add button click function
             $('#add').click(function () {
                 // Validações                
@@ -383,7 +379,6 @@
                 else {
                     $('#Quantidade').siblings('span.error').css('visibility', 'hidden');
                 }
-
                 if ($('#ValorUnitario').val().trim() == '' || isNaN($('#ValorUnitario').val().trim().replace(',', '.'))) {
                     isValidItem = false;
                     $('#ValorUnitario').siblings('span.error').css('visibility', 'visible');
@@ -391,22 +386,23 @@
                 else {
                     $('#ValorUnitario').siblings('span.error').css('visibility', 'hidden');
                 }
-
-                if ($('#ObservacaoItem').val().length > 30) {
-                    isValidItem = false;
-                    $('#ObservacaoItem').siblings('span.error').css('visibility', 'visible');
+                if ($('#ObservacaoItem').val() != undefined) {
+                    if ($('#ObservacaoItem').val().length > 30) {
+                        isValidItem = false;
+                        $('#ObservacaoItem').siblings('span.error').css('visibility', 'visible');
+                    }
+                    else {
+                        $('#ObservacaoItem').siblings('span.error').css('visibility', 'hidden');
+                    }
                 }
-                else {
-                    $('#ObservacaoItem').siblings('span.error').css('visibility', 'hidden');
-                }
-
+                
                 if (isNaN($('#PercDesconto').val().trim().replace(',', '.'))) {
                     isValidItem = false;
                     $('#PercDesconto').siblings('span.error').css('visibility', 'visible');
                 } else {
                     $('#PercDesconto').siblings('span.error').css('visibility', 'hidden');
                 }
-
+                
                 // Add item to list if valid
                 if (isValidItem) {                    
                     //var el = document.getElementById('ProdutoAux');
@@ -416,17 +412,17 @@
                         ProdutoID: produtoSelecionado,
                         Quantidade: $('#Quantidade').val().trim().replace('.',','),
                         ValorUnitario: $('#ValorUnitario').val().trim().replace('.', ','),
-                        Observacao: $('#ObservacaoItem').val().trim(),
+                        Observacao: $('#ObservacaoItem').val() == undefined ? '' : $('#ObservacaoItem').val().trim(),
                         //DescProduto: el.options[el.selectedIndex].text,
                         DescProduto: descProdutoSelecionado,
-                        ValorDesconto: $('#ValorDesconto').val().trim().replace('.', ','),
+                        ValorDesconto: $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.', ','),
                         PercentualDesconto: $('#PercDesconto').val().trim().replace('.', ',')                        
                     });
                     
                     totalPedido += (Number($('#Quantidade').val().trim().replace(',', '.'))
                         * Number($('#ValorUnitario').val().trim().replace(',', '.')))
                         - (Number($('#Quantidade').val().trim().replace(',', '.'))
-                        * Number($('#ValorDesconto').val().trim().replace(',', '.')));
+                        * Number($('#ValorDesconto').val() == undefined ? '0' : $('#ValorDesconto').val().trim().replace(',', '.')));
                     
                     $('#ProdutoAux').val('').focus();
                     $('#Quantidade').val('');
