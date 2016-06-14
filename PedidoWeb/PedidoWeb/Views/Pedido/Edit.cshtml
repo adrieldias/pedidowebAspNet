@@ -20,17 +20,17 @@
         @Html.ValidationMessageFor(model => model.VendedorID)
     </div>
 
-    <div>
-        @Html.Label("Número (opcional)")
-        @Html.TextBox("NumeroPedido", null, new { @class = "form-control" })
-        <span class="error" style="visibility: hidden">Número inválido</span>
-    </div>
-
     @*<div class="form-group">
         * @Html.LabelFor(model => model.CadastroID, "Cliente")
         @Html.DropDownList("CadastroID", null, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.CadastroID)
     </div>*@
+
+    <div class="form-group">
+        * @Html.Label("Filial")
+        @Html.DropDownList("FilialID", null, string.Empty, new { @class="form-control"})
+        <span class="error" style="visibility: hidden">Filial é obrigatória</span>
+    </div>
 
     <div class="form-group">
         * @Html.Label("Cliente")
@@ -54,41 +54,57 @@
         * @Html.LabelFor(model => model.PrazoVencimentoID, "Forma de Pagamento")
         @Html.DropDownList("PrazoVencimentoID", null, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.PrazoVencimentoID)
-    </div>       
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.TransportadorID, "Transportador (opcional)")
-        @Html.DropDownList("TransportadorID", null, string.Empty, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.TransportadorID)
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.TipoFrete, "Tipo de Frete (opcional)")
-        @Html.DropDownListFor(model => model.TipoFrete, 
-            new List<SelectListItem>() { 
-                new SelectListItem(){Text="", Value=""},
-                new SelectListItem(){Text="CIF", Value="CIF"}, 
-                new SelectListItem(){Text="FOB", Value="FOB" }}, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.TipoFrete)
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.OrdemCompra, "Ordem de Compra (opcional)")
-        @Html.TextBoxFor(model => model.OrdemCompra, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.OrdemCompra)
-    </div>
-
+    
     <div class="form-group">
         @Html.LabelFor(model => model.Status)
         @Html.TextBoxFor(model => model.Status, new { @readonly = "readonly", @class = "form-control" })
         @Html.ValidationMessageFor(model => model.Status)
-    </div>
+    </div>       
+    <br />
+    <button type="button" style="min-width:160px" id="btOpcionais" class="btn btn-default" onclick="toggleDiv('opcionais')">
+        @*<span id="testeglyph2" class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>*@
+        Mais Informações
+    </button>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Observacao, "Observação (opcional)")
-        @Html.TextAreaFor(model => model.Observacao, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Observacao)
-    </div>  
+
+    <div id="opcionais" class="opcionais" style="display: none">
+
+        <div>
+            @Html.Label("Número (opcional)")
+            @Html.TextBox("NumeroPedido", null, new { @class = "form-control" })
+            <span class="error" style="visibility: hidden">Número inválido</span>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TransportadorID, "Transportador (opcional)")
+            @Html.DropDownList("TransportadorID", null, string.Empty, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.TransportadorID)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TipoFrete, "Tipo de Frete (opcional)")
+            @Html.DropDownListFor(model => model.TipoFrete,
+        new List<SelectListItem>() {
+            new SelectListItem(){Text="", Value=""},
+            new SelectListItem(){Text="CIF", Value="CIF"},
+            new SelectListItem(){Text="FOB", Value="FOB" }}, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.TipoFrete)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.OrdemCompra, "Ordem de Compra (opcional)")
+            @Html.TextBoxFor(model => model.OrdemCompra, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.OrdemCompra)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Observacao, "Observação (opcional)")
+            @Html.TextAreaFor(model => model.Observacao, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Observacao)
+        </div>
+    </div>
+    
     <br />
     <div class="details">
         <h2>Itens do Pedido</h2>
@@ -100,37 +116,37 @@
         </div>
 
         @*@{AjaxOptions ajaxOptions = new AjaxOptions()
-        {
-            UpdateTargetId = "ValorUnitario",
-            OnSuccess = "SuccessRequest",
-            OnFailure = "FailureRequest",
-            HttpMethod = "POST"
-        };
-        }
+            {
+                UpdateTargetId = "ValorUnitario",
+                OnSuccess = "SuccessRequest",
+                OnFailure = "FailureRequest",
+                HttpMethod = "POST"
+            };
+            }
 
-        @using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
-        {
-            <div class="form-group">
-                * @Html.Label("Produto")                  
-                @Html.DropDownList("ProdutoID", null, string.Empty, new { @class = "form-control", onchange = "buscaValor()" })
-                <span class="error" style="visibility: hidden">Produto é obrigatório</span>
-            </div>
+            @using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
+            {
+                <div class="form-group">
+                    * @Html.Label("Produto")
+                    @Html.DropDownList("ProdutoID", null, string.Empty, new { @class = "form-control", onchange = "buscaValor()" })
+                    <span class="error" style="visibility: hidden">Produto é obrigatório</span>
+                </div>
 
-            <script type="text/javascript">
-                function buscaValor() {
-                    $("#ProdutoID").submit();
-                }
+                <script type="text/javascript">
+                    function buscaValor() {
+                        $("#ProdutoID").submit();
+                    }
 
-                function SuccessRequest(response) {
-                    //alert(response);
-                    $('#ValorUnitario').val(response);
-                }
+                    function SuccessRequest(response) {
+                        //alert(response);
+                        $('#ValorUnitario').val(response);
+                    }
 
-                function FailureRequest(response) {
-                    alert("Não foi possível buscar o preço do produto");
-                }
-            </script>
-        }*@
+                    function FailureRequest(response) {
+                        alert("Não foi possível buscar o preço do produto");
+                    }
+                </script>
+            }*@
 
         <div class="form-group">
             @Html.Label("* Produto")
@@ -172,7 +188,7 @@
             <textarea id="ObservacaoItem" class="form-control"></textarea>
             <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>
         </div>
-        
+
         <div class="col-md-6">
             @*<input type="button" id="add" value="Salvar Item" class="btn btn-default btn-group-justified" />*@
             <button type="button" id="add" class="btn btn-default btn-group-justified">
@@ -190,20 +206,20 @@
         </div>
 
         <div class="clearfix"></div>
-        <br />        
+        <br />
         <div id="pedidoItens"></div>
         <div id="totalPedido"></div>
         <hr />
-        <br />        
+        <br />
     </div>
-    
-    <div class="col-md-6">        
+
+    <div class="col-md-6">
         <button type="button" id="submit" class="btn btn-primary btn-group-justified">
             <span class="glyphicon glyphicon-floppy-disk"></span>
             Salvar Pedido
         </button>
     </div>
-    <div class="col-md-6">        
+    <div class="col-md-6">
         <a href="@Url.Action("Index")" class="btn btn-danger btn-group-justified">
             <span class="glyphicon glyphicon-share-alt"></span>
             Sair sem Salvar
@@ -213,11 +229,34 @@
 </div>
 
 
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")    
     @Scripts.Render("~/bundles/jqueryui")
         
     <script>
+        
+        function toggleDiv(divid) {
+            var div = document.getElementById(divid);
+            var disp = div.style.display;
+            div.style.display = disp == 'none' ? 'block' : 'none';
+            
+            //var glyph = document.getElementById('testeglyph1');
+            //var glyph2 = document.getElementById('testeglyph2');            
+            
+            //glyph.style.display = disp == 'none' ? 'none' : 'block';
+            //glyph2.style.display = disp == 'none' ? 'block' : 'none';
+            
+            var bt = document.getElementById('btOpcionais');
+            
+            if (disp == 'none') {                
+                bt.innerText = 'Menos Informações';
+            }
+            if (disp == 'block') {
+                bt.innerText = 'Mais Informações';
+            }
+        };
+
         $("document").ready(function () {
             
             var produtoSelecionado = 0;
@@ -298,7 +337,7 @@
             $("#Status").prop("disabled", true);    
             $('#ValorDesconto').prop('disabled', true);            
             $("#MsgAddItem").hide();
-
+            $("#testeglyph2").hide();
 
             var valorUnitario = '@(ViewBag.Empresa.AlteraValorUnitario)';
             var percDesconto = '@(ViewBag.Empresa.DescontoInformado)'; 
@@ -460,6 +499,15 @@
                     $('#CadastroAux').siblings('span.error').css('visibility', 'hidden');
                 }
 
+                if($('#FilialID').val().trim() == '')
+                {
+                    isValidOrder = false;
+                    $('#FilialID').siblings('span.error').css('visibility','visible');
+                }
+                else {
+                    $('#FilialID').siblings('span.error').css('visibility', 'hidden');
+                }
+
                 if ($('#PrazoVencimentoID').val().trim() == '') {
                     isValidOrder = false;
                     $('#PrazoVencimentoID').siblings('span.error').css('visibility', 'visible');
@@ -501,6 +549,7 @@
                         NumeroPedido : $('#NumeroPedido').val().trim(),
                         OperacaoID : $('#OperacaoID').val().trim(),
                         CodEmpresa: '@(ViewBag.Empresa.CodEmpresa)',
+                        FilialID: $('#FilialID').val().trim(),
                         Itens: pedidoItens
                     }
                     cadastroSelecionado = 0;
@@ -531,7 +580,7 @@
 
 
             // Function for show added items in table
-            function GeneratedItemsTable() {   
+            function GeneratedItemsTable() {
                 if (pedidoItens.length > 0) {
                     var $div = $('<div class="table-responsive"></div>');
                     var $table = $('<table class="table table-responsive table-striped"></table>');

@@ -71,7 +71,7 @@ namespace PedidoWeb.Models
 
         [DisplayName("Empresa")]
         [ForeignKey("Filial")]
-        public int FilialID { get; set; }
+        public int? FilialID { get; set; }
         public virtual Filial Filial { get; set; }
 
         // Lazy Load

@@ -12,6 +12,12 @@
             * @Html.Label("Vendedor")
             @Html.DropDownList("VendedorID", null, new { @disabled = true, @class = "form-control" })
         </div>
+
+        <div class="form-group">
+            * @Html.Label("Filial")
+            @Html.DropDownList("FilialID", null, string.Empty, new { @class="form-control"})
+            <span class="error" style="visibility: hidden">Filial é obrigatória</span>        
+        </div>
         
         @*<div class="form-group">
             * @Html.Label("Cliente")
@@ -37,18 +43,13 @@
             <span class="error" style="visibility: hidden">Prazo de Vencimento</span>
         </div> 
         
-        <button type="button" class="btn btn-default" onclick="toggleDiv('opcionais')">
-            <div class="dl-horizontal">
-                <dt>
-                    Informações Opcionais
-                </dt>
-                <dd>
-                    <span id="testeglyph1" class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
-                    <span id="testeglyph2" class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-                </dd>
-            </div>
-        </button>   
         
+            
+        <button type="button" style="min-width:160px" id="btOpcionais" class="btn btn-default" onclick="toggleDiv('opcionais')">
+            @*<span id="testeglyph2" class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>*@
+            Mais Informações
+        </button>
+                
         <div id="opcionais" class="opcionais" style="display: none">
             
             <div>
@@ -228,12 +229,21 @@
             var div = document.getElementById(divid);
             var disp = div.style.display;
             div.style.display = disp == 'none' ? 'block' : 'none';
-
-            var glyph = document.getElementById('testeglyph1');
-            var glyph2 = document.getElementById('testeglyph2');            
             
-            glyph.style.display = disp == 'none' ? 'none' : 'block';
-            glyph2.style.display = disp == 'none' ? 'block' : 'none';
+            //var glyph = document.getElementById('testeglyph1');
+            //var glyph2 = document.getElementById('testeglyph2');            
+            
+            //glyph.style.display = disp == 'none' ? 'none' : 'block';
+            //glyph2.style.display = disp == 'none' ? 'block' : 'none';
+            
+            var bt = document.getElementById('btOpcionais');
+            
+            if (disp == 'none') {                
+                bt.innerText = 'Menos Informações';
+            }
+            if (disp == 'block') {
+                bt.innerText = 'Mais Informações';
+            }
         };
 
         $("document").ready(function () {           
@@ -241,7 +251,7 @@
             var produtoSelecionado = 0;
             var cadastroSelecionado = 0;
             var descProdutoSelecionado = '';
-
+            
             $('#ProdutoAux').autocomplete({
                 source: function (request, response) {
                     // prepare url : for example '/api/artistapi?query=sonu
@@ -410,7 +420,7 @@
                         //DescProduto: el.options[el.selectedIndex].text,
                         DescProduto: descProdutoSelecionado,
                         ValorDesconto: $('#ValorDesconto').val().trim().replace('.', ','),
-                        PercentualDesconto: $('#PercDesconto').val().trim().replace('.', ',')
+                        PercentualDesconto: $('#PercDesconto').val().trim().replace('.', ',')                        
                     });
                     
                     totalPedido += (Number($('#Quantidade').val().trim().replace(',', '.'))
@@ -471,6 +481,14 @@
                     $('#OperacaoID').siblings('span.error').css('visibility', 'hidden');
                 }
 
+                if ($('#FilialID').val().trim() == '') {
+                    isValidOrder = false;
+                    $('#FilialID').siblings('span.error').css('visibility', 'visible');
+                    $('#FilialID').focus();
+                } else {
+                    $('#FilialID').siblings('span.error').css('visibility', 'hidden');
+                }
+
                 // Salvar
                 if (isValidOrder) {
                     var data = {
@@ -484,7 +502,8 @@
                         Observacao: $('#Observacao').val().trim(),
                         NumeroPedido: $('#NumeroPedido').val().trim(),
                         OperacaoID: $('#OperacaoID').val().trim(),
-                        CodEmpresa: '@(ViewBag.Empresa.CodEmpresa)',                        
+                        CodEmpresa: '@(ViewBag.Empresa.CodEmpresa)',
+                        FilialID: $('#FilialID').val().trim(),
                         Itens: pedidoItens
                     }
 

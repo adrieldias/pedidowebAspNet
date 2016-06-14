@@ -27,8 +27,11 @@ namespace PedidoWeb.Models
 
         [DisplayName("Prazo de Vencimento Padrão")]
         public int? PrazoVencimentoPadrao { get; set; }
-        
 
+        [DisplayName("Filial Padrão")]
+        public int? FilialID { get; set; }
+
+        
         // Properties
 
         [Key]

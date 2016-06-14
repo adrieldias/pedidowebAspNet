@@ -21,5 +21,7 @@ namespace PedidoWeb.Models
         public string DescFilial { get; set; }
 
         public string NumCgc { get; set; }
+
+        public string Situacao { get; set; }
     }
 }
