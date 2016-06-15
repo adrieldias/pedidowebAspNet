@@ -298,6 +298,10 @@
     <Compile Include="Migrations\201606151245439_DescCidadeCadastro.Designer.cs">
       <DependentUpon>201606151245439_DescCidadeCadastro.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606151357233_ModelCidadeExcluido.cs" />
+    <Compile Include="Migrations\201606151357233_ModelCidadeExcluido.Designer.cs">
+      <DependentUpon>201606151357233_ModelCidadeExcluido.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Filial.cs" />
@@ -307,7 +311,6 @@
     <Compile Include="Models\Operacao.cs" />
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\PedidoCreate.cs" />
-    <Compile Include="Models\Cidade.cs" />
     <Compile Include="Models\PrazoVencimento.cs" />
     <Compile Include="Models\Log.cs" />
     <Compile Include="Models\PedidoItem.cs" />
@@ -546,6 +549,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606151245439_DescCidadeCadastro.resx">
       <DependentUpon>201606151245439_DescCidadeCadastro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606151357233_ModelCidadeExcluido.resx">
+      <DependentUpon>201606151357233_ModelCidadeExcluido.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -89,10 +89,10 @@ namespace PedidoWeb.Models
             set { this.bairro = value == null ? string.Empty : value.ToUpper(); } 
         }
 
-        [ForeignKey("Cidade")]
-        [DisplayName("Cidade")]
-        public int? CidadeID { get; set; }
-        public virtual Cidade Cidade { get; set; }
+        //[ForeignKey("Cidade")]
+        //[DisplayName("Cidade")]
+        //public int? CidadeID { get; set; }
+        //public virtual Cidade Cidade { get; set; }
 
         private string descCidade;
         [DisplayName("Cidade")]
