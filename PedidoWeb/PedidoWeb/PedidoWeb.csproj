@@ -294,6 +294,10 @@
     <Compile Include="Migrations\201606141205188_atualizações_migracao_ftp.Designer.cs">
       <DependentUpon>201606141205188_atualizações_migracao_ftp.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606151245439_DescCidadeCadastro.cs" />
+    <Compile Include="Migrations\201606151245439_DescCidadeCadastro.Designer.cs">
+      <DependentUpon>201606151245439_DescCidadeCadastro.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Filial.cs" />
@@ -539,6 +543,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606141205188_atualizações_migracao_ftp.resx">
       <DependentUpon>201606141205188_atualizações_migracao_ftp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606151245439_DescCidadeCadastro.resx">
+      <DependentUpon>201606151245439_DescCidadeCadastro.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

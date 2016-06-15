@@ -94,6 +94,14 @@ namespace PedidoWeb.Models
         public int? CidadeID { get; set; }
         public virtual Cidade Cidade { get; set; }
 
+        private string descCidade;
+        [DisplayName("Cidade")]
+        public string DescCidade
+        {
+            get { return this.descCidade == null ? string.Empty : this.descCidade.ToUpper(); }
+            set { this.descCidade = value == null ? string.Empty : value.ToUpper(); }
+        }
+
         private string cep;
         [DisplayName("CEP")]
         public string CEP 

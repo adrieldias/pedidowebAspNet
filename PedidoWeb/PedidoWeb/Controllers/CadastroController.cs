@@ -78,7 +78,7 @@ namespace PedidoWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cadastro cadastro = db.Cadastroes.Include(c => c.Cidade).First(c => c.CadastroID == id);
+            Cadastro cadastro = db.Cadastroes.First(c => c.CadastroID == id);
             if (cadastro == null)
             {
                 return HttpNotFound();
