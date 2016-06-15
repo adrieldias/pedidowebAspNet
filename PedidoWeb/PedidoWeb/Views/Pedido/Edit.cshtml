@@ -175,19 +175,23 @@
         <div class="form-group col-md-2">
 
         </div>
-        <div class="form-group col-md-5" style="padding: 0 0 0 0">
-            @Html.Label("Valor de Desconto")
-            <input type="text" id="ValorDesconto" name="ValorDesconto" class="form-control" />
-            <span class="error" style="visibility: hidden">Valor de desconto inválido</span>
-        </div>
+        @if (ViewBag.Empresa.CodEmpresa != "BISSOLOTTI")
+        {
+            <div class="form-group col-md-5" style="padding: 0 0 0 0">
+                @Html.Label("Valor de Desconto")
+                <input type="text" id="ValorDesconto" name="ValorDesconto" class="form-control" />
+                <span class="error" style="visibility: hidden">Valor de desconto inválido</span>
+            </div>
 
+            <div class="clearfix"></div>
+
+            <div class="form-group">
+                @Html.Label("Observação do Item (opcional)")
+                <textarea id="ObservacaoItem" class="form-control"></textarea>
+                <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>
+            </div>
+        }
         <div class="clearfix"></div>
-
-        <div class="form-group">
-            @Html.Label("Observação do Item (opcional)")
-            <textarea id="ObservacaoItem" class="form-control"></textarea>
-            <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>
-        </div>
 
         <div class="col-md-6">
             @*<input type="button" id="add" value="Salvar Item" class="btn btn-default btn-group-justified" />*@
@@ -439,13 +443,14 @@
                 else {
                     $('#ValorUnitario').siblings('span.error').css('visibility', 'hidden');
                 }
-
-                if ($('#ObservacaoItem').val().length > 30) {
-                    isValidItem = false;
-                    $('#ObservacaoItem').siblings('span.error').css('visibility', 'visible');
-                }
-                else {
-                    $('#ObservacaoItem').siblings('span.error').css('visibility', 'hidden');
+                if ($('#ObservacaoItem').val() != undefined) {
+                    if ($('#ObservacaoItem').val().length > 30) {
+                        isValidItem = false;
+                        $('#ObservacaoItem').siblings('span.error').css('visibility', 'visible');
+                    }
+                    else {
+                        $('#ObservacaoItem').siblings('span.error').css('visibility', 'hidden');
+                    }
                 }
 
                 if (isNaN($('#PercDesconto').val().trim().replace(',', '.'))) {
@@ -463,10 +468,10 @@
                         ProdutoID: produtoSelecionado,
                         Quantidade: $('#Quantidade').val().trim().replace('.',','),
                         ValorUnitario: $('#ValorUnitario').val().trim().replace('.',','),
-                        Observacao: $('#ObservacaoItem').val().trim(),
+                        Observacao: $('#ObservacaoItem').val() == undefined ? '' : $('#ObservacaoItem').val().trim(),
                         //DescProduto: el.options[el.selectedIndex].text,
                         DescProduto: descProdutoSelecionado,
-                        ValorDesconto : $('#ValorDesconto').val().trim().replace('.',','),
+                        ValorDesconto : $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.',','),
                         PercentualDesconto : $('#PercDesconto').val().trim().replace('.',',')
                     });
 

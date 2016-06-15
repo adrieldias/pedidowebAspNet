@@ -39,8 +39,6 @@ namespace PedidoWeb.Models
 
         public System.Data.Entity.DbSet<PedidoWeb.Models.Empresa> Empresas { get; set; }
 
-        public System.Data.Entity.DbSet<PedidoWeb.Models.Cidade> Cidades { get; set; }
-
         public System.Data.Entity.DbSet<PedidoWeb.Models.Operacao> Operacaos { get; set; }
 
         public System.Data.Entity.DbSet<PedidoWeb.Models.Sincronismo> Sincronismoes { get; set; }
