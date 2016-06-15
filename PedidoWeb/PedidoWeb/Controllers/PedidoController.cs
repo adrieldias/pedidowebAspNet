@@ -168,12 +168,14 @@ namespace PedidoWeb.Controllers
                 , "VendedorID", "Nome");
 
             if (pedidoHelper.BuscaEmpresa().FilialID > 0)
-                ViewBag.FilialID = new SelectList(db.Filials.Where(f => f.CodEmpresa == usuario.CodEmpresa)
+                ViewBag.FilialID = new SelectList(db.Filials
+                    .Where(f => f.CodEmpresa == usuario.CodEmpresa && f.Situacao == "ATIVO") 
                     , "FilialID", "DescFilial"
                     , db.Filials.Find(pedidoHelper.BuscaEmpresa().FilialID).FilialID);
             else
-                ViewBag.FilialID = new SelectList(db.Filials.Where(f => f.CodEmpresa == usuario.CodEmpresa)
-                , "FilialID", "DescFilial");
+                ViewBag.FilialID = new SelectList(db.Filials
+                    .Where(f => f.CodEmpresa == usuario.CodEmpresa && f.Situacao == "ATIVO")
+                    , "FilialID", "DescFilial");
             
             return View();
         }
@@ -392,9 +394,10 @@ namespace PedidoWeb.Controllers
                 ViewBag.ProdutoID = new SelectList(db.Produtoes
                     .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
                     .OrderBy(p => p.Descricao), "ProdutoID", "Descricao");
-                ViewBag.FilialID = new SelectList(db.Filials.Where(f => f.CodEmpresa == usuario.CodEmpresa)
-                , "FilialID", "DescFilial"
-                , pedido.FilialID);
+                ViewBag.FilialID = new SelectList(db.Filials
+                    .Where(f => f.CodEmpresa == usuario.CodEmpresa && f.Situacao == "ATIVO")
+                    , "FilialID", "DescFilial"
+                    , pedido.FilialID);
                 return View(pedido);
             }
             
