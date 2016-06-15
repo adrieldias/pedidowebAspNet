@@ -109,21 +109,46 @@
     <div>
         @using (Html.BeginForm("Index", "Pedido", FormMethod.Get))
         {
-            <div class="input-group" style="padding-left: 0px; padding-right: 0px">
+            <div class="input-group" style="padding-left: 0px; padding-right: 0px">            
                 @Html.TextBox("Search", null, new
-        {
-            onchange = "$(this.form).submit();",
-            placeholder = "Pesquisar por Cliente, nº do Pedido ou Data",
-            @class = "form-control"
-        })
+            {
+                onchange = "$(this.form).submit();",
+                placeholder = "Pesquisar por Cliente, nº do Pedido ou Data",
+                @class = "form-control"
+            })
                 <span class="input-group-btn">
                     <input type="submit" value="Procurar" class="btn btn-default" />
+                </span>                
+                
+                <span class="input-group-btn">
+                    <span class="" aria-hidden="true"></span>
+                    <input type="button" value="..." class="btn btn-block" onclick="toggleDiv('opcionais')" />
                 </span>
             </div>
         }
         
 
-    </div>    
+    </div>
+    
+    @using(Html.BeginForm("Index", "Pedido", FormMethod.Get))
+    { 
+        <div class="opcionais" id="opcionais">
+            <h4 style="text-align:center">Mais Opções de Pesquisa</h4>
+            <h4>Situação do pedido</h4>
+            <div style="display: block" class="radio">                
+                <label><input type="radio" name="status" value="Aprovado" onchange="submit()" />Aprovado</label>
+            </div>
+            <div style="display: block" class="radio">
+                <label><input type="radio" name="status" value="Em Analise" onchange="submit()" />Em Análise</label>
+            </div>
+            <div style="display: block" class="radio">
+                <label><input type="radio" name="status" value="Faturado" onchange="submit()" />Faturado</label>
+            </div>
+            <br />
+            <h4>Período</h4>
+            @Html.TextBox("DataIni") até @Html.TextBox("DataFin")
+        </div>    
+    }
 
     <h2>Pedidos</h2>
     <br>
@@ -207,14 +232,15 @@
             @Html.DisplayFor(modelItem => item.DataEmissao)
         </td>
         <td>
-            @Html.ActionLink(" ", "Details", new { id = item.PedidoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
             @if (item.Status != "APROVADO" && item.Status != "EM ANALISE")
             {
+                @Html.ActionLink(" ", "Details", new { id = item.PedidoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
                 @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil disabled" })
                 @Html.ActionLink(" ", "Delete", new { id = item.PedidoID }, new { @class = "btn btn-danger glyphicon glyphicon-remove disabled" })
             }
             else
             {
+                @Html.ActionLink(" ", "Details", new { id = item.PedidoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
                 @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil" })
                 @Html.ActionLink(" ", "Delete", new { id = item.PedidoID }, new { @class = "btn btn-danger glyphicon glyphicon-remove" })
             }
@@ -229,3 +255,30 @@
     @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 </div>
 <div class="clearfix"></div>
+
+@section Scripts{
+    
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/jqueryui/stylesheet")
+
+    <script type="text/javascript">
+        function toggleDiv(divid) {
+            var div = document.getElementById(divid);
+            var disp = div.style.display;
+            div.style.display = disp == 'none' ? 'block' : 'none';            
+        };        
+
+        $("document").ready(function () {
+            
+            $('#DataIni').keyup(function () {
+                //alert(parseInt($('#DataIni').val()));
+                if(isNaN(parseInt($('#DataIni').val().substr($('#DataIni').val().length - 1, 1))))
+                {
+                    return;
+                }
+            });
+        });
+
+    </script>
+}

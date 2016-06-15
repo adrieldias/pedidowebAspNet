@@ -21,7 +21,7 @@ namespace PedidoWeb.Controllers
         // GET: /Pedido/
         [Authorize]
         public ViewResult Index(string sortOrder, string currentFilter, string search, string searchByDate, int? page,
-            string mensagem)
+            string status, string mensagem)
         {
             if (mensagem != string.Empty)
                 ViewBag.Message = mensagem;
@@ -69,8 +69,7 @@ namespace PedidoWeb.Controllers
             {
                 DateTime data;
                 DateTime.TryParse(search, out data);
-                
-                
+                                
                 int numero;
                 int.TryParse(search, out numero);
 
@@ -90,6 +89,11 @@ namespace PedidoWeb.Controllers
                     pedidos = pedidos.Where(s => s.DataEmissao == data);
             }
 
+            if(!string.IsNullOrEmpty(status))
+            {
+                pedidos = pedidos.Where(p => p.Status.ToUpper().Contains(status.ToUpper()));
+            }
+
             switch (sortOrder)
             {
                 case "DataEmissao":
@@ -99,7 +103,8 @@ namespace PedidoWeb.Controllers
                     pedidos = pedidos.OrderByDescending(s => s.DataEmissao);
                     break;
                 default:
-                    pedidos = pedidos.OrderByDescending(s => s.Status).ThenByDescending(s => s.PedidoID);
+                    //pedidos = pedidos.OrderByDescending(s => s.Status).ThenByDescending(s => s.PedidoID);
+                    pedidos = pedidos.OrderByDescending(s => s.PedidoID);
                     break;
             }
 
