@@ -20,8 +20,8 @@ namespace PedidoWeb.Controllers
 
         // GET: /Pedido/
         [Authorize]
-        public ViewResult Index(string sortOrder, string currentFilter, string search, string searchByDate, int? page,
-            string status, string mensagem)
+        public ActionResult Index(string sortOrder, string currentFilter, string search, string searchByDate, int? page,
+            string status, string DataIni, string DataFin, string mensagem)
         {
             if (mensagem != string.Empty)
                 ViewBag.Message = mensagem;
@@ -92,6 +92,28 @@ namespace PedidoWeb.Controllers
             if(!string.IsNullOrEmpty(status))
             {
                 pedidos = pedidos.Where(p => p.Status.ToUpper().Contains(status.ToUpper()));
+            }
+
+            if(!string.IsNullOrEmpty(DataIni) && !string.IsNullOrEmpty(DataFin))
+            {
+                try
+                {
+                    var dtInicial = Convert.ToDateTime(DataIni);
+                    pedidos = pedidos.Where(p => p.DataEmissao >= dtInicial);
+                }catch(Exception ex)
+                {
+                    return RedirectToAction("Index", new { mensagem = "Data Inicial inválida para a pesquisa" });
+                }
+                try
+                {
+                    var dtFinal = Convert.ToDateTime(DataFin);
+                    pedidos = pedidos.Where(p => p.DataEmissao <= dtFinal);
+                }
+                catch (Exception ex)
+                {
+                    return RedirectToAction("Index", new { mensagem = "Data Final inválida para a pesquisa" });
+                }
+                
             }
 
             switch (sortOrder)
