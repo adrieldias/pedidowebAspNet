@@ -117,16 +117,18 @@
                 @class = "form-control"
             })
                 <span class="input-group-btn">
-                    <input type="submit" value="Procurar" class="btn btn-default" />
+                    <button type="submit" value="Procurar" class="btn btn-default" aria-label="Procurar" >
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
                 </span>                
                 
                 <span class="input-group-btn">
                     @*<span class="" aria-hidden="true"></span>*@                    
                     @*<input type="button" value="..." class="btn btn-block" style="width:300px" onclick="toggleDiv('opcionais')" />*@
-                    <button type="button" class="btn btn-primary" @*style="background-color: #003366; color: white"*@ onclick="toggleDiv('opcionais')"  style="width: auto">
-                        @*<span class="glyphicon glyphicon-apple" aria-hidden="true"></span>*@
-                        Filtrar
+                    <button type="button" class="btn btn-primary" aria-label="Filtros" @*style="background-color: #003366; color: white"*@ onclick="toggleDiv('opcionais')">
+                        <span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>                        
                     </button>
+                </span>
             </div>
         }
         
@@ -139,13 +141,13 @@
             <h4 style="text-align:center">Mais Opções de Pesquisa</h4>
             <h4>Situação do pedido</h4>
             <div style="display: block" class="radio form-control">
-                <label><input type="radio" name="status" value="Aprovado" onchange="mostraMsgAguarde(); submit()" />Aprovado</label>
+                <label><input type="radio" name="status" value="Aprovado" onchange="mostraMsgAguarde(); submit()" />APROVADO</label>
             </div>
             <div style="display: block" class="radio form-control">
-                <label><input type="radio" name="status" value="Em Analise" onchange="mostraMsgAguarde(); submit()" />Em Análise</label>
+                <label><input type="radio" name="status" value="Em Analise" onchange="mostraMsgAguarde(); submit()" />EM ANÁLISE</label>
             </div>
             <div style="display: block" class="radio form-control">
-                <label><input type="radio" name="status" value="Faturado" onchange="mostraMsgAguarde(); submit()" />Faturado</label>
+                <label><input type="radio" name="status" value="Faturado" onchange="mostraMsgAguarde(); submit()" />FATURADO</label>
             </div>
             <br />
             <h4>Período</h4>
@@ -163,7 +165,11 @@
             
             <div class="col-md-5 margem-zero" style="text-align:center">
                 <br />
-                <input type="submit" value="Procurar" onclick="mostraMsgAguarde()" class="btn btn-primary" style="width:100%" />
+                @*<input type="submit" value="Procurar" onclick="mostraMsgAguarde()" class="btn btn-primary" style="width:100%" />*@
+                <button type="submit" value="Procurar" onclick="mostraMsgAguarde()" class="btn btn-primary" style="width:100%">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    Procurar
+                </button>
             </div>
 
             <div class="clearfix"></div>
