@@ -10,8 +10,21 @@
 
     @if (Model.Status == "EM ANALISE")
     {
-        <h4 class="alert alert-warning">Este pedido está em análise</h4>
+        <div class="alert alert-warning">
+            <h4>Este pedido está em análise</h4>
+        </div>
+        
+        <div class="opcionais">
+            @foreach(var motivo in (List<string>
+                )ViewBag.MotivoStatus)
+                {
+                <h5>@motivo</h5>
+                }
+        </div>
+        <br />
     }
+
+
 
     @if (Model.Status == "CANCELADO")
     {
@@ -43,7 +56,7 @@
             </dd>
         }
 
-        
+
         <dt>
             @Html.DisplayNameFor(model => model.Operacao.Descricao)
         </dt>
@@ -60,7 +73,7 @@
             @Html.DisplayFor(model => model.Cadastro.Nome)
         </dd>
 
-        @if(Model.NumeroPedido != null)
+        @if (Model.NumeroPedido != null)
         {
             <dt>
                 @Html.DisplayNameFor(model => model.NumeroPedido)
@@ -191,31 +204,31 @@
 
     @{
         decimal teste = 0;
-        
-        foreach(var item in Model.Itens)
+
+        foreach (var item in Model.Itens)
         {
             decimal valDesc = Convert.ToDecimal(item.ValorDesconto == null ? 0 : item.ValorDesconto);
-            
+
             teste += (item.Quantidade * item.ValorUnitario)
                 - (item.Quantidade * valDesc);
         }
         <div id="TotalPedido">
-            <p class="label label-default">Total do Pedido R$ @Html.Label(teste.ToString())</p>            
+            <p class="label label-default">Total do Pedido R$ @Html.Label(teste.ToString())</p>
         </div>
         <br />
     }
 
     <div class="form-group">
         <div>
-            @if(Model.Status != "APROVADO" && Model.Status != "EM ANALISE")
+            @if (Model.Status != "APROVADO" && Model.Status != "EM ANALISE")
             {
                 @Html.ActionLink("Editar", "Edit", new { id = Model.PedidoID }, new { @class = "btn btn-primary disabled" })
             }
             else
             {
-                @Html.ActionLink("Editar", "Edit", new { id = Model.PedidoID }, new { @class = "btn btn-primary" })    
+                @Html.ActionLink("Editar", "Edit", new { id = Model.PedidoID }, new { @class = "btn btn-primary" })
             }
-            
+
             @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
 
             @if (ViewBag.TipoUsuario == "ADMINISTRADOR" && Model.Status == "EM ANALISE")
@@ -230,4 +243,5 @@
         </div>
     </div>
 
-    </div>
+</div>
+
