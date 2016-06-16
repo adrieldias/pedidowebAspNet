@@ -154,11 +154,14 @@ namespace PedidoWeb.Controllers
                 .Include(o => o.Operacao)
                 .Include(f => f.Filial)
                 .First(p => p.PedidoID == id);
-            ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
+            ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;            
             if (pedido == null)
             {
                 return HttpNotFound();
             }
+            StatusPedido sp = new StatusPedido();
+            sp.CalculaStatus(pedido);
+            ViewBag.MotivoStatus = sp.MotivoStatus;
             return View(pedido);
         }        
 
