@@ -218,6 +218,12 @@
                 <th>
                     @Html.DisplayName("Emissão")
                 </th>
+                @if(ViewBag.TipoUsuario == "MASTER")
+                {
+                    <th>
+                        @Html.DisplayName("Empresa")
+                    </th>
+                }
                 <th></th>
             </tr>
                         @foreach (var item in Model)
@@ -257,6 +263,12 @@
         <td>
             @Html.DisplayFor(modelItem => item.DataEmissao)
         </td>
+        @if(ViewBag.TipoUsuario == "MASTER")
+        {
+            <td>
+                @Html.DisplayFor(modelItem => item.CodEmpresa)
+            </td>
+        }
         <td>
             @if (item.Status != "APROVADO" && item.Status != "EM ANALISE")
             {
