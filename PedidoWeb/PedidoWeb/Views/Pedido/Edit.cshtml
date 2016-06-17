@@ -63,7 +63,8 @@
     </div>       
     <br />
     <button type="button" style="min-width:160px" id="btOpcionais" class="btn btn-default" onclick="toggleDiv('opcionais')">
-        @*<span id="testeglyph2" class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>*@
+        <span id="testeglyph1" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span id="testeglyph2" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>    
         Mais Informações
     </button>
 
@@ -251,13 +252,17 @@
             //glyph.style.display = disp == 'none' ? 'none' : 'block';
             //glyph2.style.display = disp == 'none' ? 'block' : 'none';
             
-            var bt = document.getElementById('btOpcionais');
+            //var bt = document.getElementById('btOpcionais');
             
             if (disp == 'none') {                
-                bt.innerText = 'Menos Informações';
+                //$("#btOpcionais").text('Menos Informações');
+                $("#testeglyph2").show();
+                $("#testeglyph1").hide();
             }
             if (disp == 'block') {
-                bt.innerText = 'Mais Informações';
+                //$("#btOpcionais").text('Mais Informações');
+                $("#testeglyph2").hide();
+                $("#testeglyph1").show();                
             }
         };
 
