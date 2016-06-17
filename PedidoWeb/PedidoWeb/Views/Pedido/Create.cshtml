@@ -166,6 +166,7 @@
                     <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>               
                 </div>  
             }      
+            @Html.Hidden("ItemIndex")
             <div class="clearfix"></div>      
             
             <div class="col-md-6">
@@ -284,7 +285,7 @@
                     //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value + 'Valor ' + ui.item.valor );
                     $('#ProdutoAux').val(ui.item.label);
                     $('#ValorUnitario').val(ui.item.valor);
-                    DescProdutoSelecionado = ui.item.label;
+                    descProdutoSelecionado = ui.item.label;
                     produtoSelecionado = ui.item.value;
                     return false;
                 }
@@ -342,6 +343,21 @@
 
             var pedidoItens = [];
             var totalPedido = 0;
+
+            var calulaTotal = function () {
+                for (var i = 0; i < pedidoItens.length; i++) {
+                    var d = 0;
+                    if (!isNaN(Number(String(pedidoItens[i].ValorDesconto).replace(',', '.'))))
+                        d = Number(String(pedidoItens[i].ValorDesconto).replace(',', '.'))
+                            * Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
+
+                    totalPedido += Number(
+                        Number(String(pedidoItens[i].Quantidade).replace(',', '.'))
+                        * Number(String(pedidoItens[i].ValorUnitario).replace(',', '.'))
+                        - Number(d)
+                    );
+                }
+            };
             
             // Add desconto change function        
             $('#PercDesconto').change(function () {
@@ -364,6 +380,7 @@
                 $('#ObservacaoItem').val('');
                 $('#PercDesconto').val('');
                 $('#ValorDesconto').val('');
+                $('#ItemIndex').val('');
             });
             // Add button click function
             $('#add').click(function () {
@@ -412,22 +429,29 @@
                 if (isValidItem) {                    
                     //var el = document.getElementById('ProdutoAux');
                     
-                    pedidoItens.push({
-                        //ProdutoID: $('#ProdutoAux').val().trim(),
-                        ProdutoID: produtoSelecionado,
-                        Quantidade: $('#Quantidade').val().trim().replace('.',','),
-                        ValorUnitario: $('#ValorUnitario').val().trim().replace('.', ','),
-                        Observacao: $('#ObservacaoItem').val() == undefined ? '' : $('#ObservacaoItem').val().trim(),
-                        //DescProduto: el.options[el.selectedIndex].text,
-                        DescProduto: descProdutoSelecionado,
-                        ValorDesconto: $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.', ','),
-                        PercentualDesconto: $('#PercDesconto').val().trim().replace('.', ',')                        
-                    });
-                    
-                    totalPedido += (Number($('#Quantidade').val().trim().replace(',', '.'))
-                        * Number($('#ValorUnitario').val().trim().replace(',', '.')))
-                        - (Number($('#Quantidade').val().trim().replace(',', '.'))
-                        * Number($('#ValorDesconto').val() == undefined ? '0' : $('#ValorDesconto').val().trim().replace(',', '.')));
+                    if ($('#ItemIndex').val() == '') //adição de itens
+                        pedidoItens.push({
+                            //ProdutoID: $('#ProdutoAux').val().trim(),
+                            ProdutoID: produtoSelecionado,
+                            Quantidade: $('#Quantidade').val().trim().replace('.',','),
+                            ValorUnitario: $('#ValorUnitario').val().trim().replace('.',','),
+                            Observacao: $('#ObservacaoItem').val() == undefined ? '' : $('#ObservacaoItem').val().trim(),
+                            //DescProduto: el.options[el.selectedIndex].text,
+                            DescProduto: descProdutoSelecionado,
+                            ValorDesconto: $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.', ','),
+                            PercentualDesconto: $('#PercDesconto').val().trim().replace('.',',')                        
+                        });
+                    else //edição de itens
+                    {
+                        var i = $('#ItemIndex').val();
+                        pedidoItens[i].ProdutoID = produtoSelecionado;
+                        pedidoItens[i].Quantidade = $('#Quantidade').val().trim().replace('.', ',');
+                        pedidoItens[i].ValorUnitario = $('#ValorUnitario').val().trim().replace('.', ',');
+                        pedidoItens[i].Observacao = $('#ObservacaoItem').val() == undefined ? '' : $('#ObservacaoItem').val().trim();
+                        pedidoItens[i].DescProduto = descProdutoSelecionado;
+                        pedidoItens[i].ValorDesconto = $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.', ',');
+                        pedidoItens[i].PercentualDesconto = $('#PercDesconto').val().trim().replace('.', ',');
+                    }
                     
                     $('#ProdutoAux').val('').focus();
                     $('#Quantidade').val('');
@@ -435,6 +459,7 @@
                     $('#ObservacaoItem').val('');
                     $('#PercDesconto').val('');
                     $('#ValorDesconto').val('');
+                    $('#ItemIndex').val('');
                     produtoSelecionado = 0;
                     $("#MsgAddItem").show();                    
                     setTimeout("$('#MsgAddItem').hide()", 3500);
@@ -553,20 +578,24 @@
                         else
                             $row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
                         $row.append($('<td/>').html(val.ValorUnitario));
-                        $row.append($('<td><button id=excluir class="btn btn-danger">Excluir</button></td>').click(function () {
-                            for (var i in pedidoItens) {
-                                if (pedidoItens[i].ProdutoID == val.ProdutoID
-                                    && pedidoItens[i].Quantidade == val.Quantidade
-                                    && pedidoItens[i].ValorUnitario == val.ValorUnitario
-                                    && pedidoItens[i].Observacao == val.Observacao
-                                    && pedidoItens[i].ValorDesconto == val.ValorDesconto) {
-                                    pedidoItens.splice(i, 1);
-                                    totalPedido -= ((val.Quantidade.trim().replace(',', '.')
-                                        * val.ValorUnitario.trim().replace(',', '.'))
-                                        - (val.Quantidade.trim().replace(',', '.') * val.ValorDesconto.trim().replace(',', '.')));
-                                    GeneratedItemsTable();
-                                }
-                            }
+                        $row.append($('<td><button id=editarItem class="btn btn-primary">' +
+                            '<span class="glyphicon glyphicon-pencil" aria-hidden="true">' +
+                            '</span></button></td>').click(function () {
+                            $('#ProdutoAux').val(val.DescProduto).focus();
+                            $('#Quantidade').val(val.Quantidade);
+                            $('#ValorUnitario').val(val.ValorUnitario);
+                            $('#ObservacaoItem').val(val.Observacao);
+                            $('#PercDesconto').val(val.percDesconto);
+                            $('#ValorDesconto').val(val.ValorDesconto);
+                            $('#ItemIndex').val(i);
+                            produtoSelecionado = val.ProdutoID;
+                            descProdutoSelecionado = val.DescProduto;
+                        }));
+                        $row.append($('<td><button id=excluir class="btn btn-danger">'+
+                            '<span class="glyphicon glyphicon-remove" aria-hidden="true">'+
+                            '</span></button></td>').click(function(){
+                            pedidoItens.splice(i, 1);                            
+                            GeneratedItemsTable();
                         }));
 
                         $tbody.append($row);
@@ -579,13 +608,15 @@
                     $('#pedidoItens').html('');
                 }
 
+                calulaTotal();
+
                 if (isNaN(totalPedido)) {
                     $('#totalPedido').html(
                         '<p class="label label-default">'
                         + 'Total do Pedido R$: 0.00'
                         + '</p>'
                         );
-                    totalPedido = 0;
+                    
                 } else {
                     $('#totalPedido').html(
                         '<p class="label label-default">'
@@ -594,6 +625,7 @@
                         + '</p>'
                         );
                 }
+                totalPedido = 0;
             };
         });
     </script>
