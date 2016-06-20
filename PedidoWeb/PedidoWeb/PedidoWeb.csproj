@@ -302,6 +302,10 @@
     <Compile Include="Migrations\201606151357233_ModelCidadeExcluido.Designer.cs">
       <DependentUpon>201606151357233_ModelCidadeExcluido.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606171903506_modificacaoConsertado.cs" />
+    <Compile Include="Migrations\201606171903506_modificacaoConsertado.Designer.cs">
+      <DependentUpon>201606171903506_modificacaoConsertado.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Filial.cs" />
@@ -369,6 +373,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -552,6 +557,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606151357233_ModelCidadeExcluido.resx">
       <DependentUpon>201606151357233_ModelCidadeExcluido.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606171903506_modificacaoConsertado.resx">
+      <DependentUpon>201606171903506_modificacaoConsertado.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

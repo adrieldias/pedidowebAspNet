@@ -494,7 +494,7 @@ namespace PedidoWeb.Controllers
 
                 Pedido pedido = db.Pedidoes.Include(p => p.Itens).Where(p => p.PedidoID == id).First();
                 db.PedidoItems.RemoveRange(pedido.Itens);
-
+                
                 if (pedido.CodPedidoCab != null && pedido.CodPedidoCab > 0)
                 {
                     Sincronismo sincronismo = new Sincronismo();
@@ -505,8 +505,16 @@ namespace PedidoWeb.Controllers
                     sincronismo.Tipo = "PEDIDO";
                     db.Sincronismoes.Add(sincronismo);
                 }
-                
+                //Adiciona ao histórico do pedido
+                HistoricoPedido historico = new HistoricoPedido();
+                historico.DataModificacao = DateTime.Now;
+                historico.PedidoID = pedido.PedidoID;
+                historico.UsuarioID = pedidoHelper.UsuarioCorrente.UsuarioID;
+
                 db.Pedidoes.Remove(pedido);
+                db.SaveChanges();
+
+                db.HistoricoPedidoes.Add(historico); 
                 db.SaveChanges();
 
                 return RedirectToAction("Index");                
@@ -514,8 +522,7 @@ namespace PedidoWeb.Controllers
             catch(Exception ex)
             {
                 PedidoWeb.Controllers.Negocio.Log.SalvaLog(pedidoHelper.UsuarioCorrente, ex.Message);
-                ViewBag.Message = ex.Message;
-                return RedirectToAction("Delete", new { @id = id});
+                return RedirectToAction("Index", "Pedido", new { mensagem = ex.Message });
             }
         }
 

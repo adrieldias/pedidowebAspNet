@@ -14,17 +14,14 @@ namespace PedidoWeb.Models
     {
         [Key]
         public int HistoricoPedidoID { get; set; }
-        public DateTime DataModificao { get; set; }
+        public DateTime DataModificacao { get; set; }
 
-        [ForeignKey("Usuario")]
         public int? UsuarioID { get; set; }
         public virtual Usuario Usuario { get; set; }
 
-        [ForeignKey("Pedido")]
         public int? PedidoID { get; set; }
         public virtual Pedido Pedido { get; set; }
 
-        [ForeignKey("PedidoItem")]
         public int? PedidoItemID { get; set; }
         public virtual PedidoItem PedidoItem { get; set; }
 
