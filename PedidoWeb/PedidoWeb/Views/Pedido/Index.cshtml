@@ -167,8 +167,6 @@
             </div>
 
             <div class="clearfix"></div>
-
-            
             
             <div id="MsgAguarde">
                 <h3>Aguarde...</h3>
@@ -184,6 +182,39 @@
         <span class="glyphicon glyphicon-plus"></span>
         Novo Pedido
     </a>
+    <br />
+    <div id="mensagemFiltro">
+        <br />
+        <div class="opcionais">
+            <h3>Filtrando por</h3>
+            <ul>
+                @if (!string.IsNullOrEmpty(ViewBag.Status))
+                {
+                    <li>
+                        Status
+                        @ViewBag.Status
+                    </li>
+                }
+
+                @if (!string.IsNullOrEmpty(ViewBag.DataInicial) && !string.IsNullOrEmpty(ViewBag.DataFinal))
+                {
+                    <li>
+                        Período
+                        @ViewBag.DataInicial
+                        até
+                        @ViewBag.DataFinal
+                    </li>
+                }
+            </ul>
+            @using(Html.BeginForm("Index", "Pedido", FormMethod.Get))
+            {
+                <button type="submit" id="RemoveFiltro" name="RemoveFiltro" class="btn btn-default btn-sm" onclick="removeFiltros()">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Remover Filtros
+                </button>
+            }
+        </div>
+    </div>
     
     <div>
         <p style="text-align: right">
@@ -290,7 +321,14 @@
 </div>
 
     Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    @Html.PagedListPager(Model, page => Url.Action("Index"
+        , new { page, sortOrder = ViewBag.CurrentSort
+                    , currentFilter = ViewBag.CurrentFilter
+                    , status = ViewBag.Status
+                    , DataIni = ViewBag.DataInicial
+                    , DataFin = ViewBag.DataFinal
+              }
+    ))
 </div>
 <div class="clearfix"></div>
 
@@ -300,7 +338,8 @@
 @Scripts.Render("~/bundles/jqueryui")
 @Scripts.Render("~/bundles/jqueryui/stylesheet")
 
-    <script type="text/javascript">
+    <script type="text/javascript">        
+
         function toggleDiv(divid) {
             var div = document.getElementById(divid);
             var disp = div.style.display;
@@ -310,7 +349,6 @@
         function mostraMsgAguarde() {   
             $('#MsgAguarde').show();
         };
-
 
         $("document").ready(function () {
             var numero = false;
@@ -339,7 +377,9 @@
                                 //alert($('#DataIni').val().substr($('#DataIni').val().length - 1, 1).toString());
                                 $('#DataIni').val($('#DataIni').val() + '/');
                                 numero = true;
-                            }                    
+                            }
+                            if ($('#DataIni').val().length == 10)
+                                $('#DataFin').focus();
                         } else {
                             if(!numero)
                                 $('#DataIni').val($('#DataIni').val().substr($('#DataIni').val().length - 2, 0));
@@ -383,10 +423,21 @@
                         numero = false;
                     }
                 }
-            });
+            });            
             
             $('#opcionais').hide();
             $('#MsgAguarde').hide();
+            
+            var filtroStatus = '@(ViewBag.Status)';
+            var filtroDtIni = '@ViewBag.DataInicial';
+            var filtroDtFin = '@ViewBag.DataFinal';
+            if (filtroStatus != '' || (filtroDtIni != '' && filtroDtFin != '')) {
+                $('#mensagemFiltro').show();                
+            }
+            else {
+                $('#mensagemFiltro').hide();                
+            }
+            
         });
 
     </script>

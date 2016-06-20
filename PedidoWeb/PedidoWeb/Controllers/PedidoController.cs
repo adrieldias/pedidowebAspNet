@@ -36,6 +36,10 @@ namespace PedidoWeb.Controllers
             ViewBag.DateParam = sortOrder == "DataEmissao" ? "DataEmissao_desc" : "DataEmissao";
             ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
             ViewBag.UrlConfUsuario = "/Usuario/Edit/" + pedidoHelper.UsuarioCorrente.UsuarioID;
+            ViewBag.Status = string.IsNullOrEmpty(status) ? null : status;
+            ViewBag.DataInicial = string.IsNullOrEmpty(DataIni) ? null : DataIni;
+            ViewBag.DataFinal = string.IsNullOrEmpty(DataFin) ? null : DataFin;
+
             if(ViewBag.TipoUsuario == "ADMINISTRADOR")
             {
                 ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + pedidoHelper.UsuarioCorrente.CodEmpresa;
