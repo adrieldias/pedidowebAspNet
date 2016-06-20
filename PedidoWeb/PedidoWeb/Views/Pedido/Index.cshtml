@@ -147,6 +147,9 @@
                 <label><input type="radio" name="status" value="Em Analise" onchange="mostraMsgAguarde(); submit()" />EM ANÁLISE</label>
             </div>
             <div style="display: block" class="radio form-control">
+                <label><input type="radio" name="status" value="Em Embarque" onchange="mostraMsgAguarde(); submit()" />EM EMBARQUE</label>
+            </div>
+            <div style="display: block" class="radio form-control">
                 <label><input type="radio" name="status" value="Faturado" onchange="mostraMsgAguarde(); submit()" />FATURADO</label>
             </div>
             <br />
@@ -255,76 +258,92 @@
                 <th>
                     @Html.DisplayName("Emissão")
                 </th>
+
                 @if(ViewBag.TipoUsuario == "MASTER")
                 {
                     <th>
                         @Html.DisplayName("Empresa")
                     </th>
                 }
+                
+                @if(ViewBag.TipoUsuario == "ADMINISTRADOR")
+                {
+                    <th>
+                        @Html.DisplayName("Vendedor")
+                    </th>
+                }
                 <th></th>
             </tr>
-                        @foreach (var item in Model)
-{
-    <tr class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Pedido", new { id = item.PedidoID }))'">
-        <td>
-            @if (item.Status == "EM ANALISE")
+            @foreach (var item in Model)
             {
-                <div class="label label-warning">
-                    @Html.DisplayFor(modelItem => item.Status)
-                </div>
+                <tr class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Pedido", new { id = item.PedidoID }))'">
+                    <td>
+                        @if (item.Status == "EM ANALISE")
+                        {
+                            <div class="label label-warning">
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </div>
+                        }
+                        else
+                            if (item.Status == "CANCELADO")
+                            {
+                                <div class="label label-danger">
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="label label-success">
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </div>
+                            }
+
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PedidoID)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cadastro.Nome)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataEmissao)
+                    </td>
+                    
+                    @if(ViewBag.TipoUsuario == "MASTER")
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CodEmpresa)
+                        </td>
+                    }
+                    
+                    @if (ViewBag.TipoUsuario == "ADMINISTRADOR")
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VendedorID)
+                        </td>
+                    }
+                    <td>
+                        @if (item.Status != "APROVADO" && item.Status != "EM ANALISE")
+                        {
+                            @Html.ActionLink(" ", "Details", new { id = item.PedidoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
+                            @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil disabled" })
+                            @Html.ActionLink(" ", "Delete", new { id = item.PedidoID }, new { @class = "btn btn-danger glyphicon glyphicon-remove disabled" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink(" ", "Details", new { id = item.PedidoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
+                            @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil" })
+                            @Html.ActionLink(" ", "Delete", new { id = item.PedidoID }, new { @class = "btn btn-danger glyphicon glyphicon-remove" })
+                        }
+                    </td>
+                </tr>
             }
-            else
-                if (item.Status == "CANCELADO")
-                {
-                    <div class="label label-danger">
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </div>
-                }
-                else
-                {
-                    <div class="label label-success">
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </div>
-                }
 
-        </td>
-
-        <td>
-            @Html.DisplayFor(modelItem => item.PedidoID)
-        </td>
-
-        <td>
-            @Html.DisplayFor(modelItem => item.Cadastro.Nome)
-        </td>
-
-        <td>
-            @Html.DisplayFor(modelItem => item.DataEmissao)
-        </td>
-        @if(ViewBag.TipoUsuario == "MASTER")
-        {
-            <td>
-                @Html.DisplayFor(modelItem => item.CodEmpresa)
-            </td>
-        }
-        <td>
-            @if (item.Status != "APROVADO" && item.Status != "EM ANALISE")
-            {
-                @Html.ActionLink(" ", "Details", new { id = item.PedidoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
-                @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil disabled" })
-                @Html.ActionLink(" ", "Delete", new { id = item.PedidoID }, new { @class = "btn btn-danger glyphicon glyphicon-remove disabled" })
-            }
-            else
-            {
-                @Html.ActionLink(" ", "Details", new { id = item.PedidoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
-                @Html.ActionLink(" ", "Edit", new { id = item.PedidoID }, new { @class = "btn btn-primary glyphicon glyphicon-pencil" })
-                @Html.ActionLink(" ", "Delete", new { id = item.PedidoID }, new { @class = "btn btn-danger glyphicon glyphicon-remove" })
-            }
-        </td>
-    </tr>
-}
-
-</table>
-</div>
+        </table>
+    </div>
 
     Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
     @Html.PagedListPager(Model, page => Url.Action("Index"
