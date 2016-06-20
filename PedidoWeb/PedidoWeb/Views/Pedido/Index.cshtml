@@ -384,8 +384,11 @@
                                 $('#DataIni').val($('#DataIni').val() + '/');
                                 numero = true;
                             }
-                            if ($('#DataIni').val().length == 10)
+                            // Joga o foco para a data final
+                            if ($('#DataIni').val().length == 10 && e.which != 37 && e.which != 39 && e.which != 9 && e.which != 16) {
+                                //alert(e.which);
                                 $('#DataFin').focus();
+                            }
                         } else {
                             if(!numero)
                                 $('#DataIni').val($('#DataIni').val().substr($('#DataIni').val().length - 2, 0));
