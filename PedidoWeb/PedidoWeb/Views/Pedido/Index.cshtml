@@ -292,11 +292,25 @@
                                 </div>
                             }
                             else
-                            {
-                                <div class="label label-success">
-                                    @Html.DisplayFor(modelItem => item.Status)
-                                </div>
-                            }
+                                if(item.Status == "EM EMBARQUE")
+                                {
+                                    <div class="label label-default">
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </div> 
+                                }
+                                else
+                                    if(item.Status == "APROVADO")
+                                    {
+                                        <div class="label label-primary">
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </div>
+                                    }
+                                    else 
+                                    {
+                                        <div class="label label-success">
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </div>
+                                    }
 
                     </td>
 
@@ -322,7 +336,7 @@
                     @if (ViewBag.TipoUsuario == "ADMINISTRADOR")
                     {
                         <td>
-                            @Html.DisplayFor(modelItem => item.VendedorID)
+                            @Html.DisplayFor(modelItem => item.Vendedor.CodVendedor)
                         </td>
                     }
                     <td>
