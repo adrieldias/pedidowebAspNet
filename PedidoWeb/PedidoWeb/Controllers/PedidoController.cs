@@ -11,6 +11,7 @@ using PagedList;
 using PedidoWeb.Controllers.Negocio;
 
 using System.Data.Entity.Validation;
+using System.Data.Entity.Infrastructure;
 
 namespace PedidoWeb.Controllers
 {
@@ -233,6 +234,7 @@ namespace PedidoWeb.Controllers
                     p.NumeroPedido = pedido.NumeroPedido;
                     p.CadastroID = pedido.CadastroID;
                     p.DataEmissao = System.DateTime.Now.Date;
+                    p.DataCriacao = DateTime.Now;
                     p.Observacao = pedido.Observacao == null ? string.Empty : pedido.Observacao;
                     p.OrdemCompra = pedido.OrdemCompra;
                     p.PrazoVencimentoID = pedido.PrazoVencimentoID;
@@ -244,9 +246,9 @@ namespace PedidoWeb.Controllers
                     p.StatusSincronismo = "NOVO";
                     p.OperacaoID = pedido.OperacaoID;
                     p.FilialID = pedido.FilialID;
-                    db.Pedidoes.Add(p);
-                    db.SaveChanges();
-                    
+                    db.Pedidoes.Add(p);                    
+                    db.SaveChanges();                    
+
                     decimal valorPedido = 0;
                     decimal valorProduto = 0;
 
@@ -274,45 +276,65 @@ namespace PedidoWeb.Controllers
                 {
                     try
                     {
-
                         //db.Configuration.ProxyCreationEnabled = false;
                         //db.Configuration.LazyLoadingEnabled = false;
 
                         // Exclui itens do pedido cadastrados no B.D.
-                        var itens = db.PedidoItems.Where(i => i.PedidoID == pedido.PedidoID);
-                        foreach(var i in itens)
+                        Pedido pedidoBanco = db.Pedidoes.Find(pedido.PedidoID);
+
+                        pedidoBanco.CadastroID = pedido.CadastroID;
+                        pedidoBanco.NumeroPedido = pedido.NumeroPedido;
+                        pedidoBanco.Observacao = pedido.Observacao;
+                        pedidoBanco.OrdemCompra = pedido.OrdemCompra;
+                        pedidoBanco.PrazoVencimentoID = pedido.PrazoVencimentoID;
+                        pedidoBanco.Status = new StatusPedido().CalculaStatus(pedido);
+                        pedidoBanco.TipoFrete = pedido.TipoFrete;
+                        pedidoBanco.TransportadorID = pedido.TransportadorID;
+                        pedidoBanco.OperacaoID = pedido.OperacaoID;
+                        pedidoBanco.FilialID = pedido.FilialID;
+
+
+                        for (int i = 0; i < pedidoBanco.Itens.Count; i++)
                         {
-                            db.Entry(i).State = EntityState.Deleted;
+                            PedidoItem itemTela;
+                            itemTela = pedido.Itens.Find(it => it.PedidoItemID == pedidoBanco.Itens[i].PedidoItemID);
+                            if (itemTela == null)
+                            {
+                                adicionaHistorico(pedidoBanco.Itens[i], "EXCLUSAO", pedidoHelper.UsuarioCorrente.UsuarioID);
+                                db.Entry(pedidoBanco.Itens[i]).State = EntityState.Deleted;
+                                i--;
+                                continue;
+                            }
+                            pedidoBanco.Itens[i].CodPedidoItem = itemTela.CodPedidoItem;
+                            pedidoBanco.Itens[i].Observacao = itemTela.Observacao;
+                            pedidoBanco.Itens[i].PercentualDesconto = itemTela.PercentualDesconto;
+                            pedidoBanco.Itens[i].ProdutoID = itemTela.ProdutoID;
+                            pedidoBanco.Itens[i].Quantidade = itemTela.Quantidade;
+                            pedidoBanco.Itens[i].ValorDesconto = itemTela.ValorDesconto;
+                            pedidoBanco.Itens[i].ValorUnitario = itemTela.ValorUnitario;
                         }
 
-                        db.SaveChanges();
-
-                        Pedido obj = db.Pedidoes.Find(pedido.PedidoID);
-
-                        obj.CadastroID = pedido.CadastroID;
-                        obj.NumeroPedido = pedido.NumeroPedido;
-                        obj.Observacao = pedido.Observacao;
-                        obj.OrdemCompra = pedido.OrdemCompra;
-                        obj.PrazoVencimentoID = pedido.PrazoVencimentoID;
-                        obj.Status = new StatusPedido().CalculaStatus(pedido);
-                        obj.StatusSincronismo = "ALTERADO";
-                        obj.TipoFrete = pedido.TipoFrete;
-                        obj.TransportadorID = pedido.TransportadorID;
-                        obj.OperacaoID = pedido.OperacaoID;
-                        obj.FilialID = pedido.FilialID;
-
-                        foreach (var i in pedido.Itens)
-                        {
-                            i.Produto = null;
-                            if (obj.Itens == null)
-                                obj.Itens = new List<PedidoItem>();
-                            i.StatusSincronismo = "ALTERADO";
-                            obj.Itens.Add(i);
+                        List<PedidoItem> itensNovos = new List<PedidoItem>();
+                        foreach (var itemTela in pedido.Itens.Where(i => i.PedidoItemID == 0).ToList())
+                        {                            
+                            itemTela.Produto = null;
+                            if (pedidoBanco.Itens == null)
+                                pedidoBanco.Itens = new List<PedidoItem>();
+                            itemTela.StatusSincronismo = "NOVO";
+                            pedidoBanco.Itens.Add(itemTela);
+                            itensNovos.Add(itemTela);
                         }
-                        
 
-                        db.Entry(obj).State = EntityState.Modified;
-                        db.SaveChanges();
+                        if (DetectaAlteracoes((db as IObjectContextAdapter).ObjectContext))
+                        {
+                            db.Entry(pedidoBanco).State = EntityState.Modified;
+                            db.SaveChanges();
+                            foreach(PedidoItem itemNovo in itensNovos)
+                            {
+                                adicionaHistorico(itemNovo, "ADICAO", pedidoHelper.UsuarioCorrente.UsuarioID);
+                                db.SaveChanges();
+                            }
+                        }
                                        
                         status = true;
                     }
@@ -501,16 +523,8 @@ namespace PedidoWeb.Controllers
                     sincronismo.Tipo = "PEDIDO";
                     db.Sincronismoes.Add(sincronismo);
                 }
-                //Adiciona ao histórico do pedido
-                HistoricoPedido historico = new HistoricoPedido();
-                historico.DataModificacao = DateTime.Now;
-                historico.PedidoID = pedido.PedidoID;
-                historico.UsuarioID = pedidoHelper.UsuarioCorrente.UsuarioID;
-
-                db.Pedidoes.Remove(pedido);
-                db.SaveChanges();
-
-                db.HistoricoPedidoes.Add(historico); 
+                db.Entry(pedido).State = EntityState.Deleted;
+                DetectaAlteracoes((db as IObjectContextAdapter).ObjectContext);
                 db.SaveChanges();
 
                 return RedirectToAction("Index");                
@@ -526,15 +540,11 @@ namespace PedidoWeb.Controllers
         [Authorize]  
         public ActionResult StatusPedido(int? id, string status)
         {
-            Pedido pedido = db.Pedidoes.Include(p => p.Itens).First(p => p.PedidoID == id);
+            Pedido pedido = db.Pedidoes.Find(id);
             pedido.Status = status;
-            pedido.StatusSincronismo = "ALTERADO";
             
-            foreach(var item in pedido.Itens)
-            {
-                item.StatusSincronismo = "ALTERADO";
-            }
-            db.Entry(pedido).State = EntityState.Modified;
+            //db.Entry(pedido).State = EntityState.Modified;
+            DetectaAlteracoes((db as IObjectContextAdapter).ObjectContext);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -588,6 +598,76 @@ namespace PedidoWeb.Controllers
                 p.Nome = string.Format("{0} - {1}", p.CodCadastro, p.Nome);
             }
             return Json(cadastros, JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// dump changes in the context to the debug log
+        /// <para>Debug logging must be turned on using log4net</para>
+        /// </summary>
+        /// <param name="context">The context to dump the changes for</param>
+        [Authorize]
+        private bool DetectaAlteracoes(System.Data.Entity.Core.Objects.ObjectContext context)
+        {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
+            bool hasChanges = false;
+            context.DetectChanges();
+            if (context.ObjectStateManager.GetObjectStateEntries(EntityState.Added).Count() > 0)
+                hasChanges = true;
+            foreach (var modified in context.ObjectStateManager.GetObjectStateEntries(EntityState.Modified))
+            {
+                // Coloca o valor do campo original na variável Dictionary
+                var originalValues = new Dictionary<string, int>();
+                for (var i = 0; i < modified.OriginalValues.FieldCount; ++i)
+                {
+                    originalValues.Add(modified.OriginalValues.GetName(i), i);
+                }
+                // Output each of the changed properties.
+                foreach (var entry in modified.GetModifiedProperties())
+                {                       
+                    var originalIdx = originalValues[entry];
+                    HistoricoPedido hp = adicionaHistorico(modified.Entity, "ALTERACAO", pedidoHelper.UsuarioCorrente.UsuarioID);
+                    
+                    hp.CampoAlterado = modified.OriginalValues.GetName(originalIdx);
+                    hp.ValorAntigo = Convert.ToString(modified.OriginalValues.GetValue(originalIdx));
+                    hp.NovoValor = Convert.ToString(modified.CurrentValues.GetValue(originalIdx));               
+                }
+                if (modified.Entity.GetType().BaseType == typeof(Pedido))
+                    ((Pedido)modified.Entity).StatusSincronismo = "ALTERADO";
+                if (modified.Entity.GetType().BaseType == typeof(PedidoItem))
+                    ((PedidoItem)modified.Entity).StatusSincronismo = "ALTERADO";
+                hasChanges = true;
+            }
+            foreach (var deleted in context.ObjectStateManager.GetObjectStateEntries(EntityState.Deleted))
+            {
+                if (deleted.Entity.GetType().BaseType == typeof(Pedido))
+                    adicionaHistorico(deleted.Entity, "EXCLUSAO", pedidoHelper.UsuarioCorrente.UsuarioID);
+                hasChanges = true;
+            }
+            return hasChanges;
+        }
+        private HistoricoPedido adicionaHistorico(object Obj, string Tipo, int UsuarioID)
+        {
+            HistoricoPedido hp = new HistoricoPedido();
+            Type type = Obj.GetType();
+            if (Obj.GetType().BaseType == typeof(Pedido) || Obj.GetType() == typeof(Pedido))
+            {
+                hp.PedidoID = ((Pedido)Obj).PedidoID;
+                hp.NumeroPedido = ((Pedido)Obj).NumeroPedido;
+                hp.Operacao = Tipo;
+                hp.DataOperacao = DateTime.Now;
+                hp.UsuarioID = UsuarioID;
+            }
+            else
+            {
+                hp.PedidoID = ((PedidoItem)Obj).Pedido.PedidoID;
+                hp.NumeroPedido = ((PedidoItem)Obj).Pedido.NumeroPedido;
+                hp.PedidoItemID = ((PedidoItem)Obj).PedidoItemID;
+                hp.DescricaoItem = db.Produtoes.Find(((PedidoItem)Obj).ProdutoID).Descricao;
+                hp.Operacao = Tipo;
+                hp.DataOperacao = DateTime.Now;
+                hp.UsuarioID = UsuarioID;
+            }
+            db.HistoricoPedidoes.Add(hp);
+            return hp;
         }
 
         protected override void Dispose(bool disposing)

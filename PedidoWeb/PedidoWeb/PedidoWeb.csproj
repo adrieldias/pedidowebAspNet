@@ -306,6 +306,18 @@
     <Compile Include="Migrations\201606171903506_modificacaoConsertado.Designer.cs">
       <DependentUpon>201606171903506_modificacaoConsertado.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606202046222_campoAlteradoNoHistorico.cs" />
+    <Compile Include="Migrations\201606202046222_campoAlteradoNoHistorico.Designer.cs">
+      <DependentUpon>201606202046222_campoAlteradoNoHistorico.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606211301008_novosCamposHistorico.cs" />
+    <Compile Include="Migrations\201606211301008_novosCamposHistorico.Designer.cs">
+      <DependentUpon>201606211301008_novosCamposHistorico.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201606212028246_adicionadoDataCriacao.cs" />
+    <Compile Include="Migrations\201606212028246_adicionadoDataCriacao.Designer.cs">
+      <DependentUpon>201606212028246_adicionadoDataCriacao.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Filial.cs" />
@@ -560,6 +572,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606171903506_modificacaoConsertado.resx">
       <DependentUpon>201606171903506_modificacaoConsertado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606202046222_campoAlteradoNoHistorico.resx">
+      <DependentUpon>201606202046222_campoAlteradoNoHistorico.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606211301008_novosCamposHistorico.resx">
+      <DependentUpon>201606211301008_novosCamposHistorico.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606212028246_adicionadoDataCriacao.resx">
+      <DependentUpon>201606212028246_adicionadoDataCriacao.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

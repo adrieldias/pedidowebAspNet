@@ -60,6 +60,9 @@ namespace PedidoWeb.Models
 
         public string StatusSincronismo { get; set; }
 
+        [DisplayName("Data de Criação")]
+        public DateTime? DataCriacao { get; set; }
+
         
         private string codEmpresa;
 
