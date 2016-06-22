@@ -629,10 +629,39 @@ namespace PedidoWeb.Controllers
                 {                       
                     var originalIdx = originalValues[entry];
                     HistoricoPedido hp = adicionaHistorico(modified.Entity, "ALTERACAO", pedidoHelper.UsuarioCorrente.UsuarioID);
-                    
-                    hp.CampoAlterado = modified.OriginalValues.GetName(originalIdx);
-                    hp.ValorAntigo = Convert.ToString(modified.OriginalValues.GetValue(originalIdx));
-                    hp.NovoValor = Convert.ToString(modified.CurrentValues.GetValue(originalIdx));               
+                    string campoAlterado = modified.OriginalValues.GetName(originalIdx);
+                    object valorAntigo = modified.OriginalValues.GetValue(originalIdx);
+                    object novoValor = modified.CurrentValues.GetValue(originalIdx);
+                    switch(campoAlterado)
+                    {
+                        case "ProdutoID": populaAlteracoes(ref hp, "Produto", 
+                                    db.Produtoes.Find(valorAntigo).CodProduto,
+                                    db.Produtoes.Find(novoValor).CodProduto);
+                            
+                            break;
+                        case "OperacaoID": populaAlteracoes(ref hp, "Operação",
+                                    db.Operacaos.Find(valorAntigo).CodOperacao,
+                                    db.Operacaos.Find(novoValor).CodOperacao);
+                            break;
+                        case "CadastroID": populaAlteracoes(ref hp,"Cliente",
+                                    db.Cadastroes.Find(valorAntigo).CodCadastro,
+                                    db.Cadastroes.Find(novoValor).CodCadastro);
+                            break;
+                        case "PrazoVencimentoID": populaAlteracoes(ref hp, "Pagamento",
+                                    db.PrazoVencimentoes.Find(valorAntigo).CodPrazoVencimento,
+                                    db.PrazoVencimentoes.Find(novoValor).CodPrazoVencimento);
+                            break;
+                        case "FilialID": populaAlteracoes(ref hp, "Empresa",
+                                    db.Filials.Find(valorAntigo).CodFilial,
+                                    db.Filials.Find(novoValor).CodFilial);
+                            break;
+                        case "TransportadorID": populaAlteracoes(ref hp, "Transportador",
+                                    valorAntigo.ToString() == "" ? null : (object)db.Transportadors.Find(valorAntigo).CodCadastro,
+                                    novoValor.ToString() == "" ? null : (object)db.Transportadors.Find(novoValor).CodCadastro);
+                            break;
+                        default:  populaAlteracoes(ref hp, campoAlterado, valorAntigo, novoValor);
+                            break;
+                    }
                 }
                 if (modified.Entity.GetType().BaseType == typeof(Pedido))
                     ((Pedido)modified.Entity).StatusSincronismo = "ALTERADO";
@@ -647,6 +676,12 @@ namespace PedidoWeb.Controllers
                 hasChanges = true;
             }
             return hasChanges;
+        }
+        private void populaAlteracoes(ref HistoricoPedido hp, string campoAlterado, object valorAntigo, object novoValor)
+        {
+            hp.CampoAlterado = campoAlterado;
+            hp.ValorAntigo = Convert.ToString(valorAntigo==null?"":valorAntigo);
+            hp.NovoValor = Convert.ToString(novoValor==null?"":novoValor);
         }
         private HistoricoPedido adicionaHistorico(object Obj, string Tipo, int UsuarioID)
         {
