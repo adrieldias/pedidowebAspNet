@@ -709,6 +709,24 @@ namespace PedidoWeb.Controllers
             return hp;
         }
 
+        public ActionResult HistoricoPedido(int id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            
+            var historico = db.HistoricoPedidoes.Where(h => h.PedidoID == id)
+                .OrderBy(h => h.HistoricoPedidoID);
+            
+            if (historico == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(historico.ToList());
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

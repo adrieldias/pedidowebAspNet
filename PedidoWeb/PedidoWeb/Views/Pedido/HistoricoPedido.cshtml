@@ -1,0 +1,50 @@
+﻿@model IEnumerable<PedidoWeb.Models.HistoricoPedido>
+
+@{
+    ViewBag.Title = "HistoricoPedido";
+}
+
+<div class="table-responsive">
+    <h2>Histórico do Pedido</h2>
+
+    <table class="table table-striped">
+        @*<tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DataModificacao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UsuarioID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PedidoID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PedidoItemID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CampoAlterado)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ValorAntigo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NovoValor)
+                </th>
+                <th></th>
+            </tr>*@
+        <tr></tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <p>@Html.DisplayFor(modelItem => item.DataModificacao)</p>
+                    <p>Usuário @Html.DisplayFor(modelItem => item.UsuarioID)</p>
+                    <br />
+                    @*@if(@Html.ValueFor(modelItem => item.))*@
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
