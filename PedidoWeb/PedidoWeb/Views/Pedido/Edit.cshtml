@@ -195,23 +195,21 @@
         @Html.Hidden("ItemIndex")
         <div class="clearfix"></div>
 
-        <div class="col-md-6">
-            @*<input type="button" id="add" value="Salvar Item" class="btn btn-default btn-group-justified" />*@
-            <button type="button" id="add" class="btn btn-default btn-group-justified">
-                <span class="glyphicon glyphicon-ok"></span>
-                Salvar Item
-            </button>
-        </div>
+        <span class="input-group-btn">
+            <span class="input-group-btn" style="width:50%">
+                <button type="button" id="add" class="btn btn-default btn-group-justified">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Salvar Item
+                </button>
+            </span>
+            <span class="input-group-btn" style="width:50%">
+                <a type="button" id="del" class="btn btn-warning btn-group-justified">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Limpar Campos
+                </a>
+            </span>
+        </span>
 
-        <div class="col-md-6">
-            @*<input type="button" id="del" value="Cancelar Inclusão" class="btn btn-danger btn-group-justified" />*@
-            <button type="button" id="del" class="btn btn-warning btn-group-justified">
-                <span class="glyphicon glyphicon-remove"></span>
-                Cancelar Item
-            </button>
-        </div>
-
-        <div class="clearfix"></div>
         <br />
         <div id="pedidoItens"></div>
         <div id="totalPedido"></div>
@@ -219,19 +217,20 @@
         <br />
     </div>
 
-    <div class="col-md-6">
-        <button type="button" id="submit" class="btn btn-primary btn-group-justified">
-            <span class="glyphicon glyphicon-floppy-disk"></span>
-            Salvar Pedido
-        </button>
-    </div>
-    <div class="col-md-6">
-        <a href="@Url.Action("Index")" class="btn btn-warning btn-group-justified">
-            <span class="glyphicon glyphicon-share-alt"></span>
-            Sair sem Salvar
-        </a>
-    </div>
-    <div class="clearfix"></div>
+    <span class="input-group-btn">
+        <span class="input-group-btn" style="width:50%">
+            <button type="button" id="submit" class="btn btn-primary btn-group-justified">
+                <span class="glyphicon glyphicon-floppy-disk"></span>
+                Salvar Pedido
+            </button>
+        </span>
+        <span class="input-group-btn" style="width:50%">
+            <a href="@Url.Action("Index")" class="btn btn-warning btn-group-justified">
+                <span class=" glyphicon glyphicon-share-alt"></span>
+                Sair sem Salvar
+            </a>
+        </span>
+    </span>
 </div>
 
 
@@ -622,9 +621,9 @@
                         else
                             $row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
                         $row.append($('<td/>').html(val.ValorUnitario));  
-                        $row.append($('<td><button id=editarItem class="btn btn-primary">'+
+                        $row.append($('<td style="text-align:right;padding-top:0px"><button id=editarItem class="btn btn-primary btn-sm">'+
                             '<span class="glyphicon glyphicon-pencil" aria-hidden="true">'+
-                            '</span></button></td>').click(function(){                            
+                            '</span></button>').click(function(){                            
                                 $('#ProdutoAux').val(val.DescProduto).focus();
                                 $('#Quantidade').val(val.Quantidade);
                                 $('#ValorUnitario').val(val.ValorUnitario);
@@ -634,9 +633,8 @@
                                 $('#ItemIndex').val(i);
                                 produtoSelecionado = val.ProdutoID;
                                 descProdutoSelecionado = val.DescProduto;
-                            
                             }));
-                        $row.append($('<td><button id=excluir class="btn btn-danger">'+
+                        $row.append($('<button id=excluir class="btn btn-danger btn-sm" style="margin-top:1px">'+
                             '<span class="glyphicon glyphicon-remove" aria-hidden="true">'+
                             '</span></button></td>').click(function(){
                                 pedidoItens.splice(i, 1);                                    
