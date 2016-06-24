@@ -223,10 +223,12 @@
             @if (Model.Status != "APROVADO" && Model.Status != "EM ANALISE")
             {
                 @Html.ActionLink("Editar", "Edit", new { id = Model.PedidoID }, new { @class = "btn btn-primary disabled" })
+                @Html.ActionLink("Excluir", "Delete", new { id = Model.PedidoID }, new { @class = "btn btn-danger disabled" })
             }
             else
             {
                 @Html.ActionLink("Editar", "Edit", new { id = Model.PedidoID }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Excluir", "Delete", new { id = Model.PedidoID }, new { @class = "btn btn-danger" })
             }
 
             @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
