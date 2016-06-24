@@ -673,6 +673,13 @@ namespace PedidoWeb.Controllers
             {
                 if (deleted.Entity.GetType().BaseType == typeof(Pedido))
                     adicionaHistorico(deleted.Entity, "EXCLUSAO", pedidoHelper.UsuarioCorrente.UsuarioID);
+                if(deleted.Entity.GetType().BaseType == typeof(PedidoItem))
+                    if(context.ObjectStateManager.
+                    GetObjectStateEntries(EntityState.Deleted).
+                    Count(p => p.Entity.GetType().BaseType == typeof(Pedido) &&
+                    p.OriginalValues["PedidoID"] == deleted.OriginalValues["PedidoID"]) == 0)
+                        db.Pedidoes.Find((int)deleted.OriginalValues["PedidoID"]).StatusSincronismo = "ALTERADO";
+                    
                 hasChanges = true;
             }
             return hasChanges;
@@ -686,7 +693,7 @@ namespace PedidoWeb.Controllers
         private HistoricoPedido adicionaHistorico(object Obj, string Tipo, int UsuarioID)
         {
             HistoricoPedido hp = new HistoricoPedido();
-            Type type = Obj.GetType();
+            
             if (Obj.GetType().BaseType == typeof(Pedido) || Obj.GetType() == typeof(Pedido))
             {
                 hp.PedidoID = ((Pedido)Obj).PedidoID;
