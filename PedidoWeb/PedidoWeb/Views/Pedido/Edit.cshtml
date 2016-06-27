@@ -214,8 +214,7 @@
         <div class="clearfix"></div>
         <br />
         <div id="pedidoItens"></div>
-        <div id="totalPedido"></div>
-        <hr />
+        <div id="totalPedido" class="gridRodape"></div>
         <br />
     </div>
 
@@ -347,7 +346,7 @@
             $("#Status").prop("disabled", true);    
             $('#ValorDesconto').prop('disabled', true);            
             $("#MsgAddItem").hide();
-            $("#testeglyph2").hide();
+            $("#testeglyph2").hide();            
 
             var valorUnitario = '@(ViewBag.Empresa.AlteraValorUnitario)';
             var percDesconto = '@(ViewBag.Empresa.DescontoInformado)'; 
@@ -656,20 +655,19 @@
 
                 if (isNaN(totalPedido)) {
                     $('#totalPedido').html(
-                        '<p class="label label-default">'
+                        '<label>'
                         + 'Total do Pedido R$: 0.00'
-                        + '</p>'
+                        + '</label>'
                         );
                     
                 } else {
                     $('#totalPedido').html(
-                        '<p class="label label-default">'
+                        '<label>'
                         + 'Total do Pedido R$: '
                         + parseFloat(totalPedido).toFixed(2)
-                        + '</p>'
+                        + '</label>'
                         );
                 }
-
                 totalPedido = 0;
             }
         });

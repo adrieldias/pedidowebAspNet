@@ -4,44 +4,111 @@
     ViewBag.Title = "HistoricoPedido";
 }
 
-<div class="table-responsive">
+<div class="principal1coluna table-responsive">
     <h2>Histórico do Pedido</h2>
-
+    <br />
     <table class="table table-striped">
-        @*<tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.DataModificacao)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UsuarioID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PedidoID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PedidoItemID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CampoAlterado)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ValorAntigo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.NovoValor)
-                </th>
-                <th></th>
-            </tr>*@
+        
         <tr></tr>
 
         @foreach (var item in Model)
         {
             <tr>
                 <td>
-                    <p>@Html.DisplayFor(modelItem => item.DataModificacao)</p>
-                    <p>Usuário @Html.DisplayFor(modelItem => item.UsuarioID)</p>
-                    <br />
-                    @*@if(@Html.ValueFor(modelItem => item.))*@
+                    <p>
+                        <strong>
+                            @Html.DisplayFor(modelItem => item.DataOperacao) 
+                            - Usuário @Html.DisplayFor(modelItem => item.UsuarioID)
+                        </strong>                        
+                    </p>
+                    
+                    
+                    @if(@Html.ValueFor(modelItem => item.Operacao).ToString().Equals("ADICAO"))
+                    {
+                        //Se foi adicionado um novo item
+                        if(!@Html.ValueFor(modelItem => item.PedidoItemID).ToString().Equals(string.Empty))
+                        {
+                            <p>Adicionado @Html.DisplayFor(modelItem => item.DescricaoItem)</p>
+                        }
+                        else
+                        {
+                            <p>Adição não processada pela View - HistoricoPedidoID @Html.DisplayFor(modelItem => item.HistoricoPedidoID)</p>
+                        }
+                        
+                    }
+                    
+                    @if(@Html.ValueFor(modelItem => item.Operacao).ToString().Equals("ALTERACAO"))
+                    {
+                        //Se a alteração foi no item do pedido
+                        if(!@Html.ValueFor(modelItem => item.PedidoItemID).ToString().Equals(string.Empty))
+                        {                                   
+                            if (@Html.ValueFor(modelItem => item.CampoAlterado).ToString().Equals("Produto")
+                                || @Html.ValueFor(modelItem => item.CampoAlterado).ToString().Equals("ProdutoID"))
+                            {
+                                <p>
+                                    <strong>@Html.DisplayFor(modelItem => item.CampoAlterado):</strong>
+                                    @Html.DisplayFor(modelItem => item.ValorAntigo)
+                                    alterado para
+                                    @Html.DisplayFor(modelItem => item.NovoValor) (@Html.DisplayFor(modelItem => item.DescricaoItem))
+                                </p>
+                            }
+                            else
+                            {
+                                <p>
+                                    <strong>@Html.DisplayFor(modelItem => item.CampoAlterado):</strong>
+                                    @Html.DisplayFor(modelItem => item.ValorAntigo)
+                                    alterado para
+                                    @Html.DisplayFor(modelItem => item.NovoValor)
+                                    - ITEM: @Html.DisplayFor(modelItem => item.DescricaoItem)
+                                </p>
+                            }
+                        }
+                        else // Se a alteração foi no cabeçalho do pedido
+                        {
+                            if ((!string.IsNullOrEmpty(@Html.ValueFor(modelItem => item.NovoValor).ToString().Trim()))
+                                && (!string.IsNullOrEmpty(@Html.ValueFor(modelItem => item.ValorAntigo).ToString().Trim())))
+                            { 
+                                <p>
+                                    <strong>@Html.DisplayFor(modelItem => item.CampoAlterado):</strong>
+                                    @Html.DisplayFor(modelItem => item.ValorAntigo)
+                                    alterado para
+                                    @Html.DisplayFor(modelItem => item.NovoValor)
+                                </p>
+                            }
+                            else
+                                if(!string.IsNullOrEmpty(@Html.ValueFor(modelItem => item.NovoValor).ToString().Trim()))
+                                {
+                                    <p>
+                                        <strong>@Html.DisplayFor(modelItem => item.CampoAlterado):</strong>
+                                        Adicionado @Html.DisplayFor(modelItem => item.NovoValor)
+                                    </p>
+                                }
+                                else
+                                    if(!string.IsNullOrEmpty(@Html.ValueFor(modelItem => item.ValorAntigo).ToString().Trim()))
+                                    {
+                                        <p>
+                                        <strong>@Html.DisplayFor(modelItem => item.CampoAlterado):</strong>
+                                        Excluído @Html.DisplayFor(modelItem => item.ValorAntigo)
+                                    </p>
+                                    }
+                        }
+                    }
+                    
+                    @if (@Html.ValueFor(modelItem => item.Operacao).ToString().Equals("EXCLUSAO"))
+                    {
+                        // Exclusão de item
+                        if(!@Html.ValueFor(modelItem => item.PedidoItemID).ToString().Equals(string.Empty))
+                        { 
+                            <p>
+                                Excluído 
+                                @Html.DisplayFor(modelItem => item.DescricaoItem)                                
+                            </p>
+                        }
+                        else
+                        {                           
+                            <p>Exclusão não processada pela View - HistoricoPedidoID @Html.DisplayFor(modelItem => item.HistoricoPedidoID)</p>                            
+                        }                        
+                    }
                 </td>
             </tr>
         }

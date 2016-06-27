@@ -145,8 +145,7 @@
             <div class="form-group col-md-5" style="padding: 0 0 0 0">                
                 @Html.Label("Percentual de Desconto")
                 <input type="text" id="PercDesconto" name="PercDesconto" class="form-control" />
-                <span class="error" style="visibility: hidden">Percentual de desconto inválido</span>
-                               
+                <span class="error" style="visibility: hidden">Percentual de desconto inválido</span>                               
             </div>
             <div class="form-group col-md-2">
                 
@@ -188,8 +187,7 @@
             <div class="clearfix"></div>
             <br />        
             <div id="pedidoItens"></div>  
-            <div id="totalPedido"></div>  
-            <hr />        
+            <div id="totalPedido" class="gridRodape"></div>        
             <br />
             
         </div>
@@ -328,6 +326,7 @@
             $("#ValorDesconto").prop("disabled", true);
             $("#MsgAddItem").hide();
             $("#testeglyph2").hide();
+            $('#totalPedido').hide();
             
             var valorUnitario = '@(ViewBag.Empresa.AlteraValorUnitario)';
             var percDesconto = '@(ViewBag.Empresa.DescontoInformado)'; 
@@ -609,20 +608,20 @@
                 }
 
                 calulaTotal();
-
+                $('#totalPedido').show();
                 if (isNaN(totalPedido)) {
                     $('#totalPedido').html(
-                        '<p class="label label-default">'
+                        '<label>'
                         + 'Total do Pedido R$: 0.00'
-                        + '</p>'
+                        + '</label>'
                         );
                     
                 } else {
                     $('#totalPedido').html(
-                        '<p class="label label-default">'
+                        '<label>'
                         + 'Total do Pedido R$: '
                         + parseFloat(totalPedido).toFixed(2)
-                        + '</p>'
+                        + '</label>'
                         );
                 }
                 totalPedido = 0;

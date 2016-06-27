@@ -24,8 +24,6 @@
         <br />
     }
 
-
-
     @if (Model.Status == "CANCELADO")
     {
         <h4 class="alert alert-danger">Este pedido está cancelado</h4>
@@ -199,7 +197,7 @@
                     </td>
                 </tr>
             }
-        </table>
+        </table>        
     </div>
 
     @{
@@ -212,11 +210,80 @@
             teste += (item.Quantidade * item.ValorUnitario)
                 - (item.Quantidade * valDesc);
         }
-        <div id="TotalPedido">
-            <p class="label label-default">Total do Pedido R$ @Html.Label(teste.ToString())</p>
+        <div id="TotalPedido" class="gridRodape">
+            @*<p class="label label-default">Total do Pedido R$ @Html.Label(teste.ToString())</p>*@
+            @Html.Label(string.Format("Total do Pedido R$ {0}", teste.ToString()))
         </div>
         <br />
     }
+
+    @{AjaxOptions ajaxOptions = new AjaxOptions()
+      {
+          UpdateTargetId = "HistoricoPedido",
+          OnSuccess = "SuccessRequest",
+          OnFailure = "FailureRequest",
+          HttpMethod = "GET"
+      };
+    }
+
+    @using (Ajax.BeginForm("HistoricoPedido", "Pedido", new { id=Model.PedidoID }, ajaxOptions))
+    {   
+        <button id="btHistorico" type="button" class="btn btn-info btn-sm" onclick="BuscaValor()">
+            <span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>            
+                  Visualizar Histórico
+        </button>
+        <div id="msgAguarde" class="error">Aguarde...</div>
+        <script type="text/javascript">
+
+            var HistoricoList = [];
+
+            function BuscaValor() {                                
+                if ($('#btHistorico').html().indexOf('Visualizar Histórico') > 0) {                    
+                    $('#btHistorico').html('<span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span> Esconder Histórico')
+                    $('#btHistorico').submit();
+                    $('#msgAguarde').show();
+                } else {
+                    $('#btHistorico').html('<span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span> Visualizar Histórico')
+                    $('#historico').html('');
+                }
+            };            
+
+            function SuccessRequest(json) {
+                $('#msgAguarde').hide();
+                HistoricoList = [];
+                if (json.length > 0) {
+                    $.each(json, function (id, data) {
+                        HistoricoList.push({
+                            HistoricoPedidoID: data.HistoricoPedidoID,
+                            DataOperacao: data.DataOperacao,
+                            UsuarioID: data.UsuarioID,
+                            PedidoID: data.PedidoID,
+                            PedidoItemID: data.PedidoItemID,
+                            DescricaoItem: data.DescricaoItem,
+                            NumeroPedido: data.NumeroPedido,
+                            CampoAlterado: data.CampoAlterado,
+                            ValorAntigo: data.ValorAntigo,
+                            NovoValor: data.NovoValor,
+                            Operacao: data.Operacao
+                        });
+                    });
+                }                
+                GenerateTable();
+                //response(autoc);
+            };
+
+            function FailureRequest() {
+                alert('Não foi possível obter o histórico do pedido')
+            };
+
+        </script>
+    }
+
+    <br />
+
+    <div id="historico"></div>
+    
+    <br />
 
     <div class="form-group">
         <div>
@@ -239,9 +306,153 @@
             {
                 @Html.ActionLink("Recusar", "StatusPedido", new { id = Model.PedidoID, status = "CANCELADO" }, new { @class = "btn btn-danger" })
             }
-
         </div>
-    </div>
-
+    </div>    
 </div>
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryui/stylesheet")
+    
+    <script>
+        $('#msgAguarde').hide();
+        String.prototype.lpad = function (padString, length) {
+            var str = this;
+            while (str.length < length)
+                str = padString + str;
+            return str;
+        }
+
+        function GenerateTable()
+        {
+            if(HistoricoList.length > 0)
+            {                
+                var $div = $('<div class="table-responsive"></div>');
+                var $table = $('<table class="table table-striped"></table>');
+                $table.append('<th></th>');                
+                $.each(HistoricoList, function (i, val) {
+                    var dataAux = String(val.DataOperacao).replace('\/Date(', '');
+                    dataAux = dataAux.replace(')\/', '');
+                    dataAux = dataAux.trim();
+                    var dataAux1 = new Date(parseInt(dataAux));
+                    var dataOperacao = dataAux1.getDate().toString().lpad('0', 2);
+                    dataOperacao += '/' + (dataAux1.getMonth()+1).toString().lpad('0', 2); // Meses são retornados de 0 a 11 em javascript
+                    dataOperacao += '/' + dataAux1.getFullYear();
+                    dataOperacao += ' às ';
+                    dataOperacao += dataAux1.getHours().toString().lpad('0', 2);
+                    dataOperacao += ':' + dataAux1.getMinutes().toString().lpad('0', 2);
+                    dataOperacao += ':' + dataAux1.getSeconds().toString().lpad('0', 2);                    
+
+                    var $row = $('<tr/>');
+                    
+                    if (val.Operacao == 'SINCRONISMO') {
+                        var $html = '<p><strong>';
+                        $html += 'Pedido sincronizado com o Sistema Cemapa em ';
+                        $html += dataOperacao;
+                        $html += '</strong></p>';
+                        //return true; // funciona como continue
+                    } else {
+
+                        var $html = '<p><strong>' + dataOperacao + ' - Usuário ' + val.UsuarioID + '</strong></p>';
+
+                        if (val.Operacao == 'ADICAO') {
+                            // Se foi adicionado um item novo
+                            if (val.PedidoItemID != null && val.PedidoItemID != '')
+                                $html += '<p>Adicionado ' + val.DescricaoItem + '</p>';
+                            else
+                                $html += '<p>Adição não processada pela View - HistoricoPedidoID ' + val.HistoricoPedidoID + '</p>';
+                        }
+
+                        if (val.Operacao == 'ALTERACAO' || val.Operacao == 'ALTERACAO_SISTEMA') {
+                            // Se a alteração foi no item do pedido
+                            if (val.PedidoItemID != null && val.PedidoItemID != '') {
+                                if (val.CampoAlterado == 'Produto' || val.CampoAlterado == 'ProdutoID') {
+                                    $html += '<p>';
+                                    $html += '<strong>';
+                                    $html += val.CampoAlterado;
+                                    $html += ': </strong>';
+                                    $html += val.ValorAntigo;
+                                    $html += ' alterado para ';
+                                    $html += val.NovoValor;
+                                    $html += ' (';
+                                    $html += val.DescricaoItem;
+                                    $html += ')';
+                                    $html += '</p>';
+                                }
+                                else {
+                                    $html += '<p>';
+                                    $html += '<strong>';
+                                    $html += val.CampoAlterado;
+                                    $html += ': </strong>';
+                                    $html += val.ValorAntigo;
+                                    $html += ' alterado para ';
+                                    $html += val.NovoValor;
+                                    $html += ' - ITEM: ';
+                                    $html += val.DescricaoItem;
+                                    $html += '</p>';
+                                }
+                            } else { // Se a alteração foi no cabeçalho do pedido                            
+                                if ((val.ValorAntigo != '' && val.ValorAntigo != null) && (val.NovoValor != '' && val.NovoValor != null)) {
+                                    $html += '<p>';
+                                    $html += '<strong>';
+                                    $html += val.CampoAlterado;
+                                    $html += ': </strong>';
+                                    $html += val.ValorAntigo;
+                                    $html += ' alterado para ';
+                                    $html += val.NovoValor;
+                                    $html += '</p>';
+                                } else
+                                    if (val.NovoValor != '' && val.NovoValor != null) {
+                                        $html += '<p>';
+                                        $html += '<strong>';
+                                        $html += val.CampoAlterado;
+                                        $html += ': </strong>';
+                                        $html += 'Adicionado ';
+                                        $html += val.NovoValor;
+                                        $html += '</p>';
+                                    } else
+                                        if (val.ValorAntigo != '' && val.ValorAntigo != null) {
+                                            $html += '<p>';
+                                            $html += '<strong>';
+                                            $html += val.CampoAlterado;
+                                            $html += ': </strong>';
+                                            $html += 'Excluído ';
+                                            $html += val.ValorAntigo;
+                                            $html += '</p>';
+                                        } else {
+                                            $html += '<p>Alteração não processada pela View - HistoricoPedidoID ' + val.HistoricoPedidoID + '</p>';
+                                        }
+                            }
+                        }
+                        if (val.Operacao == 'EXCLUSAO' || val.Operacao == 'EXCLUSAO_SISTEMA') {
+                            // Exclusão de item
+                            if (val.PedidoItemID != null && val.PedidoItemID != '') {
+                                $html += '<p>';
+                                $html += 'Excluído ';
+                                $html += val.DescricaoItem;
+                                $html += '</p>';
+                            }
+                            else {
+                                $html += '<p>';
+                                $html += 'Exclusão não processada pela View - HistoricoPedidoID ';
+                                $html += val.HistoricoPedidoID;
+                                $html += '</p>';
+                            }
+                        }
+                    }
+                    $row.append($('<td/>').html(
+                        $html                                    
+                        ));                    
+                    $table.append($row);
+                });                
+                
+                $div.append($table);
+                $('#historico').html($div);                
+            }
+            else {                
+                $('#historico').html('<div>Este pedido não possui alterações</div>')
+            }
+        }
+    </script>
+}

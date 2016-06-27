@@ -361,7 +361,15 @@ namespace PedidoWeb.Controllers
                     catch(Exception e)
                     {
                         status = false;
-                        PedidoWeb.Controllers.Negocio.Log.SalvaLog(pedidoHelper.UsuarioCorrente, e.Message);
+                        string mensagem = string.Empty;
+                        var currentException = e;
+                        mensagem = currentException.Message;
+                        while(currentException.InnerException != null)
+                        {
+                            mensagem += " " + currentException.InnerException.Message;
+                            currentException = currentException.InnerException;
+                        }                        
+                        PedidoWeb.Controllers.Negocio.Log.SalvaLog(pedidoHelper.UsuarioCorrente, mensagem);
                         return new JsonResult { Data = new { status = status, errorMessage = e.Message } };
                     }
                 }
@@ -674,22 +682,26 @@ namespace PedidoWeb.Controllers
             return hp;
         }
 
-        public ActionResult HistoricoPedido(int id)
+        public JsonResult HistoricoPedido(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+            
+            // Desabilita o lazy load
+            db.Configuration.ProxyCreationEnabled = false;
             
             var historico = db.HistoricoPedidoes.Where(h => h.PedidoID == id)
-                .OrderBy(h => h.HistoricoPedidoID);
+                .OrderBy(h => h.HistoricoPedidoID);            
             
-            if (historico == null)
-            {
-                return HttpNotFound();
-            }
+            db.Configuration.ProxyCreationEnabled = true;
+            //if (historico == null)
+            //{
+            //    return HttpNotFound();
+            //}
 
-            return View(historico.ToList());
+            return Json(historico, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

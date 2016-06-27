@@ -83,3 +83,16 @@ input[type="checkbox"].input-validation-error {
     /*background-color: #d9d9d9;*/
     background-image: linear-gradient(90deg, #f2f2f2 , #d9d9d9);    
 }
+
+.gridRodape{
+    padding: 10px 15px 10px 15px;
+    background-color: #f2f2f2;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: #d9d9d9;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #d9d9d9;
+    text-align: right;
+    color: #595959;
+}
