@@ -28,9 +28,10 @@ namespace PedidoWeb.Controllers.Negocio
                     var produtoPadrao = db.Produtoes.Find(item.ProdutoID);
                     if (item.PercentualDesconto > produtoPadrao.PercDescontoMaximo)
                     {
-                        MotivoStatus.Add(string.Format("{0} - {1}"
-                            , item.Produto.Descricao
-                            , "Desconto maior que o máximo permitido"));
+                        if(item.Produto != null)
+                            MotivoStatus.Add(string.Format("{0} - {1}"
+                                , item.Produto.Descricao
+                                , "Desconto maior que o máximo permitido"));
                         analise = true;
                         //return "EM ANALISE";
                     }
@@ -45,34 +46,34 @@ namespace PedidoWeb.Controllers.Negocio
                             percDesc += Convert.ToDecimal(item.PercentualDesconto);
                         if (percDesc > produtoPadrao.PercDescontoMaximo)
                         {
-                            MotivoStatus.Add(string.Format("{0} - {1}"
-                            , item.Produto.Descricao
-                            , "Desconto maior que o máximo permitido"));
+                            if (item.Produto != null)
+                                MotivoStatus.Add(string.Format("{0} - {1}"
+                                , item.Produto.Descricao
+                                , "Desconto maior que o máximo permitido"));
                             analise = true;
                             //return "EM ANALISE";
                         }
                     }
                 }
-
-                Cadastro cadastro = db.Cadastroes.Find(p.CadastroID);
-                if (cadastro.AtrasoPagamento)
-                {
-                    MotivoStatus.Add("Cliente com títulos sem pagamento");
-                    analise = true;
-                    //return "EM ANALISE";
-                }
-                if (string.IsNullOrEmpty(cadastro.Classificacao))
-                {
-                    MotivoStatus.Add("Cliente sem classificação no cadastro");
-                    analise = true;
-                    //return "EM ANALISE";
-                }
-                if (!cadastro.Classificacao.Contains("BOM"))
-                {
-                    MotivoStatus.Add("Cliente com classificação negativa");
-                    analise = true;
-                    //return "EM ANALISE";
-                }
+            }
+            Cadastro cadastro = db.Cadastroes.Find(p.CadastroID);
+            if (cadastro.AtrasoPagamento)
+            {
+                MotivoStatus.Add("Cliente com títulos sem pagamento");
+                analise = true;
+                //return "EM ANALISE";
+            }
+            if (string.IsNullOrEmpty(cadastro.Classificacao))
+            {
+                MotivoStatus.Add("Cliente sem classificação no cadastro");
+                analise = true;
+                //return "EM ANALISE";
+            }
+            if (!cadastro.Classificacao.Contains("BOM"))
+            {
+                MotivoStatus.Add("Cliente com classificação negativa");
+                analise = true;
+                //return "EM ANALISE";
             }
             if (analise)
                 return "EM ANALISE";
