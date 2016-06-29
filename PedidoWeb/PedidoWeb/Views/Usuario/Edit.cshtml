@@ -53,6 +53,19 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.TipoConsulta)
+            @Html.DropDownList("TipoConsulta",
+                new List<SelectListItem>()
+                {
+                    new SelectListItem(){Text="FILTRAGEM POR PARÂMETRO INFORMADO", Value="FILTRO"}
+                    , new SelectListItem(){Text="LISTAGEM", Value="LISTAGEM"}
+                }
+                , new { @class = "form-control" }
+            )
+            @Html.ValidationMessageFor(model => model.TipoConsulta)
+        </div>
+
+        <div class="form-group">
             @Html.Label("Vendedor")            
             @*@Html.DropDownList("VendedorID", (IEnumerable<SelectListItem>)ViewBag.VendedorID
                 , string.Empty, new{ @class = "form-control"})*@

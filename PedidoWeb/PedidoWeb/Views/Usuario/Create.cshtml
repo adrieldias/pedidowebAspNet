@@ -62,8 +62,21 @@
                     new SelectListItem(){Text="VENDEDOR", Value="VENDEDOR"}
                     , new SelectListItem(){Text="ADMINISTRADOR", Value="ADMINISTRADOR" }
                     , new SelectListItem(){Text="MASTER", Value="MASTER"}
-                }, string.Empty, new { @class = "form-control" })
+                }, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.TipoUsuario)            
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TipoConsulta)
+            @Html.DropDownList("TipoConsulta",
+                new List<SelectListItem>()
+                {
+                    new SelectListItem(){Text="FILTRAGEM POR PARÂMETRO INFORMADO", Value="FILTRO"}
+                    , new SelectListItem(){Text="LISTAGEM", Value="LISTAGEM"}
+                }                
+                , new{@class="form-control"}
+            )
+            @Html.ValidationMessageFor(model => model.TipoConsulta)
         </div>
 
         <div class="form-group">

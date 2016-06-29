@@ -318,6 +318,10 @@
     <Compile Include="Migrations\201606212028246_adicionadoDataCriacao.Designer.cs">
       <DependentUpon>201606212028246_adicionadoDataCriacao.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201606281249454_TipoConsulta.cs" />
+    <Compile Include="Migrations\201606281249454_TipoConsulta.Designer.cs">
+      <DependentUpon>201606281249454_TipoConsulta.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Filial.cs" />
@@ -582,6 +586,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606212028246_adicionadoDataCriacao.resx">
       <DependentUpon>201606212028246_adicionadoDataCriacao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201606281249454_TipoConsulta.resx">
+      <DependentUpon>201606281249454_TipoConsulta.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

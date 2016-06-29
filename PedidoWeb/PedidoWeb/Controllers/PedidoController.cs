@@ -211,7 +211,7 @@ namespace PedidoWeb.Controllers
                 ViewBag.FilialID = new SelectList(db.Filials
                     .Where(f => f.CodEmpresa == usuario.CodEmpresa && f.Situacao == "ATIVO")
                     , "FilialID", "DescFilial");
-            
+            ViewBag.TipoConsulta = usuario.TipoConsulta;
             return View();
         }
 
@@ -462,6 +462,7 @@ namespace PedidoWeb.Controllers
                     .Where(f => f.CodEmpresa == usuario.CodEmpresa && f.Situacao == "ATIVO")
                     , "FilialID", "DescFilial"
                     , pedido.FilialID);
+                ViewBag.TipoConsulta = usuario.TipoConsulta;
                 return View(pedido);
             }
             

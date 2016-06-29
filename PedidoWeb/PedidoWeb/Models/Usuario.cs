@@ -36,7 +36,9 @@ namespace PedidoWeb.Models
         
         private string codEmpresa { get; set; }
 
-        
+        [DisplayName("Tipo de Consulta de Dados")]
+        [Required(ErrorMessage="Tipo de consulta é obrigatório")]
+        public string TipoConsulta { get; set; }
 
         // Properties
 
