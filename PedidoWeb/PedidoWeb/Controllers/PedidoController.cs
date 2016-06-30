@@ -555,6 +555,8 @@ namespace PedidoWeb.Controllers
         {
             Pedido pedido = db.Pedidoes.Find(id);
             pedido.Status = status;
+            foreach(PedidoItem item in pedido.Itens)
+                item.StatusSincronismo = "ALTERADO";
             
             //db.Entry(pedido).State = EntityState.Modified;
             DetectaAlteracoes((db as IObjectContextAdapter).ObjectContext);
@@ -641,35 +643,38 @@ namespace PedidoWeb.Controllers
                     string campoAlterado = modified.OriginalValues.GetName(originalIdx);
                     object valorAntigo = modified.OriginalValues.GetValue(originalIdx);
                     object novoValor = modified.CurrentValues.GetValue(originalIdx);
-                    switch(campoAlterado)
+                    if (campoAlterado != "StatusSincronismo")
                     {
-                        case "ProdutoID": populaAlteracoes(ref hp, "Produto", 
-                                    db.Produtoes.Find(valorAntigo).CodProduto,
-                                    db.Produtoes.Find(novoValor).CodProduto);
-                            
-                            break;
-                        case "OperacaoID": populaAlteracoes(ref hp, "Operação",
-                                    db.Operacaos.Find(valorAntigo).CodOperacao,
-                                    db.Operacaos.Find(novoValor).CodOperacao);
-                            break;
-                        case "CadastroID": populaAlteracoes(ref hp,"Cliente",
-                                    db.Cadastroes.Find(valorAntigo).CodCadastro,
-                                    db.Cadastroes.Find(novoValor).CodCadastro);
-                            break;
-                        case "PrazoVencimentoID": populaAlteracoes(ref hp, "Pagamento",
-                                    db.PrazoVencimentoes.Find(valorAntigo).CodPrazoVencimento,
-                                    db.PrazoVencimentoes.Find(novoValor).CodPrazoVencimento);
-                            break;
-                        case "FilialID": populaAlteracoes(ref hp, "Empresa",
-                                    db.Filials.Find(valorAntigo).CodFilial,
-                                    db.Filials.Find(novoValor).CodFilial);
-                            break;
-                        case "TransportadorID": populaAlteracoes(ref hp, "Transportador",
-                                    valorAntigo.ToString() == "" ? null : (object)db.Transportadors.Find(valorAntigo).CodCadastro,
-                                    novoValor.ToString() == "" ? null : (object)db.Transportadors.Find(novoValor).CodCadastro);
-                            break;
-                        default:  populaAlteracoes(ref hp, campoAlterado, valorAntigo, novoValor);
-                            break;
+                        switch (campoAlterado)
+                        {
+                            case "ProdutoID": populaAlteracoes(ref hp, "Produto",
+                                        db.Produtoes.Find(valorAntigo).CodProduto,
+                                        db.Produtoes.Find(novoValor).CodProduto);
+
+                                break;
+                            case "OperacaoID": populaAlteracoes(ref hp, "Operação",
+                                        db.Operacaos.Find(valorAntigo).CodOperacao,
+                                        db.Operacaos.Find(novoValor).CodOperacao);
+                                break;
+                            case "CadastroID": populaAlteracoes(ref hp, "Cliente",
+                                        db.Cadastroes.Find(valorAntigo).CodCadastro,
+                                        db.Cadastroes.Find(novoValor).CodCadastro);
+                                break;
+                            case "PrazoVencimentoID": populaAlteracoes(ref hp, "Pagamento",
+                                        db.PrazoVencimentoes.Find(valorAntigo).CodPrazoVencimento,
+                                        db.PrazoVencimentoes.Find(novoValor).CodPrazoVencimento);
+                                break;
+                            case "FilialID": populaAlteracoes(ref hp, "Empresa",
+                                        db.Filials.Find(valorAntigo).CodFilial,
+                                        db.Filials.Find(novoValor).CodFilial);
+                                break;
+                            case "TransportadorID": populaAlteracoes(ref hp, "Transportador",
+                                        valorAntigo.ToString() == "" ? null : (object)db.Transportadors.Find(valorAntigo).CodCadastro,
+                                        novoValor.ToString() == "" ? null : (object)db.Transportadors.Find(novoValor).CodCadastro);
+                                break;
+                            default: populaAlteracoes(ref hp, campoAlterado, valorAntigo, novoValor);
+                                break;
+                        }
                     }
                 }
                 if (modified.Entity.GetType().BaseType == typeof(Pedido))
