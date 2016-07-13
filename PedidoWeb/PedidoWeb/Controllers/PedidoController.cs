@@ -643,7 +643,7 @@ namespace PedidoWeb.Controllers
                     string campoAlterado = modified.OriginalValues.GetName(originalIdx);
                     object valorAntigo = modified.OriginalValues.GetValue(originalIdx);
                     object novoValor = modified.CurrentValues.GetValue(originalIdx);
-                    if (campoAlterado != "StatusSincronismo")
+                    if (campoAlterado != "StatusSincronismo" && campoAlterado != "null")
                     {
                         switch (campoAlterado)
                         {
