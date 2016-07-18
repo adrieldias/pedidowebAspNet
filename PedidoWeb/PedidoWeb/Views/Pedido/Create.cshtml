@@ -372,6 +372,7 @@
                 $('#ValorDesconto').val('');
                 $('#ItemIndex').val('');
             });
+
             // Add button click function
             $('#add').click(function () {
                 // Validações                
@@ -429,11 +430,50 @@
                 // Add item to list if valid
                 if (isValidItem) {                    
                     //var el = document.getElementById('ProdutoAux');
-                    
+
                     if (tpCons == "LISTAGEM") {
                         produtoSelecionado = parseInt($('#ProdutoID').val().trim(), 10);
                         descProdutoSelecionado = $('#ProdutoID option:selected').text();
+                        cadastroSelecionado = parseInt($('#CadastroID').val().trim());
                     }
+
+                    ////////////////////////////////////////////////////////////////////////
+                    // Teste de ST
+                    $.ajax({
+                        url: '/Pedido/SubstituicaoTributaria',
+                        type: 'POST',
+                        data: jQuery.param({
+                            cadastroID: cadastroSelecionado
+                            , produtoID: produtoSelecionado
+                            , valUnitario: $('#ValorUnitario').val().trim().replace('.', ',')
+                            , valDesconto: $('#ValorDesconto').val().trim().replace('.', ',')
+                            , quantidade: $('#Quantidade').val().trim().replace('.', ',')
+                            , filialID: $('#FilialID').val().trim()
+                        }),
+                        datatype: "JSON",
+                        //contentType: "application/json",
+                        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                        success: function (d) {
+                            // Checa se o pedido foi salvo no banco de dados
+                            if (d.status == true) {
+                                //window.location.href = '/Pedido/Index';
+                                alert(d.valor);
+                            }
+                            else {
+                                alert(d.errorMessage);
+                            }
+
+                        },
+                        error: function () {
+                            alert('Erro ao calcular substituição tributária. Por favor tente novamente.');
+                        }
+                    })
+                    //////////////////////////////////////////////////////////////////////
+
+
+
+
+                    
 
                     if ($('#ItemIndex').val() == '') { //adição de itens                        
                         pedidoItens.push({                            

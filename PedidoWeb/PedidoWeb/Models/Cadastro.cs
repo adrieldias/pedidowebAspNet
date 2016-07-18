@@ -140,6 +140,12 @@ namespace PedidoWeb.Models
             set { this.codEmpresa = value == null ? string.Empty : value.ToUpper(); }
         }
 
+
+        [DisplayName("Código do Estado")]
+        public int? EstadoID { get; set; }
+
+        public virtual Estado Estado { get; set; }
+
         //Lazy Load
         public virtual Empresa Empresa { get; set; }
 

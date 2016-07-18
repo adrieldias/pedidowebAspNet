@@ -23,5 +23,9 @@ namespace PedidoWeb.Models
         public string NumCgc { get; set; }
 
         public string Situacao { get; set; }
+
+        public int? EstadoID { get; set; }
+
+        public virtual Estado Estado { get; set; }
     }
 }

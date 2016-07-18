@@ -382,6 +382,65 @@ namespace PedidoWeb.Controllers
 
             return new JsonResult { Data = new { status = status, errorMessage = "Pedido Inválido" } };
         }
+        
+        [HttpPost]
+        [Authorize]
+        public JsonResult SubstituicaoTributaria(
+            string cadastroID, string produtoID, string valUnitario, string valDesconto
+            , string quantidade, string filialID)
+        {
+            bool status = true;
+            double valor = 0.00;
+            string errorMessage = string.Empty;
+
+            if(string.IsNullOrEmpty(cadastroID))
+            {
+                errorMessage = "Impossível calcular substituição tributária - Cadastro não informado";
+                status = false;
+            }            
+            if (string.IsNullOrEmpty(produtoID))
+            {
+                errorMessage = "Impossível calcular substituição tributária - Produto não informado";
+                status = false;
+            }
+            if(string.IsNullOrEmpty(valUnitario))
+            {
+                errorMessage = "Impossível calcular substituição tributária - Valor Unitário não informado";
+                status = false;
+            }            
+            if (string.IsNullOrEmpty(quantidade))
+            {
+                errorMessage = "Impossível calcular substituição tributária - Quantidade não informada";
+                status = false;
+            }
+            if(string.IsNullOrEmpty(filialID))
+            {
+                errorMessage = "Impossível calcular substituição tributária - Filial não informada";
+                status = false;
+            }
+
+            if(status)
+            {
+                var idCadastro = Convert.ToInt32(cadastroID);
+                var idProduto = Convert.ToInt32(produtoID);                
+                var cadastro = db.Cadastroes.Include(e => e.Estado).First(c => c.CadastroID == idCadastro);
+                var produto = db.Produtoes.Include(t => t.Tributacao).First(p => p.ProdutoID == idProduto);
+                double desconto = string.IsNullOrEmpty(valDesconto) == true ? 0.00 : Convert.ToDouble(valDesconto);
+                double valorUnitario = Convert.ToDouble(valUnitario);
+                int qtQuantidade = Convert.ToInt32(quantidade);
+                int idFilial = Convert.ToInt32(filialID);
+                
+                
+                // teste
+
+                valor = 10.00;
+            }
+            
+
+            
+
+            return new JsonResult { Data = new { status = status, valor = valor, errorMessage = errorMessage } };
+        }
 
         // POST: /Pedido/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -750,7 +809,7 @@ namespace PedidoWeb.Controllers
             //}
 
             return Json(historico, JsonRequestBehavior.AllowGet);
-        }
+        }        
 
         protected override void Dispose(bool disposing)
         {

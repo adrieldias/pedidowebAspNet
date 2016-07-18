@@ -173,6 +173,7 @@
     <Compile Include="Controllers\Negocio\Login.cs" />
     <Compile Include="Controllers\Negocio\PedidoHelper.cs" />
     <Compile Include="Controllers\Negocio\StatusPedido.cs" />
+    <Compile Include="Controllers\Negocio\SubstituicaoTributaria.cs" />
     <Compile Include="Controllers\Negocio\ValidaFuncoesUsuario.cs" />
     <Compile Include="Controllers\PedidoController.cs" />
     <Compile Include="Controllers\PedidoItemController.cs" />
@@ -322,10 +323,24 @@
     <Compile Include="Migrations\201606281249454_TipoConsulta.Designer.cs">
       <DependentUpon>201606281249454_TipoConsulta.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201607081400434_substituicao_tributaria.cs" />
+    <Compile Include="Migrations\201607081400434_substituicao_tributaria.Designer.cs">
+      <DependentUpon>201607081400434_substituicao_tributaria.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607141914430_ProdutoSubstTrib.cs" />
+    <Compile Include="Migrations\201607141914430_ProdutoSubstTrib.Designer.cs">
+      <DependentUpon>201607141914430_ProdutoSubstTrib.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607181804265_alteracoes_ST.cs" />
+    <Compile Include="Migrations\201607181804265_alteracoes_ST.Designer.cs">
+      <DependentUpon>201607181804265_alteracoes_ST.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Estado.cs" />
     <Compile Include="Models\Filial.cs" />
     <Compile Include="Models\HistoricoPedido.cs" />
+    <Compile Include="Models\ProdutoSubstTrib.cs" />
     <Compile Include="Models\Sincronismo.cs" />
     <Compile Include="Models\Empresa.cs" />
     <Compile Include="Models\Operacao.cs" />
@@ -340,6 +355,7 @@
     <Compile Include="Models\InicializaBanco.cs" />
     <Compile Include="Models\PedidoWebContext.cs" />
     <Compile Include="Models\Cadastro.cs" />
+    <Compile Include="Models\Tributacao.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\Vendedor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -589,6 +605,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201606281249454_TipoConsulta.resx">
       <DependentUpon>201606281249454_TipoConsulta.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607081400434_substituicao_tributaria.resx">
+      <DependentUpon>201607081400434_substituicao_tributaria.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607141914430_ProdutoSubstTrib.resx">
+      <DependentUpon>201607141914430_ProdutoSubstTrib.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607181804265_alteracoes_ST.resx">
+      <DependentUpon>201607181804265_alteracoes_ST.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

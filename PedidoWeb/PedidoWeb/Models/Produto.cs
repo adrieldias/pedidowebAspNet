@@ -33,10 +33,8 @@ namespace PedidoWeb.Models
 
         [DisplayName("Código Cemapa")]
         public int CodProduto { get; set; }
-
         
-        private string codEmpresa;
-        
+        private string codEmpresa;        
 
         // Properties
 
@@ -47,6 +45,11 @@ namespace PedidoWeb.Models
             get { return this.codEmpresa == null ? string.Empty : this.codEmpresa.ToUpper(); }
             set { this.codEmpresa = value == null ? string.Empty : value.ToUpper(); }
         }
+
+        [DisplayName("Tributação")]
+        public int? TributacaoID { get; set; }
+
+        public virtual Tributacao Tributacao { get; set; }
 
         //Lazy Load
         public virtual Empresa Empresa { get; set; }
