@@ -130,6 +130,8 @@ namespace PedidoWeb.Models
 
         public bool AtrasoPagamento { get; set; }
 
+        public int? RegimeTributario { get; set; }
+
         // Properties
 
         [ForeignKey("Empresa")]

@@ -30,5 +30,9 @@ namespace PedidoWeb.Models
         public string DescSituacaoTribNC { get; set; }
 
         public string DescCSOSNNC { get; set; }
+
+        public int CodEmpresa { get; set; }
+
+        public virtual Empresa Empresa { get; set; }
     }
 }

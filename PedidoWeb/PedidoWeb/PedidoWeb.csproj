@@ -335,6 +335,10 @@
     <Compile Include="Migrations\201607181804265_alteracoes_ST.Designer.cs">
       <DependentUpon>201607181804265_alteracoes_ST.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201607182000532_add-codEmpresa.cs" />
+    <Compile Include="Migrations\201607182000532_add-codEmpresa.Designer.cs">
+      <DependentUpon>201607182000532_add-codEmpresa.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Estado.cs" />
@@ -614,6 +618,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201607181804265_alteracoes_ST.resx">
       <DependentUpon>201607181804265_alteracoes_ST.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607182000532_add-codEmpresa.resx">
+      <DependentUpon>201607182000532_add-codEmpresa.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

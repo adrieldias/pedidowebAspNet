@@ -35,9 +35,15 @@ namespace PedidoWeb.Controllers.Negocio
             , Produto produto, double valUnitario, double valDesconto
             , int quantidade, Filial filial)
         {
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.Current.User.Identity.Name);
+
             var valorTotal = (valUnitario - valDesconto) * quantidade;
-            float? percAliqSubst = 0;
-            float? baseAliqSubst = 0;
+            double? percAliqSubst = 0;
+            double? baseAliqSubst = 0;
+            double? baseIcms = 0;
+            double? valIcms = 0;
+            double valIcmsReduzido = 0;
+            double valST = 0;
 
             Tributacao tributacao = cadastro.Estado.Tributacao;
 
@@ -57,7 +63,30 @@ namespace PedidoWeb.Controllers.Negocio
                     baseAliqSubst = prodSubst.PercTributado;
                 }
 
+                // Sobrescreve com o valor calculado para a base da ST
+                // A partir de daqui, baseAliqSubst contém o valor da base de cálculo da ST
+                baseAliqSubst = (valorTotal * baseAliqSubst / 100);                
 
+                if(CalculaICMSParaDescontar(tributacao))
+                {
+                    if (pedidoHelper.BuscaEmpresa().Nome == "ZAPOLI")
+                        valIcmsReduzido = (valorTotal * 0.12);
+                }
+
+                baseIcms = valorTotal * tributacao.PercTributado / 100;
+                valIcms = baseIcms * tributacao.PercAliquota / 100;
+
+                valST = Convert.ToDouble(baseAliqSubst * percAliqSubst / 100) - Convert.ToDouble(valIcms) - valIcmsReduzido;
+
+                if(cadastro.RegimeTributario != null && cadastro.RegimeTributario != 3)
+                {
+                    valST = valST - Convert.ToDouble(valST * cadastro.Estado.PercReducaoIcmsSubst / 100);
+                }
+
+                if (valST > 0)
+                    return valST;
+                else
+                    return 0.00;
             }
             
 

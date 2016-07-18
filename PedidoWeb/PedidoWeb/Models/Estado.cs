@@ -48,6 +48,8 @@ namespace PedidoWeb.Models
         [DisplayName("Inscrição Substituição")]
         public string DescInscricaoSubst { get; set; }
 
+        public float? PercReducaoIcmsSubst { get; set; }
+
         public int? TributacaoID { get; set; }
 
         public virtual Tributacao Tributacao { get; set; }

@@ -32,5 +32,9 @@ namespace PedidoWeb.Models
         public float? PercTributadoSN { get; set; }
 
         public float? PercAliquotaDiferencial { get; set; }
+
+        public int CodEmpresa { get; set; }
+
+        public virtual Empresa Empresa { get; set; }
     }
 }
