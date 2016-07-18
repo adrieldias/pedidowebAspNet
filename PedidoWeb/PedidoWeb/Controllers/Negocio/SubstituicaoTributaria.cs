@@ -54,7 +54,7 @@ namespace PedidoWeb.Controllers.Negocio
 
                 // Caso tenha ST por produto
                 ProdutoSubstTrib prodSubst = db.ProdutoSubstTribs.First(p => p.CodProduto == produto.CodProduto
-                    && p.CodEstado == cadastro.CodCadastro
+                    && p.CodEstado == cadastro.CodEstado
                     && p.CodFilial == filial.CodFilial);
                 
                 if(prodSubst != null)

@@ -146,6 +146,8 @@ namespace PedidoWeb.Models
         [DisplayName("Código do Estado")]
         public int? EstadoID { get; set; }
 
+        public string CodEstado { get; set; }
+
         public virtual Estado Estado { get; set; }
 
         //Lazy Load

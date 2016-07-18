@@ -21,7 +21,7 @@ namespace PedidoWeb.Models
         public int CodProduto { get; set; }
 
         [Required(ErrorMessage = "Estado é obrigatório")]
-        public int CodEstado { get; set; }
+        public string CodEstado { get; set; }
 
         public float? PercTributado { get; set; }
 
@@ -33,7 +33,7 @@ namespace PedidoWeb.Models
 
         public float? PercAliquotaDiferencial { get; set; }
 
-        public int CodEmpresa { get; set; }
+        public string CodEmpresa { get; set; }
 
         public virtual Empresa Empresa { get; set; }
     }
