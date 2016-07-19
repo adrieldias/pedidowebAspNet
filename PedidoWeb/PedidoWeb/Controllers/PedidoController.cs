@@ -429,16 +429,11 @@ namespace PedidoWeb.Controllers
                 double valorUnitario = Convert.ToDouble(valUnitario);
                 int qtQuantidade = Convert.ToInt32(quantidade);
                 int idFilial = Convert.ToInt32(filialID);
-                
-                
-                // teste
+                var filial = db.Filials.Include(e => e.Estado).First(f => f.FilialID == idFilial);
 
-                valor = 10.00;
+                SubstituicaoTributaria st = new Negocio.SubstituicaoTributaria();
+                valor = st.CalculaSubstituicaoTributaria(cadastro, produto, valorUnitario, desconto, qtQuantidade, filial);
             }
-            
-
-            
-
             return new JsonResult { Data = new { status = status, valor = valor, errorMessage = errorMessage } };
         }
 

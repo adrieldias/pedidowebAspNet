@@ -35,7 +35,7 @@ namespace PedidoWeb.Controllers.Negocio
             , Produto produto, double valUnitario, double valDesconto
             , int quantidade, Filial filial)
         {
-            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.Current.User.Identity.Name);
+            PedidoHelper pedidoHelper = new PedidoHelper(string.Empty);
 
             var valorTotal = (valUnitario - valDesconto) * quantidade;
             double? percAliqSubst = 0;
@@ -45,7 +45,13 @@ namespace PedidoWeb.Controllers.Negocio
             double valIcmsReduzido = 0;
             double valST = 0;
 
-            Tributacao tributacao = cadastro.Estado.Tributacao;
+
+            Tributacao tributacao = produto.Tributacao;
+            if(filial.Estado != cadastro.Estado && cadastro.Estado.Tributacao != null)
+                tributacao = cadastro.Estado.Tributacao;
+
+            if (tributacao == null)
+                return 0.00;
 
             if(TemST(tributacao))
             {

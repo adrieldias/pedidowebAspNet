@@ -42,5 +42,11 @@ namespace PedidoWeb.Models
         [DisplayName("Percentual de Desconto")]
         [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true, NullDisplayText = "0,00")]
         public decimal? PercentualDesconto { get; set; }
+
+        public int? TributacaoID { get; set; }
+
+        public int? CodTributacao { get; set; }
+
+        public virtual Tributacao Tributacao { get; set; }
     }
 }

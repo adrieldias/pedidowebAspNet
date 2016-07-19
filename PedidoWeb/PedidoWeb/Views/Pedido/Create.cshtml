@@ -241,7 +241,10 @@
 
             var produtoSelecionado = 0;
             var cadastroSelecionado = 0;
-            var descProdutoSelecionado = '';            
+            var descProdutoSelecionado = '';
+            var totalST = 0;
+            var stItem = 0;
+            var emOperacao = false;
             var tpCons = '@(ViewBag.TipoConsulta)';
             
             $('#ProdutoAux').autocomplete({
@@ -377,6 +380,10 @@
             $('#add').click(function () {
                 // Validações                
                 var isValidItem = true;
+
+                if (emOperacao)
+                    isValidItem = false;
+
                 if (tpCons == "LISTAGEM") {
                     if ($('#ProdutoID').val().trim() == '') {
                         isValidItem = false;
@@ -431,14 +438,15 @@
                 if (isValidItem) {                    
                     //var el = document.getElementById('ProdutoAux');
 
+                    bloqueiaOperacoes(true);
+
                     if (tpCons == "LISTAGEM") {
                         produtoSelecionado = parseInt($('#ProdutoID').val().trim(), 10);
                         descProdutoSelecionado = $('#ProdutoID option:selected').text();
                         cadastroSelecionado = parseInt($('#CadastroID').val().trim());
                     }
-
-                    ////////////////////////////////////////////////////////////////////////
-                    // Teste de ST
+                    
+                    // Cálculo de ST
                     $.ajax({
                         url: '/Pedido/SubstituicaoTributaria',
                         type: 'POST',
@@ -456,25 +464,27 @@
                         success: function (d) {
                             // Checa se o pedido foi salvo no banco de dados
                             if (d.status == true) {
-                                //window.location.href = '/Pedido/Index';
-                                alert(d.valor);
+                                //window.location.href = '/Pedido/Index';                                
+                                //totalST += d.valor;
+
+                                var i = pedidoItens.length - 1;
+                                pedidoItens[i].St = d.valor;
+
+                                GeneratedItemsTable();                                
+                                bloqueiaOperacoes(false);
                             }
                             else {
+                                bloqueiaOperacoes(false);
                                 alert(d.errorMessage);
                             }
 
                         },
                         error: function () {
+                            bloqueiaOperacoes(false);
                             alert('Erro ao calcular substituição tributária. Por favor tente novamente.');
                         }
                     })
-                    //////////////////////////////////////////////////////////////////////
-
-
-
-
                     
-
                     if ($('#ItemIndex').val() == '') { //adição de itens                        
                         pedidoItens.push({                            
                             ProdutoID: produtoSelecionado,
@@ -484,7 +494,8 @@
                             //DescProduto: el.options[el.selectedIndex].text,
                             DescProduto: descProdutoSelecionado,
                             ValorDesconto: $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.', ','),
-                            PercentualDesconto: $('#PercDesconto').val().trim().replace('.',',')                        
+                            PercentualDesconto: $('#PercDesconto').val().trim().replace('.', ','),
+                            St: '0,00'
                         });
                     } else { //edição de itens                    
                         var i = $('#ItemIndex').val();
@@ -495,6 +506,7 @@
                         pedidoItens[i].DescProduto = descProdutoSelecionado;
                         pedidoItens[i].ValorDesconto = $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.', ',');
                         pedidoItens[i].PercentualDesconto = $('#PercDesconto').val().trim().replace('.', ',');
+                        pedidoItens[i].St = '0,00';
                     }
                     if (tpCons == 'LISTAGEM')
                         $('#ProdutoID').val('').focus();
@@ -623,7 +635,7 @@
                 if (pedidoItens.length > 0) {
                     var $div = $('<div class="table-responsive"></div>');
                     var $table = $('<table class="table table-responsive table-striped"></table>');
-                    $table.append('<tr><th>Produto</th><th></th><th>Quantidade</th><th>Desconto Unitário</th><th>Valor Unitário</th><th></th></tr>');
+                    $table.append('<tr><th>Produto</th><th></th><th>Quantidade</th><th>Desconto Unitário</th><th>Valor Unitário</th><th>ICMS ST</th><th></th></tr>');
                     //var $tbody = $('<tbody />');
                     $.each(pedidoItens, function (i, val) {
                         var $row = $('<tr/>');
@@ -635,6 +647,7 @@
                         else
                             $row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
                         $row.append($('<td/>').html(val.ValorUnitario));
+                        $row.append($('<td />').html(parseFloat(val.St).toFixed(2)));
                         var $span = $('<span class="input-group-btn btn-group-sm" style="width:50px"/>');
                         $span.append($('<button id=editarItem class="btn btn-primary">' +
                             '<span class="glyphicon glyphicon-pencil" aria-hidden="true">' +
@@ -681,15 +694,37 @@
                         );
                     
                 } else {
-                    $('#totalPedido').html(
+                    if (parseFloat(totalST) > 0) {
+                        $('#totalPedido').html(
                         '<label>'
+                        + '<p>'
+                        + 'Total do ICMS ST R$: '
+                        + parseFloat(totalST).toFixed(2)
+                        + '</p>'
+                        + '<p>'
                         + 'Total do Pedido R$: '
                         + parseFloat(totalPedido).toFixed(2)
+                        + '</p>'
                         + '</label>'
                         );
+                    } else
+                        $('#totalPedido').html(
+                            '<label>'
+                            + 'Total do Pedido R$: '
+                            + parseFloat(totalPedido).toFixed(2)
+                            + '</label>'
+                            );
                 }
                 totalPedido = 0;
             };
+
+            // Mantém uma flag e desabilita botões enquanto
+            // um processamento está sendo feito do lado do servidor
+            function bloqueiaOperacoes(bloqueio) {
+                $('#add').prop('disabled', bloqueio);
+                $('#submit').prop('disabled', bloqueio);
+                emOperacao = bloqueio;
+            }
         });
     </script>
 }
