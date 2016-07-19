@@ -351,6 +351,10 @@
     <Compile Include="Migrations\201607191800095_CodTributacao-PedidoItem.Designer.cs">
       <DependentUpon>201607191800095_CodTributacao-PedidoItem.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201607191926391_CodEstado-Filial.cs" />
+    <Compile Include="Migrations\201607191926391_CodEstado-Filial.Designer.cs">
+      <DependentUpon>201607191926391_CodEstado-Filial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Estado.cs" />
@@ -642,6 +646,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201607191800095_CodTributacao-PedidoItem.resx">
       <DependentUpon>201607191800095_CodTributacao-PedidoItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607191926391_CodEstado-Filial.resx">
+      <DependentUpon>201607191926391_CodEstado-Filial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

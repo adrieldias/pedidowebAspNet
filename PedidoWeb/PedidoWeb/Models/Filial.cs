@@ -26,6 +26,8 @@ namespace PedidoWeb.Models
 
         public int? EstadoID { get; set; }
 
+        public string CodEstado { get; set; }
+
         public virtual Estado Estado { get; set; }
     }
 }

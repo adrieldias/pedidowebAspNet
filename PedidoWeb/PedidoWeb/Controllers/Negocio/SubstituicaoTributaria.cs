@@ -44,8 +44,7 @@ namespace PedidoWeb.Controllers.Negocio
             double? valIcms = 0;
             double valIcmsReduzido = 0;
             double valST = 0;
-
-
+            
             Tributacao tributacao = produto.Tributacao;
             if(filial.Estado != cadastro.Estado && cadastro.Estado.Tributacao != null)
                 tributacao = cadastro.Estado.Tributacao;
