@@ -48,5 +48,9 @@ namespace PedidoWeb.Models
         public int? CodTributacao { get; set; }
 
         public virtual Tributacao Tributacao { get; set; }
+
+        public double? ValorIcmsSubst { get; set; }
+
+        public double? ValorIPI { get; set; }
     }
 }

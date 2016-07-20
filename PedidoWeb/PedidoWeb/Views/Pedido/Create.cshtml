@@ -335,20 +335,29 @@
                 $("#PercDesconto").prop("disabled", true);
 
             var pedidoItens = [];
-            var totalPedido = 0;
+            var totalPedido = 0;           
 
             var calulaTotal = function () {
+                totalST = 0;
+                totalPedido = 0;
                 for (var i = 0; i < pedidoItens.length; i++) {
                     var d = 0;
+
+                    totalST += Number(String(pedidoItens[i].St).replace(',', '.'))
+                        * Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
+
                     if (!isNaN(Number(String(pedidoItens[i].ValorDesconto).replace(',', '.'))))
                         d = Number(String(pedidoItens[i].ValorDesconto).replace(',', '.'))
                             * Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
-
                     totalPedido += Number(
                         Number(String(pedidoItens[i].Quantidade).replace(',', '.'))
                         * Number(String(pedidoItens[i].ValorUnitario).replace(',', '.'))
+                        // Desconto
                         - Number(d)
-                    );
+                        //ST
+                        + (Number(String(pedidoItens[i].St).replace(',', '.'))
+                        * Number(String(pedidoItens[i].Quantidade).replace(',', '.')))
+                    );                    
                 }
             };
             
@@ -455,7 +464,8 @@
                             , produtoID: produtoSelecionado
                             , valUnitario: $('#ValorUnitario').val().trim().replace('.', ',')
                             , valDesconto: $('#ValorDesconto').val().trim().replace('.', ',')
-                            , quantidade: $('#Quantidade').val().trim().replace('.', ',')
+                            //, quantidade: $('#Quantidade').val().trim().replace('.', ',')
+                            , quantidade: '1' // Será passado sempre 1 para calcular a ST unitária
                             , filialID: $('#FilialID').val().trim()
                         }),
                         datatype: "JSON",
@@ -643,11 +653,11 @@
                         $row.append($('<td/>').html(val.DescProduto));
                         $row.append($('<td/>').html(val.Quantidade));
                         if (val.ValorDesconto == '')
-                            $row.append($('<td/>').html('0.00'));
+                            $row.append($('<td/>').html('0,00'));
                         else
-                            $row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
+                            $row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2).trim().replace('.', ',')));
                         $row.append($('<td/>').html(val.ValorUnitario));
-                        $row.append($('<td />').html(parseFloat(val.St).toFixed(2)));
+                        $row.append($('<td />').html(parseFloat(val.St).toFixed(2).trim().replace('.', ',')));
                         var $span = $('<span class="input-group-btn btn-group-sm" style="width:50px"/>');
                         $span.append($('<button id=editarItem class="btn btn-primary">' +
                             '<span class="glyphicon glyphicon-pencil" aria-hidden="true">' +
@@ -688,31 +698,29 @@
                 $('#totalPedido').show();
                 if (isNaN(totalPedido)) {
                     $('#totalPedido').html(
-                        '<label>'
-                        + 'Total do Pedido R$: 0.00'
-                        + '</label>'
+                        '<p>'
+                        + 'Total do Pedido R$: 0,00'
+                        + '</p>'
                         );
                     
                 } else {
                     if (parseFloat(totalST) > 0) {
                         $('#totalPedido').html(
-                        '<label>'
-                        + '<p>'
-                        + 'Total do ICMS ST R$: '
-                        + parseFloat(totalST).toFixed(2)
+                        "<p style='font-size: small'>"
+                        + 'ICMS ST R$: '
+                        + parseFloat(totalST).toFixed(2).trim().replace('.', ',')
                         + '</p>'
                         + '<p>'
                         + 'Total do Pedido R$: '
-                        + parseFloat(totalPedido).toFixed(2)
-                        + '</p>'
-                        + '</label>'
+                        + parseFloat(totalPedido).toFixed(2).trim().replace('.', ',')
+                        + '</p>'                        
                         );
                     } else
                         $('#totalPedido').html(
-                            '<label>'
+                            '<p>'
                             + 'Total do Pedido R$: '
                             + parseFloat(totalPedido).toFixed(2)
-                            + '</label>'
+                            + '</p>'
                             );
                 }
                 totalPedido = 0;

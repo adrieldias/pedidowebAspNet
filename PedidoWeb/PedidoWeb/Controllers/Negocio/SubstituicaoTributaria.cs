@@ -15,8 +15,10 @@ namespace PedidoWeb.Controllers.Negocio
             var retorno = false;
             
             List<string> listaCsosn = new List<string> { "201", "202", "203", "900" };
-
-            if (trib.DescSituacaoTrib.Substring(2, 2) == "30"
+            var st = string.Empty;
+            if(!string.IsNullOrEmpty(trib.DescSituacaoTrib))
+                st = trib.DescSituacaoTrib;
+            if ((st.Length > 3 && st.Substring(2, 2) == "30")
                 || listaCsosn.Contains(trib.DescCSOSN))
                 retorno = true;
             
@@ -46,7 +48,7 @@ namespace PedidoWeb.Controllers.Negocio
             double valST = 0;
             
             Tributacao tributacao = produto.Tributacao;
-            if(filial.Estado != cadastro.Estado && cadastro.Estado.Tributacao != null)
+            if(filial.CodEstado != cadastro.CodEstado && cadastro.Estado.Tributacao != null)
                 tributacao = cadastro.Estado.Tributacao;
 
             if (tributacao == null)
@@ -58,10 +60,18 @@ namespace PedidoWeb.Controllers.Negocio
                 baseAliqSubst = cadastro.Estado.PercBaseSubst;
 
                 // Caso tenha ST por produto
-                ProdutoSubstTrib prodSubst = db.ProdutoSubstTribs.First(p => p.CodProduto == produto.CodProduto
-                    && p.CodEstado == cadastro.CodEstado
-                    && p.CodFilial == filial.CodFilial);
-                
+                ProdutoSubstTrib prodSubst = null;
+                try
+                {
+                    prodSubst = db.ProdutoSubstTribs.First(p => p.CodProduto == produto.CodProduto
+                        && p.CodEstado == cadastro.CodEstado
+                        && p.CodFilial == filial.CodFilial);
+                }
+                catch(Exception)
+                {
+
+                }
+
                 if(prodSubst != null)
                 {
                     percAliqSubst = prodSubst.PercAliquota;
@@ -94,8 +104,6 @@ namespace PedidoWeb.Controllers.Negocio
                     return 0.00;
             }
             
-
-
             return 0.00;
         }
     }
