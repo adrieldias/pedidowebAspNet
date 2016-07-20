@@ -28,5 +28,7 @@ namespace PedidoWeb.Models
         public virtual Estado Estado { get; set; }
         [DisplayName("Valor do Produto")]
         public virtual double ValorProduto { get; set; }
+
+        public virtual Empresa Empresa { get; set; }
     }
 }
