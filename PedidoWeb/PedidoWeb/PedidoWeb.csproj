@@ -363,6 +363,14 @@
     <Compile Include="Migrations\201607192051256_criacaoPrecoPrazoVendedor3.Designer.cs">
       <DependentUpon>201607192051256_criacaoPrecoPrazoVendedor3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201607201452076_icmsSt-ipi.cs" />
+    <Compile Include="Migrations\201607201452076_icmsSt-ipi.Designer.cs">
+      <DependentUpon>201607201452076_icmsSt-ipi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201607201830416_percIPI.cs" />
+    <Compile Include="Migrations\201607201830416_percIPI.Designer.cs">
+      <DependentUpon>201607201830416_percIPI.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Estado.cs" />
@@ -664,6 +672,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201607192051256_criacaoPrecoPrazoVendedor3.resx">
       <DependentUpon>201607192051256_criacaoPrecoPrazoVendedor3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607201452076_icmsSt-ipi.resx">
+      <DependentUpon>201607201452076_icmsSt-ipi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201607201830416_percIPI.resx">
+      <DependentUpon>201607201830416_percIPI.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -34,7 +34,9 @@ namespace PedidoWeb.Models
         [DisplayName("Código Cemapa")]
         public int CodProduto { get; set; }
         
-        private string codEmpresa;        
+        private string codEmpresa;
+
+        public float? PercIPI { get; set; }
 
         // Properties
 

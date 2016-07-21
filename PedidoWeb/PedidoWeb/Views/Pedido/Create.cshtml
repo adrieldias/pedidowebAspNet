@@ -243,6 +243,7 @@
             var cadastroSelecionado = 0;
             var descProdutoSelecionado = '';
             var totalST = 0;
+            var totalIPI = 0;
             var stItem = 0;
             var emOperacao = false;
             var tpCons = '@(ViewBag.TipoConsulta)';
@@ -343,7 +344,10 @@
                 for (var i = 0; i < pedidoItens.length; i++) {
                     var d = 0;
 
-                    totalST += Number(String(pedidoItens[i].St).replace(',', '.'))
+                    totalST += Number(String(pedidoItens[i].ValorIcmsSubst).replace(',', '.'))
+                        * Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
+
+                    totalIPI += Number(String(pedidoItens[i].ValorIPI).replace(',', '.'))
                         * Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
 
                     if (!isNaN(Number(String(pedidoItens[i].ValorDesconto).replace(',', '.'))))
@@ -355,7 +359,7 @@
                         // Desconto
                         - Number(d)
                         //ST
-                        + (Number(String(pedidoItens[i].St).replace(',', '.'))
+                        + (Number(String(pedidoItens[i].ValorIcmsSubst).replace(',', '.'))
                         * Number(String(pedidoItens[i].Quantidade).replace(',', '.')))
                     );                    
                 }
@@ -457,7 +461,7 @@
                     
                     // Cálculo de ST
                     $.ajax({
-                        url: '/Pedido/SubstituicaoTributaria',
+                        url: '/Pedido/CalculaImpostos',
                         type: 'POST',
                         data: jQuery.param({
                             cadastroID: cadastroSelecionado
@@ -478,8 +482,8 @@
                                 //totalST += d.valor;
 
                                 var i = pedidoItens.length - 1;
-                                pedidoItens[i].St = d.valor;
-
+                                pedidoItens[i].ValorIcmsSubst = d.valor;
+                                pedidoItens[i].ValorIPI = d.ipi;
                                 GeneratedItemsTable();                                
                                 bloqueiaOperacoes(false);
                             }
@@ -505,7 +509,8 @@
                             DescProduto: descProdutoSelecionado,
                             ValorDesconto: $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.', ','),
                             PercentualDesconto: $('#PercDesconto').val().trim().replace('.', ','),
-                            St: '0,00'
+                            ValorImcsSubst: '0,00',
+                            ValorIPI: '0,00'
                         });
                     } else { //edição de itens                    
                         var i = $('#ItemIndex').val();
@@ -516,7 +521,8 @@
                         pedidoItens[i].DescProduto = descProdutoSelecionado;
                         pedidoItens[i].ValorDesconto = $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.', ',');
                         pedidoItens[i].PercentualDesconto = $('#PercDesconto').val().trim().replace('.', ',');
-                        pedidoItens[i].St = '0,00';
+                        pedidoItens[i].ValorIcmsSubst = '0,00';
+                        pedidoItens[i].ValorIPI = '0,00';
                     }
                     if (tpCons == 'LISTAGEM')
                         $('#ProdutoID').val('').focus();
@@ -645,7 +651,7 @@
                 if (pedidoItens.length > 0) {
                     var $div = $('<div class="table-responsive"></div>');
                     var $table = $('<table class="table table-responsive table-striped"></table>');
-                    $table.append('<tr><th>Produto</th><th></th><th>Quantidade</th><th>Desconto Unitário</th><th>Valor Unitário</th><th>ICMS ST</th><th></th></tr>');
+                    $table.append('<tr><th>Produto</th><th></th><th>Quantidade</th><th>Desconto Unitário</th><th>Valor Unitário</th><th>ICMS ST</th><th>IPI</th><th></th></tr>');
                     //var $tbody = $('<tbody />');
                     $.each(pedidoItens, function (i, val) {
                         var $row = $('<tr/>');
@@ -657,7 +663,8 @@
                         else
                             $row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2).trim().replace('.', ',')));
                         $row.append($('<td/>').html(val.ValorUnitario));
-                        $row.append($('<td />').html(parseFloat(val.St).toFixed(2).trim().replace('.', ',')));
+                        $row.append($('<td />').html(parseFloat(val.ValorIcmsSubst).toFixed(2).trim().replace('.', ',')));
+                        $row.append($('<td />').html(parseFloat(val.ValorIPI).toFixed(2).trim().replace('.', ',')));
                         var $span = $('<span class="input-group-btn btn-group-sm" style="width:50px"/>');
                         $span.append($('<button id=editarItem class="btn btn-primary">' +
                             '<span class="glyphicon glyphicon-pencil" aria-hidden="true">' +
@@ -704,24 +711,20 @@
                         );
                     
                 } else {
-                    if (parseFloat(totalST) > 0) {
-                        $('#totalPedido').html(
-                        "<p style='font-size: small'>"
-                        + 'ICMS ST R$: '
-                        + parseFloat(totalST).toFixed(2).trim().replace('.', ',')
-                        + '</p>'
+                    var htmlST = '';
+                    if (totalST != 0)
+                        htmlST = "<p style='font-size: small'>ICMS ST R$: " + parseFloat(totalST).toFixed(2).trim().replace('.', ',') + "</p>";
+                    else 
+                        htmlST = '';     
+                    
+                        $('#totalPedido').html(                        
+                         htmlST
+                        
                         + '<p>'
                         + 'Total do Pedido R$: '
                         + parseFloat(totalPedido).toFixed(2).trim().replace('.', ',')
                         + '</p>'                        
-                        );
-                    } else
-                        $('#totalPedido').html(
-                            '<p>'
-                            + 'Total do Pedido R$: '
-                            + parseFloat(totalPedido).toFixed(2)
-                            + '</p>'
-                            );
+                        );                    
                 }
                 totalPedido = 0;
             };

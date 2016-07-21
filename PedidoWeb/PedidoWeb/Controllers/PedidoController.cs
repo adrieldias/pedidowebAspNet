@@ -267,13 +267,14 @@ namespace PedidoWeb.Controllers
                         i.StatusSincronismo = "NOVO";
                         i.PercentualDesconto = item.PercentualDesconto;
                         i.ValorDesconto = item.ValorDesconto;
+                        i.ValorIcmsSubst = item.ValorIcmsSubst * item.Quantidade;
+                        i.ValorIPI = item.ValorIPI * item.Quantidade;
                         valorPedido += item.ValorUnitario * item.Quantidade;
                         var produto = db.Produtoes.Find(item.ProdutoID);
                         valorProduto += produto.PrecoVarejo * item.Quantidade;                        
                         db.PedidoItems.Add(i);
                         db.SaveChanges();
-                    }                    
-                    
+                    }
                     status = true;
                 }
                 else // Alteração
@@ -316,6 +317,8 @@ namespace PedidoWeb.Controllers
                             pedidoBanco.Itens[i].Quantidade = itemTela.Quantidade;
                             pedidoBanco.Itens[i].ValorDesconto = itemTela.ValorDesconto;
                             pedidoBanco.Itens[i].ValorUnitario = itemTela.ValorUnitario;
+                            pedidoBanco.Itens[i].ValorIcmsSubst = itemTela.ValorIcmsSubst * itemTela.Quantidade;
+                            pedidoBanco.Itens[i].ValorIPI = itemTela.ValorIPI * itemTela.Quantidade;
                         }
 
                         List<PedidoItem> itensNovos = new List<PedidoItem>();
@@ -385,13 +388,14 @@ namespace PedidoWeb.Controllers
         
         [HttpPost]
         [Authorize]
-        public JsonResult SubstituicaoTributaria(
+        public JsonResult CalculaImpostos(
             string cadastroID, string produtoID, string valUnitario, string valDesconto
             , string quantidade, string filialID)
         {
             bool status = true;
             double valor = 0.00;
             string errorMessage = string.Empty;
+            double ipi = 0.00;
 
             if(string.IsNullOrEmpty(cadastroID))
             {
@@ -433,8 +437,14 @@ namespace PedidoWeb.Controllers
 
                 SubstituicaoTributaria st = new Negocio.SubstituicaoTributaria();
                 valor = st.CalculaSubstituicaoTributaria(cadastro, produto, valorUnitario, desconto, qtQuantidade, filial);
+
+                // IPI                
+                if(produto.PercIPI != null && produto.PercIPI > 0)
+                {
+                    ipi = valorUnitario * Convert.ToDouble(produto.PercIPI) / 100;
+                }
             }
-            return new JsonResult { Data = new { status = status, valor = valor, errorMessage = errorMessage } };
+            return new JsonResult { Data = new { status = status, valor = valor, ipi = ipi ,errorMessage = errorMessage } };
         }
 
         // POST: /Pedido/Create
