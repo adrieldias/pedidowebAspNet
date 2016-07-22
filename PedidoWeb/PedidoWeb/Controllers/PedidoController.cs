@@ -84,7 +84,7 @@ namespace PedidoWeb.Controllers
                     pedidos = pedidos.Where(s => s.DataEmissao == data);
                 else
                     if (numero > 0)
-                        pedidos = pedidos.Where(s => s.PedidoID == numero);
+                        pedidos = pedidos.Where(s => s.NumeroPedido == numero);
                         else
                             pedidos = pedidos.Where(s => s.Cadastro.Nome.ToUpper().Contains(((string)search).ToUpper()));
             }
