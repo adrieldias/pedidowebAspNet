@@ -96,3 +96,7 @@ input[type="checkbox"].input-validation-error {
     text-align: right;
     color: #595959;
 }
+
+.gridRodape p{
+    margin: 0 0 0 0;
+}

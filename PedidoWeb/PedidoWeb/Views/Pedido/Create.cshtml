@@ -458,6 +458,25 @@
                 } else {
                     $('#PercDesconto').siblings('span.error').css('visibility', 'hidden');
                 }
+
+                // Precisa que o cadastro tenha sido informado
+
+                if (tpCons == 'FILTRO') {
+                    if ($('#CadastroAux').val().trim() == '' || cadastroSelecionado == 0) {
+                        isValidItem = false;
+                        $('#CadastroAux').siblings('span.error').css('visibility', 'visible');
+                        $('#CadastroAux').focus();
+                    }
+                    else {
+                        $('#CadastroAux').siblings('span.error').css('visibility', 'hidden');
+                    }
+                } else {
+                    if ($('#CadastroID').val().trim() == '') {
+                        isValidItem = false;
+                        $('#CadastroID').siblings('span.error').css('visibility', 'visible');
+                        $('#CadastroID').focus();
+                    }
+                }
                 
                 // Add item to list if valid
                 if (isValidItem) {                    

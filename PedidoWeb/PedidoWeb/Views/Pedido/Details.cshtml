@@ -152,7 +152,7 @@
         </div>*@
 
     <div class="table-responsive">
-        <table class="table table-responsive table-striped">
+        <table class="table table-striped">
             <tr>
                 <th>
                     @Html.DisplayName("Item")
@@ -164,10 +164,10 @@
                     @Html.DisplayName("Valor Unitário")
                 </th>
                 <th>
-                    @Html.DisplayName("% Desc.")
+                    @Html.DisplayName("% Desc")
                 </th>
                 <th>
-                    @Html.DisplayName("Desc. Unitário")
+                    @Html.DisplayName("Desc Unitário")
                 </th>
                 <th>
                     @Html.DisplayName("IPI")
@@ -186,22 +186,22 @@
         <td>
             @Html.DisplayFor(modelItem => item.Produto.Descricao)
         </td>
-        <td align="center">
+        <td>
             @Html.DisplayFor(modelItem => item.Quantidade)
         </td>
-        <td align="right">
+        <td>
             @Html.DisplayFor(modelItem => item.ValorUnitario)
         </td>
-        <td align="center">
+        <td>
             @Html.DisplayFor(modelItem => item.PercentualDesconto)
         </td>
-        <td align="right">
+        <td>
             @Html.DisplayFor(modelItem => item.ValorDesconto)
         </td>
-        <td align="right">
+        <td>
             @Html.DisplayFor(modelItem => item.ValorIPI)
         </td>
-        <td align="right">
+        <td>
             @Html.DisplayFor(modelItem => item.ValorIcmsSubst)
         </td>
         <td>
@@ -214,17 +214,50 @@
 
     @{
         decimal teste = 0;
-
+        decimal resST = 0;
+        decimal resIPI = 0;
+        decimal totalST = 0;
+        decimal totalIPI = 0;
         foreach (var item in Model.Itens)
         {
             decimal valDesc = Convert.ToDecimal(item.ValorDesconto == null ? 0 : item.ValorDesconto);
+            
+            if(!decimal.TryParse(item.ValorIcmsSubst.ToString(), out resST))  
+            {
+                resST = 0;
+            }          
+                
+            
+            if(!decimal.TryParse(item.ValorIPI.ToString(), out resIPI))
+            {
+                resIPI = 0;
+            }
 
+            totalIPI += resIPI;
+            totalST += resST;
+            
             teste += (item.Quantidade * item.ValorUnitario)
-                - (item.Quantidade * valDesc);
+                - (item.Quantidade * valDesc)
+                + resST
+                + resIPI;
+            
         }
         <div id="TotalPedido" class="gridRodape">
-            @*<p class="label label-default">Total do Pedido R$ @Html.Label(teste.ToString())</p>*@
-            @Html.Label(string.Format("Total do Pedido R$ {0}", teste.ToString()))
+            @if(totalST > 0)
+            { 
+                <p style="font-size: small">
+                    @Html.Label(string.Format("ICMS ST R$ {0}", totalST.ToString("0.00")))
+                </p>
+            }
+            @if(totalIPI > 0)
+            { 
+                <p style="font-size: small">
+                    @Html.Label(string.Format("IPI R$ {0}", totalIPI.ToString("0.00")))
+                </p>
+            }
+            <p>
+                @Html.Label(string.Format("Total do Pedido R$ {0}", teste.ToString("0.00")))
+            </p>
         </div>
         <br />
     }
@@ -309,7 +342,7 @@
                 @Html.ActionLink("Editar", "Edit", new { id = Model.PedidoID }, new { @class = "btn btn-primary" })
                 @Html.ActionLink("Excluir", "Delete", new { id = Model.PedidoID }, new { @class = "btn btn-danger" })
             }
-
+          
             @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
 
             @if (ViewBag.TipoUsuario == "ADMINISTRADOR" && Model.Status == "EM ANALISE")
