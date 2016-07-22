@@ -111,11 +111,11 @@
         {
             <div class="input-group" style="padding-left: 0px; padding-right: 0px">            
                 @Html.TextBox("Search", null, new
-            {
-                onchange = "$(this.form).submit();",
-                placeholder = "Pesquisar por Cliente, nº do Pedido ou Data",
-                @class = "form-control"
-            })
+                {
+                    //onchange = "$(this.form).submit();",
+                    placeholder = "Pesquisar por Cliente, nº do Pedido ou Data",
+                    @class = "form-control"
+                })
                 <span class="input-group-btn">
                     <button type="submit" value="Procurar" class="btn btn-default" aria-label="Procurar" >
                         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -130,58 +130,75 @@
                     </button>
                 </span>
             </div>
+            <div class="opcionais" id="opcionais">
+                <h4 style="text-align:center">Mais Opções de Pesquisa</h4>
+                
+                @if (ViewBag.TipoUsuario != "VENDEDOR")
+                {
+                    <h3>Vendedor</h3>
+                    @Html.TextBox("Vendedor", null, new
+                    {
+                        placeholder = "Nome do vendedor",
+                        @class = "form-control"
+                    })
+                }
+                <br />                
+                @if (ViewBag.TipoUsuario == "MASTER")
+                {
+                    <h3>Empresa</h3>
+                    @Html.TextBox("Empresa", null, new
+                    {
+                        placeholder = "Código da Empresa",
+                        @class = "form-control"
+                    })
+                }
+                <br />
+                <h4>Situação do pedido</h4>
+                <div style="display: block" class="radio form-control">
+                    <label><input type="radio" name="status" value="Aprovado" />APROVADO</label>
+                </div>
+                <div style="display: block" class="radio form-control">
+                    <label><input type="radio" name="status" value="Em Analise" />EM ANÁLISE</label>
+                </div>
+                <div style="display: block" class="radio form-control">
+                    <label><input type="radio" name="status" value="Em Embarque" />EM EMBARQUE</label>
+                </div>
+                <div style="display: block" class="radio form-control">
+                    <label><input type="radio" name="status" value="Faturado" />FATURADO</label>
+                </div>
+                <br />                
+                <h4>Período</h4>
+                <div class="col-md-2 margem-zero">
+                    @Html.TextBox("DataIni", null, new { @class = "form-control" }) 
+                </div>
+                <div class="col-md-1 margem-zero" style="text-align:center">
+                    até
+                </div>
+                <div class="col-md-2 margem-zero">
+                    @Html.TextBox("DataFin", null, new { @class = "form-control" })
+                </div>
+            
+                <div class="clearfix"></div>
+            
+                <div class="col-md-5 margem-zero" style="text-align:center">
+                    <br />
+                    @*<input type="submit" value="Procurar" onclick="mostraMsgAguarde()" class="btn btn-primary" style="width:100%" />*@
+                    <button type="submit" value="Procurar" onclick="mostraMsgAguarde()" class="btn btn-primary" style="width:100%">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        Procurar
+                    </button>
+                </div>
+
+                <div class="clearfix"></div>
+            
+                <div id="MsgAguarde">
+                    <h3>Aguarde...</h3>
+                </div>
+            </div>
         }
         
 
     </div>
-    
-    @using(Html.BeginForm("Index", "Pedido", FormMethod.Get))
-    { 
-        <div class="opcionais" id="opcionais">
-            <h4 style="text-align:center">Mais Opções de Pesquisa</h4>
-            <h4>Situação do pedido</h4>
-            <div style="display: block" class="radio form-control">
-                <label><input type="radio" name="status" value="Aprovado" onchange="mostraMsgAguarde(); submit()" />APROVADO</label>
-            </div>
-            <div style="display: block" class="radio form-control">
-                <label><input type="radio" name="status" value="Em Analise" onchange="mostraMsgAguarde(); submit()" />EM ANÁLISE</label>
-            </div>
-            <div style="display: block" class="radio form-control">
-                <label><input type="radio" name="status" value="Em Embarque" onchange="mostraMsgAguarde(); submit()" />EM EMBARQUE</label>
-            </div>
-            <div style="display: block" class="radio form-control">
-                <label><input type="radio" name="status" value="Faturado" onchange="mostraMsgAguarde(); submit()" />FATURADO</label>
-            </div>
-            <br />
-            <h4>Período</h4>
-            <div class="col-md-2 margem-zero">
-                @Html.TextBox("DataIni", null, new { @class = "form-control" }) 
-            </div>
-            <div class="col-md-1 margem-zero" style="text-align:center">
-                até
-            </div>
-            <div class="col-md-2 margem-zero">
-                @Html.TextBox("DataFin", null, new { @class = "form-control" })
-            </div>
-            
-            <div class="clearfix"></div>
-            
-            <div class="col-md-5 margem-zero" style="text-align:center">
-                <br />
-                @*<input type="submit" value="Procurar" onclick="mostraMsgAguarde()" class="btn btn-primary" style="width:100%" />*@
-                <button type="submit" value="Procurar" onclick="mostraMsgAguarde()" class="btn btn-primary" style="width:100%">
-                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                    Procurar
-                </button>
-            </div>
-
-            <div class="clearfix"></div>
-            
-            <div id="MsgAguarde">
-                <h3>Aguarde...</h3>
-            </div>
-        </div>
-    }
 
     <h2>Pedidos</h2>
     <br>
@@ -204,7 +221,20 @@
                         @ViewBag.Status
                     </li>
                 }
-
+                @if (!string.IsNullOrEmpty(ViewBag.Vendedor))
+                {
+                   <li>
+                        Vendedor
+                        @ViewBag.Vendedor
+                    </li> 
+                }
+                @if (!string.IsNullOrEmpty(ViewBag.Empresa))
+                {
+                    <li>
+                        Empresa
+                        @ViewBag.Empresa
+                    </li>
+                }
                 @if (!string.IsNullOrEmpty(ViewBag.DataInicial) && !string.IsNullOrEmpty(ViewBag.DataFinal))
                 {
                     <li>
@@ -276,8 +306,8 @@
             </tr>
             @foreach (var item in Model)
             {
-                <tr class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Pedido", new { id = item.PedidoID }))'">
-                    <td>
+                <tr>
+                    <td class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Pedido", new { id = item.PedidoID }))'">
                         @if (item.Status == "EM ANALISE")
                         {
                             <div class="label label-warning">
@@ -292,20 +322,20 @@
                                 </div>
                             }
                             else
-                                if(item.Status == "EM EMBARQUE")
+                                if (item.Status == "EM EMBARQUE")
                                 {
                                     <div class="label label-default">
                                         @Html.DisplayFor(modelItem => item.Status)
-                                    </div> 
+                                    </div>
                                 }
                                 else
-                                    if(item.Status == "APROVADO")
+                                    if (item.Status == "APROVADO")
                                     {
                                         <div class="label label-primary">
                                             @Html.DisplayFor(modelItem => item.Status)
                                         </div>
                                     }
-                                    else 
+                                    else
                                     {
                                         <div class="label label-success">
                                             @Html.DisplayFor(modelItem => item.Status)
@@ -314,28 +344,28 @@
 
                     </td>
 
-                    <td>
+                    <td class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Pedido", new { id = item.PedidoID }))'">
                         @Html.DisplayFor(modelItem => item.PedidoID)
                     </td>
 
-                    <td>
+                    <td class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Pedido", new { id = item.PedidoID }))'">
                         @Html.DisplayFor(modelItem => item.Cadastro.Nome)
                     </td>
 
-                    <td>
+                    <td class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Pedido", new { id = item.PedidoID }))'">
                         @Html.DisplayFor(modelItem => item.DataEmissao)
                     </td>
                     
-                    @if(ViewBag.TipoUsuario == "MASTER")
+                    @if (ViewBag.TipoUsuario == "MASTER")
                     {
-                        <td>
+                        <td class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Pedido", new { id = item.PedidoID }))'">
                             @Html.DisplayFor(modelItem => item.CodEmpresa)
                         </td>
                     }
                     
                     @if (ViewBag.TipoUsuario == "ADMINISTRADOR")
                     {
-                        <td>
+                        <td class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Pedido", new { id = item.PedidoID }))'">
                             @Html.DisplayFor(modelItem => item.Vendedor.CodVendedor)
                         </td>
                     }
@@ -366,6 +396,8 @@
                     , status = ViewBag.Status
                     , DataIni = ViewBag.DataInicial
                     , DataFin = ViewBag.DataFinal
+                    , Vendedor = ViewBag.Vendedor
+                    , Empresa = ViewBag.Empresa
               }
     ))
 </div>
@@ -473,7 +505,9 @@
             var filtroStatus = '@(ViewBag.Status)';
             var filtroDtIni = '@ViewBag.DataInicial';
             var filtroDtFin = '@ViewBag.DataFinal';
-            if (filtroStatus != '' || (filtroDtIni != '' && filtroDtFin != '')) {
+            var filtroVendedor = '@ViewBag.Vendedor';
+            var filtroEmpresa = '@ViewBag.Empresa';
+            if (filtroStatus != '' || (filtroDtIni != '' && filtroDtFin != '') || filtroVendedor != '' || filtroEmpresa != '') {
                 $('#mensagemFiltro').show();                
             }
             else {
