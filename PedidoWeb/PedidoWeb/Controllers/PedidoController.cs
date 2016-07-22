@@ -225,8 +225,14 @@ namespace PedidoWeb.Controllers
         public string ValorUnitario(FormCollection f)
         {            
             var n = f.GetValue("ProdutoID");
-            var produto = db.Produtoes.Find(Convert.ToInt64(n.AttemptedValue));
-            return produto.PrecoVarejo.ToString();
+            int res = 0;
+            Produto produto = null;
+            if(int.TryParse(n.AttemptedValue, out res))            
+                produto = db.Produtoes.Find(res);
+            if (produto != null)
+                return produto.PrecoVarejo.ToString();
+            else
+                return "0,00";
         }
 
         [HttpPost]
@@ -237,7 +243,12 @@ namespace PedidoWeb.Controllers
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
 
             if(ModelState.IsValid)
-            {                
+            {
+                // Utiliza método da classe para pegar a tributação que está sendo utilizada
+                SubstituicaoTributaria tributacao = new SubstituicaoTributaria();
+                Cadastro cadastro = db.Cadastroes.Find(pedido.CadastroID);
+                Filial filial = db.Filials.Find(pedido.FilialID);
+
                 if(pedido.PedidoID == 0) // Pedido não existe - Inclusão
                 { 
                     Pedido p = new Pedido();                    
@@ -275,8 +286,11 @@ namespace PedidoWeb.Controllers
                         i.ValorDesconto = item.ValorDesconto;
                         i.ValorIcmsSubst = item.ValorIcmsSubst * item.Quantidade;
                         i.ValorIPI = item.ValorIPI * item.Quantidade;
+                        Produto produto = db.Produtoes.Find(item.ProdutoID);
+                        Tributacao trib = tributacao.EscolheTributacao(cadastro, produto, filial);
+                        i.TributacaoID = trib.TributacaoID;
+                        i.CodTributacao = trib.CodTributacao;
                         valorPedido += item.ValorUnitario * item.Quantidade;
-                        var produto = db.Produtoes.Find(item.ProdutoID);
                         valorProduto += produto.PrecoVarejo * item.Quantidade;                        
                         db.PedidoItems.Add(i);
                         db.SaveChanges();
@@ -325,6 +339,11 @@ namespace PedidoWeb.Controllers
                             pedidoBanco.Itens[i].ValorUnitario = itemTela.ValorUnitario;
                             pedidoBanco.Itens[i].ValorIcmsSubst = itemTela.ValorIcmsSubst * itemTela.Quantidade;
                             pedidoBanco.Itens[i].ValorIPI = itemTela.ValorIPI * itemTela.Quantidade;
+
+                            Produto produto = db.Produtoes.Find(itemTela.ProdutoID);
+                            Tributacao trib = tributacao.EscolheTributacao(cadastro, produto, filial);
+                            pedidoBanco.Itens[i].TributacaoID = trib.TributacaoID;
+                            pedidoBanco.Itens[i].CodTributacao = trib.CodTributacao;
                         }
 
                         List<PedidoItem> itensNovos = new List<PedidoItem>();
@@ -403,38 +422,43 @@ namespace PedidoWeb.Controllers
             string errorMessage = string.Empty;
             double ipi = 0.00;
 
-            if(string.IsNullOrEmpty(cadastroID))
+            if(string.IsNullOrEmpty(cadastroID) || cadastroID == "0")
             {
-                errorMessage = "Impossível calcular substituição tributária - Cadastro não informado";
+                errorMessage = "Impossível calcular impostos - Cadastro não informado";
                 status = false;
             }            
-            if (string.IsNullOrEmpty(produtoID))
+            if (string.IsNullOrEmpty(produtoID) || produtoID == "0")
             {
-                errorMessage = "Impossível calcular substituição tributária - Produto não informado";
+                errorMessage = "Impossível calcular impostos - Produto não informado";
                 status = false;
             }
             if(string.IsNullOrEmpty(valUnitario))
             {
-                errorMessage = "Impossível calcular substituição tributária - Valor Unitário não informado";
+                errorMessage = "Impossível calcular impostos - Valor Unitário não informado";
                 status = false;
             }            
-            if (string.IsNullOrEmpty(quantidade))
+            if (string.IsNullOrEmpty(quantidade) || quantidade == "0")
             {
-                errorMessage = "Impossível calcular substituição tributária - Quantidade não informada";
+                errorMessage = "Impossível calcular impostos - Quantidade não informada";
                 status = false;
             }
-            if(string.IsNullOrEmpty(filialID))
+            if(string.IsNullOrEmpty(filialID) || filialID == "0")
             {
-                errorMessage = "Impossível calcular substituição tributária - Filial não informada";
+                errorMessage = "Impossível calcular impostos - Filial não informada";
+                status = false;
+            }
+            var idProduto = Convert.ToInt32(produtoID);                
+            var produto = db.Produtoes.Include(t => t.Tributacao).First(p => p.ProdutoID == idProduto);
+            if(produto.Tributacao == null)
+            {
+                errorMessage = "Impossível calcular impostos - Produto sem tributação";
                 status = false;
             }
 
             if(status)
             {
-                var idCadastro = Convert.ToInt32(cadastroID);
-                var idProduto = Convert.ToInt32(produtoID);                
-                var cadastro = db.Cadastroes.Include(e => e.Estado).First(c => c.CadastroID == idCadastro);
-                var produto = db.Produtoes.Include(t => t.Tributacao).First(p => p.ProdutoID == idProduto);
+                var idCadastro = Convert.ToInt32(cadastroID);                
+                var cadastro = db.Cadastroes.Include(e => e.Estado).First(c => c.CadastroID == idCadastro);                
                 double desconto = string.IsNullOrEmpty(valDesconto) == true ? 0.00 : Convert.ToDouble(valDesconto);
                 double valorUnitario = Convert.ToDouble(valUnitario);
                 int qtQuantidade = Convert.ToInt32(quantidade);
@@ -447,7 +471,7 @@ namespace PedidoWeb.Controllers
                 // IPI                
                 if(produto.PercIPI != null && produto.PercIPI > 0)
                 {
-                    ipi = valorUnitario * Convert.ToDouble(produto.PercIPI) / 100;
+                    ipi = (valorUnitario * Convert.ToDouble(produto.PercIPI) / 100) * qtQuantidade;
                 }
             }
             return new JsonResult { Data = new { status = status, valor = valor, ipi = ipi ,errorMessage = errorMessage } };

@@ -33,6 +33,22 @@ namespace PedidoWeb.Controllers.Negocio
             return (ListaCst.Contains(trib.DescSituacaoTrib) || ListaCsosn.Contains(trib.DescCSOSN));                
         }
 
+        /// <summary>
+        /// Escolhe a tributação a ser utilizada considerando operações interestaduais
+        /// </summary>
+        /// <param name="cadastro"></param>
+        /// <param name="produto"></param>
+        /// <param name="filial"></param>
+        /// <returns>Tributacao</returns>
+        public Tributacao EscolheTributacao(Cadastro cadastro, Produto produto, Filial filial)
+        {
+            Tributacao trib = produto.Tributacao;
+            if (filial.CodEstado != cadastro.CodEstado && cadastro.Estado.Tributacao != null)
+                trib = cadastro.Estado.Tributacao;
+
+            return trib;
+        }
+
         public double CalculaSubstituicaoTributaria(Cadastro cadastro
             , Produto produto, double valUnitario, double valDesconto
             , int quantidade, Filial filial)
@@ -46,10 +62,8 @@ namespace PedidoWeb.Controllers.Negocio
             double? valIcms = 0;
             double valIcmsReduzido = 0;
             double valST = 0;
-            
-            Tributacao tributacao = produto.Tributacao;
-            if(filial.CodEstado != cadastro.CodEstado && cadastro.Estado.Tributacao != null)
-                tributacao = cadastro.Estado.Tributacao;
+
+            Tributacao tributacao = EscolheTributacao(cadastro, produto, filial);
 
             if (tributacao == null)
                 return 0.00;

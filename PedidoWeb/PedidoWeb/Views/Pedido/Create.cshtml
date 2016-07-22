@@ -114,17 +114,25 @@
                     </div>
                 
                     <script type="text/javascript">
-                        function buscaValor() {                        
+                        function buscaValor() {
+                            bloqueiaOperacoes(true);
                             $("#ProdutoID").submit();                        
                         }
 
                         function SuccessRequest(response) {
                             //alert(response);
                             $('#ValorUnitario').val(response);
+                            bloqueiaOperacoes(false);
                         }
 
                         function FailureRequest(response) {
                             alert("Não foi possível buscar o preço do produto");
+                            bloqueiaOperacoes(false);
+                        }
+
+                        function bloqueiaOperacoes(bloqueio) {
+                            $('#add').prop('disabled', bloqueio);
+                            $('#submit').prop('disabled', bloqueio);                            
                         }
                     </script>    
                 }
@@ -341,14 +349,15 @@
             var calulaTotal = function () {
                 totalST = 0;
                 totalPedido = 0;
+                totalIPI = 0;
                 for (var i = 0; i < pedidoItens.length; i++) {
                     var d = 0;
 
-                    totalST += Number(String(pedidoItens[i].ValorIcmsSubst).replace(',', '.'))
-                        * Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
+                    totalST += Number(String(pedidoItens[i].ValorIcmsSubst).replace(',', '.'));
+                        //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
 
-                    totalIPI += Number(String(pedidoItens[i].ValorIPI).replace(',', '.'))
-                        * Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
+                    totalIPI += Number(String(pedidoItens[i].ValorIPI).replace(',', '.'));
+                        //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
 
                     if (!isNaN(Number(String(pedidoItens[i].ValorDesconto).replace(',', '.'))))
                         d = Number(String(pedidoItens[i].ValorDesconto).replace(',', '.'))
@@ -358,10 +367,13 @@
                         * Number(String(pedidoItens[i].ValorUnitario).replace(',', '.'))
                         // Desconto
                         - Number(d)
-                        //ST
-                        + (Number(String(pedidoItens[i].ValorIcmsSubst).replace(',', '.'))
-                        * Number(String(pedidoItens[i].Quantidade).replace(',', '.')))
-                    );                    
+                        // ST
+                        + (Number(String(pedidoItens[i].ValorIcmsSubst).replace(',', '.')))
+                            //* Number(String(pedidoItens[i].Quantidade).replace(',', '.')))
+                        // IPI
+                        + Number(String(pedidoItens[i].ValorIPI).replace(',', '.'))
+                            //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'))
+                    );
                 }
             };
             
@@ -468,8 +480,7 @@
                             , produtoID: produtoSelecionado
                             , valUnitario: $('#ValorUnitario').val().trim().replace('.', ',')
                             , valDesconto: $('#ValorDesconto').val().trim().replace('.', ',')
-                            //, quantidade: $('#Quantidade').val().trim().replace('.', ',')
-                            , quantidade: '1' // Será passado sempre 1 para calcular a ST unitária
+                            , quantidade: $('#Quantidade').val().trim().replace('.', ',')                            
                             , filialID: $('#FilialID').val().trim()
                         }),
                         datatype: "JSON",
@@ -495,7 +506,7 @@
                         },
                         error: function () {
                             bloqueiaOperacoes(false);
-                            alert('Erro ao calcular substituição tributária. Por favor tente novamente.');
+                            alert('Erro ao calcular impostos. Por favor tente novamente.');
                         }
                     })
                     
@@ -717,9 +728,15 @@
                     else 
                         htmlST = '';     
                     
+                    var htmlIPI = '';
+                    if (totalIPI != 0)
+                        htmlIPI = "<p style='font-size: small'>IPI R$: " + parseFloat(totalIPI).toFixed(2).trim().replace('.', ',') + "</p>";
+                    else
+                        htmlIPI = '';
+
                         $('#totalPedido').html(                        
-                         htmlST
-                        
+                        htmlST
+                        + htmlIPI
                         + '<p>'
                         + 'Total do Pedido R$: '
                         + parseFloat(totalPedido).toFixed(2).trim().replace('.', ',')
