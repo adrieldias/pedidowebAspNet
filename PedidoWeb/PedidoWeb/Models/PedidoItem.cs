@@ -49,8 +49,10 @@ namespace PedidoWeb.Models
 
         public virtual Tributacao Tributacao { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true, NullDisplayText = "0,00")]
         public double? ValorIcmsSubst { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true, NullDisplayText = "0,00")]
         public double? ValorIPI { get; set; }
     }
 }

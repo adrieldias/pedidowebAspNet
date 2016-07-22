@@ -155,19 +155,25 @@
         <table class="table table-responsive table-striped">
             <tr>
                 <th>
-                    @Html.DisplayName("Descrição")
+                    @Html.DisplayName("Item")
                 </th>
                 <th>
-                    @Html.DisplayName("Quantidade")
+                    @Html.DisplayName("Qtde")
                 </th>
                 <th>
                     @Html.DisplayName("Valor Unitário")
                 </th>
                 <th>
-                    @Html.DisplayName("% Desconto")
+                    @Html.DisplayName("% Desc.")
                 </th>
                 <th>
-                    @Html.DisplayName("Desconto Unitário")
+                    @Html.DisplayName("Desc. Unitário")
+                </th>
+                <th>
+                    @Html.DisplayName("IPI")
+                </th>
+                <th>
+                    @Html.DisplayName("ST")
                 </th>
                 <th>
                     @Html.DisplayName("Observação")
@@ -175,28 +181,34 @@
             </tr>
 
             @foreach (var item in Model.Itens)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Produto.Descricao)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Quantidade)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ValorUnitario)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PercentualDesconto)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ValorDesconto)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Observacao)
-                    </td>
-                </tr>
-            }
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Produto.Descricao)
+        </td>
+        <td align="center">
+            @Html.DisplayFor(modelItem => item.Quantidade)
+        </td>
+        <td align="right">
+            @Html.DisplayFor(modelItem => item.ValorUnitario)
+        </td>
+        <td align="center">
+            @Html.DisplayFor(modelItem => item.PercentualDesconto)
+        </td>
+        <td align="right">
+            @Html.DisplayFor(modelItem => item.ValorDesconto)
+        </td>
+        <td align="right">
+            @Html.DisplayFor(modelItem => item.ValorIPI)
+        </td>
+        <td align="right">
+            @Html.DisplayFor(modelItem => item.ValorIcmsSubst)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Observacao)
+        </td>
+    </tr>
+}
         </table>        
     </div>
 
