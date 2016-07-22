@@ -22,7 +22,7 @@ namespace PedidoWeb.Controllers
         // GET: /Pedido/
         [Authorize]
         public ActionResult Index(string sortOrder, string currentFilter, string search, string searchByDate, int? page,
-            string status, string DataIni, string DataFin, string mensagem)
+            string status, string DataIni, string DataFin, string Vendedor, string Empresa, string mensagem)
         {
             if (mensagem != string.Empty)
                 ViewBag.Message = mensagem;
@@ -40,6 +40,8 @@ namespace PedidoWeb.Controllers
             ViewBag.Status = string.IsNullOrEmpty(status) ? null : status;
             ViewBag.DataInicial = string.IsNullOrEmpty(DataIni) ? null : DataIni;
             ViewBag.DataFinal = string.IsNullOrEmpty(DataFin) ? null : DataFin;
+            ViewBag.Vendedor = string.IsNullOrEmpty(Vendedor) ? null : Vendedor;
+            ViewBag.Empresa = string.IsNullOrEmpty(Empresa) ? null : Empresa;
 
             if(ViewBag.TipoUsuario == "ADMINISTRADOR")
             {
@@ -82,7 +84,7 @@ namespace PedidoWeb.Controllers
                     pedidos = pedidos.Where(s => s.DataEmissao == data);
                 else
                     if (numero > 0)
-                        pedidos = pedidos.Where(s => s.PedidoID == numero);
+                        pedidos = pedidos.Where(s => s.NumeroPedido == numero);
                         else
                             pedidos = pedidos.Where(s => s.Cadastro.Nome.ToUpper().Contains(((string)search).ToUpper()));
             }
@@ -120,6 +122,10 @@ namespace PedidoWeb.Controllers
                 }
                 
             }
+            if (!string.IsNullOrEmpty(Vendedor) && tipoUsuario != "VENDEDOR")
+                pedidos = pedidos.Where(p => p.Vendedor.Nome.ToUpper().Contains(((string)Vendedor).ToUpper()));
+            if (!string.IsNullOrEmpty(Empresa) && tipoUsuario == "MASTER")
+                pedidos = pedidos.Where(p => p.CodEmpresa.ToUpper().Contains(((string)Empresa).ToUpper()));
 
             switch (sortOrder)
             {
