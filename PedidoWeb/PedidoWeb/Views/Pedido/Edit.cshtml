@@ -147,16 +147,24 @@
 
                 <script type="text/javascript">
                     function buscaValor() {
+                        bloqueiaOperacoes(true);
                         $("#ProdutoID").submit();
                     }
 
                     function SuccessRequest(response) {
                         //alert(response);
                         $('#ValorUnitario').val(response);
+                        bloqueiaOperacoes(false);
                     }
 
                     function FailureRequest(response) {
                         alert("Não foi possível buscar o preço do produto");
+                        bloqueiaOperacoes(false);
+                    }
+
+                    function bloqueiaOperacoes(bloqueio) {
+                        $('#add').prop('disabled', bloqueio);
+                        $('#submit').prop('disabled', bloqueio);                            
                     }
                 </script>
             }
@@ -283,7 +291,11 @@
             var produtoSelecionado = 0;
             var cadastroSelecionado = 0;
             var descProdutoSelecionado = '';
+            var totalST = 0;
+            var totalIPI = 0;
+            var emOperacao = false;            
             var tpCons = '@(ViewBag.TipoConsulta)';
+            var indexEdicao;
 
             $('#ProdutoAux').autocomplete({
                 source: function (request, response) {
@@ -396,10 +408,20 @@
             var totalPedido = 0;
 
             var calulaTotal = function()
-            {                
+            {
+                totalST = 0;
+                totalPedido = 0;
+                totalIPI = 0;
                 for(var i = 0; i < itens.length; i++)
                 {
                     var d = 0;
+                    
+                    totalST += Number(String(pedidoItens[i].ValorIcmsSubst).replace(',', '.'));
+                        //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
+
+                    totalIPI += Number(String(pedidoItens[i].ValorIPI).replace(',', '.'));
+                        //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'));                    
+                    
                     if(!isNaN(Number(String(itens[i].ValorDesconto).replace(',','.'))))
                         d = Number(String(itens[i].ValorDesconto).replace(',','.')) 
                             * Number(String(itens[i].Quantidade).replace(',','.'));                            
@@ -407,7 +429,14 @@
                     totalPedido += Number(
                         Number(String(itens[i].Quantidade).replace(',','.')) 
                         * Number(String(itens[i].ValorUnitario).replace(',','.'))
+                        // Desconto
                         - Number(d)
+                        // ST
+                        + (Number(String(pedidoItens[i].ValorIcmsSubst).replace(',', '.')))
+                            //* Number(String(pedidoItens[i].Quantidade).replace(',', '.')))
+                        // IPI
+                        + Number(String(pedidoItens[i].ValorIPI).replace(',', '.'))
+                            //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'))
                     );
                 }
             };
@@ -498,10 +527,53 @@
                 // Add item to list if valid                
                 if (isValidItem) {
                     //var el = document.getElementById('ProdutoID');
+                    
+                    bloqueiaOperacoes(true);
+                    
                     if(tpCons == "LISTAGEM"){
                         produtoSelecionado = parseInt($('#ProdutoID').val().trim(), 10);
                         descProdutoSelecionado = $('#ProdutoID option:selected').text();
+                        cadastroSelecionado = parseInt($('#CadastroID').val().trim());
                     }       
+
+                    // Cálculo de ST
+                    $.ajax({
+                        url: '/Pedido/CalculaImpostos',
+                        type: 'POST',
+                        data: jQuery.param({
+                            cadastroID: cadastroSelecionado
+                            , produtoID: produtoSelecionado
+                            , valUnitario: $('#ValorUnitario').val().trim().replace('.', ',')
+                            , valDesconto: $('#ValorDesconto').val().trim().replace('.', ',')
+                            , quantidade: $('#Quantidade').val().trim().replace('.', ',')                            
+                            , filialID: $('#FilialID').val().trim()
+                        }),
+                        datatype: "JSON",
+                        //contentType: "application/json",
+                        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                        success: function (d) {                            
+                            if (d.status == true) {
+                                //window.location.href = '/Pedido/Index';                                
+                                //totalST += d.valor;                                
+                                var i = indexEdicao;
+                                pedidoItens[i].ValorIcmsSubst = d.valor;
+                                pedidoItens[i].ValorIPI = d.ipi;
+                                GeneratedItemsTable();
+                                indexEdicao = undefined;
+                                bloqueiaOperacoes(false);
+                            }
+                            else {
+                                bloqueiaOperacoes(false);
+                                alert(d.errorMessage);
+                            }
+
+                        },
+                        error: function () {
+                            bloqueiaOperacoes(false);
+                            alert('Erro ao calcular impostos. Por favor tente novamente.');
+                        }
+                    })
+
                     if($('#ItemIndex').val() == '') {//adição de itens                        
                         pedidoItens.push({
                             //ProdutoID: $('#ProdutoID').val().trim(),
@@ -512,7 +584,9 @@
                             //DescProduto: el.options[el.selectedIndex].text,
                             DescProduto: descProdutoSelecionado,
                             ValorDesconto: $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.',','),
-                            PercentualDesconto: $('#PercDesconto').val().trim().replace('.',',')
+                            PercentualDesconto: $('#PercDesconto').val().trim().replace('.',','),
+                            ValorImcsSubst: '0,00',
+                            ValorIPI: '0,00'
                         });
                     } else { //edição de itens                    
                         var i = $('#ItemIndex').val();
@@ -523,6 +597,8 @@
                         pedidoItens[i].DescProduto = descProdutoSelecionado;
                         pedidoItens[i].ValorDesconto = $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.',',');
                         pedidoItens[i].PercentualDesconto = $('#PercDesconto').val().trim().replace('.',',');
+                        pedidoItens[i].ValorIcmsSubst = '0,00';
+                        pedidoItens[i].ValorIPI = '0,00';
                     }
 
                     if(tpCons == 'FILTRO')
@@ -654,8 +730,8 @@
                 if (pedidoItens.length > 0) {
                     var $div = $('<div class="table-responsive"></div>');
                     var $table = $('<table class="table table-responsive table-striped"></table>');
-                            $table.append('<tr><th>Produto</th><th></th><th>Quantidade</th><th>Desconto Unitário</th><th>Valor Unitário</th><th></th></tr>');
-                            //var $tbody = $('<tbody />');
+                    $table.append('<tr><th>Produto</th><th></th><th>Quantidade</th><th>Desconto Unitário</th><th>Valor Unitário</th><th>ICMS ST</th><th>IPI</th><th></th></tr>');
+                    //var $tbody = $('<tbody />');
                     $.each(pedidoItens, function (i, val) {
                         var $row = $('<tr/>');
                         $row.append($('<td/>').html(val.ProdutoID));
@@ -665,36 +741,39 @@
                             $row.append($('<td/>').html('0.00'));
                         else
                             $row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
-                        $row.append($('<td/>').html(val.ValorUnitario));  
-                                var $span = $('<span class="input-group-btn btn-group-sm" style="width:50px"/>');
-                                $span.append($('<button id=editarItem class="btn btn-primary">' +
-                                        '<span class="glyphicon glyphicon-pencil" aria-hidden="true">' +
-                                        '</span></button>').click(function(){
-                                            if(tpCons == 'FILTRO')
-                                                $('#ProdutoAux').val(val.DescProduto).focus();
-                                            else
-                                                $('#ProdutoID').val(val.ProdutoID).focus();
-                                            $('#Quantidade').val(val.Quantidade);
-                                            $('#ValorUnitario').val(val.ValorUnitario);
-                                            $('#ObservacaoItem').val(val.Observacao);
-                                            $('#PercDesconto').val(val.percDesconto);
-                                            $('#ValorDesconto').val(val.ValorDesconto);
-                                            $('#ItemIndex').val(i);
-                                            produtoSelecionado = val.ProdutoID;
-                                            descProdutoSelecionado = val.DescProduto;
-                            }));
-                                $span.append($('<button id=excluir class="btn btn-danger">'+
-                            '<span class="glyphicon glyphicon-remove" aria-hidden="true">'+
-                                        '</span></button>').click(function(){
-                                pedidoItens.splice(i, 1);                                    
-                                GeneratedItemsTable();
-                            }));
-                                var $col = $('<td style="text-align:right"/>');
-                                $col.append($span);
-                                $row.append($col);
-                                $table.append($row);
+                        $row.append($('<td/>').html(val.ValorUnitario));
+                        $row.append($('<td />').html(parseFloat(val.ValorIcmsSubst).toFixed(2).trim().replace('.', ',')));
+                        $row.append($('<td />').html(parseFloat(val.ValorIPI).toFixed(2).trim().replace('.', ',')));
+                        var $span = $('<span class="input-group-btn btn-group-sm" style="width:50px"/>');
+                        $span.append($('<button id=editarItem class="btn btn-primary">' +
+                                '<span class="glyphicon glyphicon-pencil" aria-hidden="true">' +
+                                '</span></button>').click(function(){
+                                    if(tpCons == 'FILTRO')
+                                        $('#ProdutoAux').val(val.DescProduto).focus();
+                                    else
+                                        $('#ProdutoID').val(val.ProdutoID).focus();
+                                    $('#Quantidade').val(val.Quantidade);
+                                    $('#ValorUnitario').val(val.ValorUnitario);
+                                    $('#ObservacaoItem').val(val.Observacao);
+                                    $('#PercDesconto').val(val.percDesconto);
+                                    $('#ValorDesconto').val(val.ValorDesconto);
+                                    $('#ItemIndex').val(i);
+                                    produtoSelecionado = val.ProdutoID;
+                                    descProdutoSelecionado = val.DescProduto;
+                                    indexEdicao = i;
+                                }));
+                        $span.append($('<button id=excluir class="btn btn-danger">'+
+                    '<span class="glyphicon glyphicon-remove" aria-hidden="true">'+
+                                '</span></button>').click(function(){
+                                    pedidoItens.splice(i, 1);                                    
+                                    GeneratedItemsTable();
+                                }));
+                        var $col = $('<td style="text-align:right"/>');
+                        $col.append($span);
+                        $row.append($col);
+                        $table.append($row);
                     });
-                            //$table.append($tbody);
+                    //$table.append($tbody);
                     $div.append($table);
                     $('#pedidoItens').html($div);
                 }
@@ -706,22 +785,43 @@
 
                 if (isNaN(totalPedido)) {
                     $('#totalPedido').html(
-                        '<label>'
-                        + 'Total do Pedido R$: 0.00'
-                        + '</label>'
+                        '<p>'
+                        + 'Total do Pedido R$: 0,00'
+                        + '</p>'
                         );
                     
                 } else {
-                    $('#totalPedido').html(
-                        '<label>'
-                        + 'Total do Pedido R$: '
-                        + parseFloat(totalPedido).toFixed(2)
-                        + '</label>'
-                        );
+                    var htmlST = '';
+                    if (totalST != 0)
+                        htmlST = "<p style='font-size: small'>ICMS ST R$: " + parseFloat(totalST).toFixed(2).trim().replace('.', ',') + "</p>";
+                    else 
+                        htmlST = '';     
+                    
+                    var htmlIPI = '';
+                    if (totalIPI != 0)
+                        htmlIPI = "<p style='font-size: small'>IPI R$: " + parseFloat(totalIPI).toFixed(2).trim().replace('.', ',') + "</p>";
+                    else
+                        htmlIPI = '';
+
+                    $('#totalPedido').html(                        
+                    htmlST
+                    + htmlIPI
+                    + '<p>'
+                    + 'Total do Pedido R$: '
+                    + parseFloat(totalPedido).toFixed(2).trim().replace('.', ',')
+                    + '</p>'                        
+                    );                    
                 }
                 totalPedido = 0;
+            };
+
+            // Mantém uma flag e desabilita botões enquanto
+            // um processamento está sendo feito do lado do servidor
+            function bloqueiaOperacoes(bloqueio) {
+                $('#add').prop('disabled', bloqueio);
+                $('#submit').prop('disabled', bloqueio);
+                emOperacao = bloqueio;
             }
         });
-
     </script>
 }
