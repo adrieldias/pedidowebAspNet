@@ -221,18 +221,43 @@ namespace PedidoWeb.Controllers
             return View();
         }
 
+        [HttpPost]
         [Authorize]
-        public string ValorUnitario(FormCollection f)
-        {            
-            var n = f.GetValue("ProdutoID");
-            int res = 0;
-            Produto produto = null;
-            if(int.TryParse(n.AttemptedValue, out res))            
-                produto = db.Produtoes.Find(res);
-            if (produto != null)
-                return produto.PrecoVarejo.ToString();
-            else
-                return "0,00";
+        public JsonResult ValorUnitario(int? produtoID, int prazoVencimentoID, int cadastroID)
+        {
+            var status = true;
+            string errorMessage = string.Empty;
+            decimal valor = 0;
+
+            if(produtoID == null || produtoID == 0) // Assume que não foi informado nenhum produto
+            {
+                status = true;
+                return new JsonResult { Data = new { status = status, valor = 0, errorMessage = errorMessage } };
+            }
+            if(prazoVencimentoID == 0)
+            {
+                status = false;
+                errorMessage = "Não foi possível buscar o preço do item. Prazo de vencimento não informado";
+            }
+            if(cadastroID == 0)
+            {
+                status = false;
+                errorMessage = "Não foi possível buscar o preço do item. Cadastro não informado";
+            }
+
+            ValorUnitario v = new ValorUnitario();
+            try
+            {
+                valor = v.BuscaValor(produtoID.GetValueOrDefault(), prazoVencimentoID, cadastroID);
+            }
+            catch(Exception ex)
+            {
+                status = false;
+                errorMessage = string.Format("{0} - {1}", ex.Message, ex.InnerException);
+            }
+            
+
+            return new JsonResult { Data = new { status = status, valor = valor, errorMessage = errorMessage } };
         }
 
         [HttpPost]
@@ -658,8 +683,9 @@ namespace PedidoWeb.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
         [Authorize]
-        public JsonResult ProdutoAutoComplete(string term)
+        public JsonResult ProdutoAutoComplete(string term, string prazoVencimentoID, string cadastroID)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             int codigo = 0;
@@ -675,10 +701,20 @@ namespace PedidoWeb.Controllers
                     .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
             }
 
-            
+            ValorUnitario v = new ValorUnitario();
             foreach(var p in produtos)
             {
                 p.Descricao = string.Format("{0} - {1}", p.CodProduto, p.Descricao);
+
+                // Buscar valor unitário
+                int prazo = 0;
+                int cadastro = 0;
+                int.TryParse(prazoVencimentoID, out prazo);
+                int.TryParse(cadastroID, out cadastro);
+                if (prazo > 0 && cadastro > 0)
+                {
+                    p.PrecoVarejo = v.BuscaValor(p.ProdutoID, prazo, cadastro);
+                }
             }
             return Json(produtos, JsonRequestBehavior.AllowGet);
         }

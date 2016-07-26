@@ -137,15 +137,15 @@
                 };
             
 
-            using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
-            {
+            //using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
+            //{
                 <div class="form-group">
                     * @Html.Label("Produto")
                     @Html.DropDownList("ProdutoID", null, string.Empty, new { @class = "form-control", onchange = "buscaValor()" })
                     <span class="error" style="visibility: hidden">Produto é obrigatório</span>
                 </div>
 
-                <script type="text/javascript">
+                @*<script type="text/javascript">
                     function buscaValor() {
                         bloqueiaOperacoes(true);
                         $("#ProdutoID").submit();
@@ -166,8 +166,8 @@
                         $('#add').prop('disabled', bloqueio);
                         $('#submit').prop('disabled', bloqueio);                            
                     }
-                </script>
-            }
+                </script>*@
+            //}
         }
         else { 
             <div class="form-group">
@@ -300,12 +300,18 @@
             $('#ProdutoAux').autocomplete({
                 source: function (request, response) {
                     // prepare url : for example '/api/artistapi?query=sonu
-                    var autocompleteUrl = '/Pedido/ProdutoAutoComplete' + '?term=' + request.term;
+                    //var autocompleteUrl = '/Pedido/ProdutoAutoComplete' + '?term=' + request.term;
+                    var autocompleteUrl = '/Pedido/ProdutoAutoComplete';
                     $.ajax({
                         url: autocompleteUrl,
-                        type: 'GET',
+                        type: 'POST',
                         cache: false,
                         dataType: 'json',
+                        data: jQuery.param({
+                            term: request.term
+                            , prazoVencimentoID: $('#PrazoVencimentoID').val()
+                            , cadastroID: $('#CadastroID').val()
+                        }),
                         success: function (json) {                            
                             var autoc = [];
                             $.each(json, function (id, data) {                                
@@ -468,6 +474,37 @@
                 $('#PercDesconto').val('');
                 $('#ValorDesconto').val('');
                 $('#ItemIndex').val('');
+            });
+
+            // Add ValorUnitario change function
+            $('#ProdutoID').change(function () {
+                bloqueiaOperacoes(true);
+                $.ajax({
+                    url: '/Pedido/ValorUnitario',
+                    type: 'POST',
+                    data: jQuery.param({
+                        cadastroID: $('#CadastroID').val()
+                        , produtoID: $('#ProdutoID').val()
+                        , prazoVencimentoID: $('#PrazoVencimentoID').val()                        
+                    }),
+                    datatype: "JSON",
+                    //contentType: "application/json",
+                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                    success: function (d) {                        
+                        if (d.status == true) {
+                            $('#ValorUnitario').val(d.valor);
+                            bloqueiaOperacoes(false);
+                        }
+                        else {
+                            bloqueiaOperacoes(false);
+                            alert(d.errorMessage);
+                        }
+                    },
+                    error: function () {
+                        bloqueiaOperacoes(false);
+                        alert('Erro ao buscar valor do item. Por favor tente novamente.');
+                    }
+                })
             });
 
             // Add button click function
