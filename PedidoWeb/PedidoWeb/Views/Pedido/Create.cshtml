@@ -269,7 +269,7 @@
                         data: jQuery.param({
                             term: request.term
                             , prazoVencimentoID: $('#PrazoVencimentoID').val()
-                            , cadastroID: $('#CadastroID').val()
+                            , cadastroID: cadastroSelecionado
                         }),
                         success: function (json) {                            
                             var autoc = [];
