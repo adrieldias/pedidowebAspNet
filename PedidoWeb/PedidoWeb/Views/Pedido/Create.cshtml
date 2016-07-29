@@ -566,7 +566,7 @@
                         }
                     })
                     
-                    if ($('#ItemIndex').val() == '') { //adição de itens                        
+                    if ($('#ItemIndex').val() == '') { //adição de itens       
                         pedidoItens.push({                            
                             ProdutoID: produtoSelecionado,
                             Quantidade: $('#Quantidade').val().trim().replace('.',','),
@@ -728,7 +728,8 @@
                         if (val.ValorDesconto == '')
                             $row.append($('<td/>').html('0,00'));
                         else
-                            $row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2).trim().replace('.', ',')));
+                            $row.append($('<td/>').html(parseFloat(val.ValorDesconto.trim().replace(',', '.')).toFixed(2).trim().replace('.', ',')));
+                        
                         $row.append($('<td/>').html(val.ValorUnitario));
                         $row.append($('<td />').html(parseFloat(val.ValorIcmsSubst).toFixed(2).trim().replace('.', ',')));
                         $row.append($('<td />').html(parseFloat(val.ValorIPI).toFixed(2).trim().replace('.', ',')));
