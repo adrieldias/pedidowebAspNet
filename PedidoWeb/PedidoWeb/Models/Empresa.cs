@@ -49,7 +49,11 @@ namespace PedidoWeb.Models
             get { return this.nome == null ? string.Empty : this.nome.ToUpper();}
             set { this.nome = value == null ? string.Empty : value.ToUpper();} 
         }
-
+        public string Email { get; set; }
+        public string Senha { get; set; }
+        public string SMTP { get; set; }
+        public int? PortaSMTP { get; set; }
+        public bool SSL { get; set; }
 
     }
 }
