@@ -62,12 +62,12 @@
     <div>
         @using (Html.BeginForm("Index", "Cadastro", FormMethod.Get))
         {
-            <div class="input-group margem-zero">
+            <div class="input-group" style="padding-left: 0px; padding-right: 0px">
                 @Html.TextBox("Search", null, new
-            {
-                placeholder = "Pesquisar por Nome",
-                @class = "form-control"
-            })
+                            {
+                                placeholder = "Pesquisar por Nome",
+                                @class = "form-control"
+                            })
 
                 <span class="input-group-btn">
                     <button type="submit" value="Procurar" class="btn btn-default" aria-label="Procurar">
@@ -75,12 +75,69 @@
                     </button>
                 </span>
 
+
+                <span class="input-group-btn">
+                    @*<span class="" aria-hidden="true"></span>*@
+                    @*<input type="button" value="..." class="btn btn-block" style="width:300px" onclick="toggleDiv('opcionais')" />*@
+                    <button type="button" class="btn btn-primary" aria-label="Filtros" @*style="background-color: #003366; color: white"*@ onclick="toggleDiv('opcionais')">
+                        <span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+                    </button>
+                </span>
+            </div>
+            <div class="opcionais" id="opcionais">
+                <h4 style="text-align:center">Mais Opções de Pesquisa</h4>
+            
+                <h4>Cidade do cliente</h4>
+
+                @Html.TextBox("Cidade", null, new
+                    {
+                        placeholder = "Cidade do cliente",
+                        @class = "form-control"
+                    })
+                <br />
+                <div class="col-md-5 margem-zero" style="text-align:center">
+                    <br />
+                    @*<input type="submit" value="Procurar" onclick="mostraMsgAguarde()" class="btn btn-primary" style="width:100%" />*@
+                    <button type="submit" value="Procurar" onclick="mostraMsgAguarde()" class="btn btn-primary" style="width:100%">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        Procurar
+                    </button>
+                </div>
+
+                <div class="clearfix"></div>
+            
+                <div id="MsgAguarde">
+                    <h3>Aguarde...</h3>
+                </div>
             </div>
         }        
     </div>
 
 
     <h2>Cadastros</h2>
+    <br />
+    <div id="mensagemFiltro">
+        <br />
+        <div class="opcionais">
+            <h3>Filtrando por</h3>
+            <ul>
+                @if (!string.IsNullOrEmpty(ViewBag.Cidade))
+                {
+                    <li>
+                        Cidade
+                        @ViewBag.Cidade
+                    </li>
+                }               
+            </ul>
+            @using (Html.BeginForm("Index", "Cadastro", FormMethod.Get))
+            {
+                <button type="submit" id="RemoveFiltro" name="RemoveFiltro" class="btn btn-default btn-sm" onclick="removeFiltros()">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Remover Filtros
+                </button>
+            }
+        </div>
+    </div>
     
     <p>
         @*@Html.ActionLink("Novo Cadastro", "Create", null, new { @class = "btn btn-primary btn-group-justified" })*@
@@ -113,6 +170,9 @@
                     @Html.DisplayNameFor(model => model[0].Fone)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model[0].DescCidade)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model[0].Email)
                 </th>                      
                 <th></th>
@@ -134,6 +194,9 @@
             @Html.DisplayFor(modelItem => item.Fone)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.DescCidade)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.Email)
         </td>
         <td>
@@ -144,6 +207,48 @@
         </table>
     </div>
     Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    @Html.PagedListPager(Model, page => Url.Action("Index"
+        , new { page, sortOrder = ViewBag.CurrentSort
+                    , currentFilter = ViewBag.CurrentFilter
+                    , Cidade = ViewBag.Cidade
+              }
+    ))
 </div>
 <div class="clearfix"></div>
+
+@section Scripts{
+
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryui/stylesheet")
+
+    <script type="text/javascript">
+
+
+        function toggleDiv(divid) {
+            var div = document.getElementById(divid);
+            var disp = div.style.display;
+            div.style.display = disp == 'none' ? 'block' : 'none';
+        };
+
+        function mostraMsgAguarde() {
+            $('#MsgAguarde').show();
+        };
+
+        $("document").ready(function () {
+            $('#opcionais').hide();
+            $('#MsgAguarde').hide();
+
+            var filtroCidade = '@(ViewBag.Cidade)';
+           
+            if (filtroCidade != '') {
+                $('#mensagemFiltro').show();
+            }
+            else {
+                $('#mensagemFiltro').hide();
+            }
+
+        });
+
+    </script>
+}

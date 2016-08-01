@@ -153,6 +153,14 @@
                     })
                 }
                 <br />
+                <h4>Cidade do cliente</h4>
+
+                @Html.TextBox("CidadeCliente", null, new
+                    {
+                        placeholder = "Cidade do cliente",
+                        @class = "form-control"
+                    })
+                <br />
                 <h4>Situação do pedido</h4>
                 <div style="display: block" class="radio form-control">
                     <label><input type="radio" name="status" value="Aprovado" />APROVADO</label>
@@ -235,6 +243,13 @@
                         @ViewBag.Empresa
                     </li>
                 }
+                @if (!string.IsNullOrEmpty(ViewBag.CidadeCliente))
+                {
+                    <li>
+                        Cidade do cliente
+                        @ViewBag.CidadeCliente
+                    </li>
+                }
                 @if (!string.IsNullOrEmpty(ViewBag.DataInicial) && !string.IsNullOrEmpty(ViewBag.DataFinal))
                 {
                     <li>
@@ -301,7 +316,7 @@
                     <th>
                         @Html.DisplayName("Vendedor")
                     </th>
-                }
+                }              
                 <th></th>
             </tr>
             @foreach (var item in Model)
@@ -398,6 +413,7 @@
                     , DataFin = ViewBag.DataFinal
                     , Vendedor = ViewBag.Vendedor
                     , Empresa = ViewBag.Empresa
+                    , CidadeCliente = ViewBag.CidadeCliente
               }
     ))
 </div>
@@ -507,7 +523,9 @@
             var filtroDtFin = '@ViewBag.DataFinal';
             var filtroVendedor = '@ViewBag.Vendedor';
             var filtroEmpresa = '@ViewBag.Empresa';
-            if (filtroStatus != '' || (filtroDtIni != '' && filtroDtFin != '') || filtroVendedor != '' || filtroEmpresa != '') {
+            var filtroCidadeCliente = '@ViewBag.CidadeCliente';
+            if (filtroStatus != '' || (filtroDtIni != '' && filtroDtFin != '') || filtroVendedor != '' || filtroEmpresa != '' ||
+                filtroCidadeCliente != '') {
                 $('#mensagemFiltro').show();                
             }
             else {

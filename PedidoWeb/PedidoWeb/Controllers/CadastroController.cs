@@ -19,12 +19,13 @@ namespace PedidoWeb.Controllers
 
         // GET: /Cadastro/
         [Authorize]
-        public ViewResult Index(string sortOrder, string currentFilter, string search, int? page)
+        public ViewResult Index(string sortOrder, string currentFilter, string search, int? page, string Cidade)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NomeParam = sortOrder == "Nome" ? "Nome_desc" : "Nome";
             ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
+            ViewBag.Cidade = string.IsNullOrEmpty(Cidade) ? null : Cidade;
             if (ViewBag.TipoUsuario == "ADMINISTRADOR")
             {
                 ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + pedidoHelper.UsuarioCorrente.CodEmpresa;
@@ -50,7 +51,8 @@ namespace PedidoWeb.Controllers
 
             if (!String.IsNullOrEmpty(search))
                 cadastros = cadastros.Where(s => s.Nome.ToUpper().Contains(search.ToUpper()));
-            
+            if(!string.IsNullOrEmpty(Cidade))
+                cadastros = cadastros.Where(s => s.DescCidade.ToUpper().Contains(Cidade.ToUpper()));
             switch (sortOrder)
             {
                 case "Nome":
