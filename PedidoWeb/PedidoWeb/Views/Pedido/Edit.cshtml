@@ -536,7 +536,7 @@
                 else {
                     $('#Quantidade').siblings('span.error').css('visibility', 'hidden');
                 }
-
+                $('#ValorUnitario').val($('#ValorUnitario').val().trim().replace(',', '.'));
                 if ($('#ValorUnitario').val().trim() == '' || isNaN($('#ValorUnitario').val().trim().replace(',', '.'))) {
                     isValidItem = false;
                     $('#ValorUnitario').siblings('span.error').css('visibility', 'visible');

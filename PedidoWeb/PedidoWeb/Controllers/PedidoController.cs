@@ -212,7 +212,7 @@ namespace PedidoWeb.Controllers
                 ViewBag.FilialID = new SelectList(db.Filials
                     .Where(f => f.CodEmpresa == usuario.CodEmpresa && f.Situacao == "ATIVO") 
                     , "FilialID", "DescFilial"
-                    , db.Filials.Find(pedidoHelper.BuscaEmpresa().FilialID).FilialID);
+                    , pedidoHelper.BuscaEmpresa().FilialID);
             else
                 ViewBag.FilialID = new SelectList(db.Filials
                     .Where(f => f.CodEmpresa == usuario.CodEmpresa && f.Situacao == "ATIVO")
@@ -880,7 +880,38 @@ namespace PedidoWeb.Controllers
             //}
 
             return Json(historico, JsonRequestBehavior.AllowGet);
-        }        
+        }   
+     
+        [Authorize]
+        public ActionResult EnviaEmailPedido(int id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Pedido pedido = db.Pedidoes.Include(i => i.Itens)
+                .Include(c => c.Cadastro)
+                .Include(f => f.Filial)
+                .FirstOrDefault(p => p.PedidoID == id);
+
+            if(pedido != null)
+            {
+                Email email = new Email();
+                Empresa empresa = db.Empresas.Find(pedido.CodEmpresa);
+                email.SMTP = empresa.SMTP;
+                email.Porta = empresa.PortaSMTP.GetValueOrDefault();
+                email.Ssl = empresa.SSL;
+                email.Senha = empresa.Senha;
+                email.Destinatario = pedido.Cadastro.Email;
+                email.Assunto = string.Format("{0} - Pedido nº {1}"
+                    , pedido.Filial.DescFilial, pedido.NumeroPedido.ToString());
+
+
+            }
+
+            return View();
+        }
 
         protected override void Dispose(bool disposing)
         {
