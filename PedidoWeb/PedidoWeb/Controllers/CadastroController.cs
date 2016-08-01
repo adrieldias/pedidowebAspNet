@@ -25,7 +25,7 @@ namespace PedidoWeb.Controllers
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NomeParam = sortOrder == "Nome" ? "Nome_desc" : "Nome";
             ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
-            ViewBag.Cidade = Cidade;
+            ViewBag.Cidade = string.IsNullOrEmpty(Cidade) ? null : Cidade;
             if (ViewBag.TipoUsuario == "ADMINISTRADOR")
             {
                 ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + pedidoHelper.UsuarioCorrente.CodEmpresa;
