@@ -64,5 +64,13 @@ namespace PedidoWeb.Models
         // Lazy Load
 
         public virtual Empresa Empresa { get; set; }
+        [DisplayName("Senha do Email")]
+        public string SenhaEmail { get; set; }
+        [DisplayName("Servidor SMTP")]
+        public string SMTP { get; set; }
+        [DisplayName("Porta SMTP")]
+        public int? PortaSMTP { get; set; }
+        [DisplayName("Conexão SSL")]
+        public bool SSL { get; set; }
     }
 }

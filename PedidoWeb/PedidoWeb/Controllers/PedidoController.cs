@@ -22,7 +22,7 @@ namespace PedidoWeb.Controllers
         // GET: /Pedido/
         [Authorize]
         public ActionResult Index(string sortOrder, string currentFilter, string search, string searchByDate, int? page,
-            string status, string DataIni, string DataFin, string Vendedor, string Empresa, string mensagem)
+            string status, string DataIni, string DataFin, string Vendedor, string Empresa, string CidadeCliente, string mensagem)
         {
             if (mensagem != string.Empty)
                 ViewBag.Message = mensagem;
@@ -42,6 +42,7 @@ namespace PedidoWeb.Controllers
             ViewBag.DataFinal = string.IsNullOrEmpty(DataFin) ? null : DataFin;
             ViewBag.Vendedor = string.IsNullOrEmpty(Vendedor) ? null : Vendedor;
             ViewBag.Empresa = string.IsNullOrEmpty(Empresa) ? null : Empresa;
+            ViewBag.CidadeCliente = string.IsNullOrEmpty(CidadeCliente) ? null : CidadeCliente;
 
             if(ViewBag.TipoUsuario == "ADMINISTRADOR")
             {
@@ -126,6 +127,8 @@ namespace PedidoWeb.Controllers
                 pedidos = pedidos.Where(p => p.Vendedor.Nome.ToUpper().Contains(((string)Vendedor).ToUpper()));
             if (!string.IsNullOrEmpty(Empresa) && tipoUsuario == "MASTER")
                 pedidos = pedidos.Where(p => p.CodEmpresa.ToUpper().Contains(((string)Empresa).ToUpper()));
+            if (!string.IsNullOrEmpty(CidadeCliente))
+                pedidos = pedidos.Where(p => p.Cadastro.DescCidade.ToUpper().Contains(((string)CidadeCliente).ToUpper()));
 
             switch (sortOrder)
             {
