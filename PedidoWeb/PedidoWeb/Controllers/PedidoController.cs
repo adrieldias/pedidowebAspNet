@@ -185,9 +185,14 @@ namespace PedidoWeb.Controllers
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             var usuario = pedidoHelper.UsuarioCorrente;
-            ViewBag.CadastroID = new SelectList(db.Cadastroes
+            var cadastrosViewBag = db.Cadastroes
                 .Where(c => c.CodEmpresa == usuario.CodEmpresa && c.Situacao == "ATIVO" && c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID)
-                .OrderBy(c => c.Nome), "CadastroID", "Nome");
+                .OrderBy(c => c.Nome);
+            foreach(var c in cadastrosViewBag)
+            {
+                c.Nome += string.Format(" - {0} - {1}", c.Fantasia, c.DescCidade);
+            }
+            ViewBag.CadastroID = new SelectList(cadastrosViewBag, "CadastroID", "Nome");
             ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes
                 .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
                 .OrderBy(p => p.Descricao)
@@ -314,7 +319,7 @@ namespace PedidoWeb.Controllers
                         i.ValorDesconto = item.ValorDesconto;
                         i.ValorIcmsSubst = item.ValorIcmsSubst * item.Quantidade;
                         i.ValorIPI = item.ValorIPI * item.Quantidade;
-                        Produto produto = db.Produtoes.Find(item.ProdutoID);
+                        Produto produto = db.Produtoes.Include(t => t.Tributacao).FirstOrDefault(it => it.ProdutoID == item.ProdutoID);
                         Tributacao trib = tributacao.EscolheTributacao(cadastro, produto, filial);
                         i.TributacaoID = trib.TributacaoID;
                         i.CodTributacao = trib.CodTributacao;
@@ -368,7 +373,7 @@ namespace PedidoWeb.Controllers
                             pedidoBanco.Itens[i].ValorIcmsSubst = itemTela.ValorIcmsSubst * itemTela.Quantidade;
                             pedidoBanco.Itens[i].ValorIPI = itemTela.ValorIPI * itemTela.Quantidade;
 
-                            Produto produto = db.Produtoes.Find(itemTela.ProdutoID);
+                            Produto produto = db.Produtoes.Include(t => t.Tributacao).FirstOrDefault(it => it.ProdutoID == itemTela.ProdutoID);
                             Tributacao trib = tributacao.EscolheTributacao(cadastro, produto, filial);
                             pedidoBanco.Itens[i].TributacaoID = trib.TributacaoID;
                             pedidoBanco.Itens[i].CodTributacao = trib.CodTributacao;
