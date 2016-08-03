@@ -55,5 +55,7 @@ namespace PedidoWeb.Models
 
         //Lazy Load
         public virtual Empresa Empresa { get; set; }
+        [DisplayName("Núm Fabricante")]
+        public string NumFabricante { get; set; }
     }
 }
