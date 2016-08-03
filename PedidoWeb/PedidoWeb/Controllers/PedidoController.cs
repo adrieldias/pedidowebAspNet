@@ -901,12 +901,13 @@ namespace PedidoWeb.Controllers
             Pedido pedido = db.Pedidoes.Include(i => i.Itens)
                 .Include(c => c.Cadastro)
                 .Include(f => f.Filial)
+                .Include(p => p.PrazoVencimento)
                 .FirstOrDefault(p => p.PedidoID == id);
 
             if(pedido != null)
             {
                 Email email = new Email();
-                Empresa empresa = db.Empresas.Find(pedido.CodEmpresa);
+                Empresa empresa = db.Empresas.Find(pedido.CodEmpresa);                
                 email.SMTP = empresa.SMTP;
                 email.Porta = empresa.PortaSMTP.GetValueOrDefault();
                 email.Ssl = empresa.SSL;
@@ -915,6 +916,80 @@ namespace PedidoWeb.Controllers
                 email.Assunto = string.Format("{0} - Pedido nº {1}"
                     , pedido.Filial.DescFilial, pedido.NumeroPedido.ToString());
 
+                string mensagem = "<!DOCTYPE html>";
+                mensagem += "<html>";
+                mensagem += "<head>";
+                mensagem += "<meta charset='utf-8' />";
+                mensagem += "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
+                mensagem += "<title>Pedido</title>";
+                mensagem += "</head>";
+                mensagem += "<body style='padding: 10px 10px 10px 10px'>";
+
+                mensagem += string.Format("{0} - Pedido nº {1}", pedido.Filial.DescFilial, pedido.NumeroPedido);
+                mensagem += "<hr>";
+                mensagem += "<h4>Informações</h4>";
+                mensagem += "<table>";
+                mensagem += "<tr>";
+                mensagem += "<td>Vendedor:</td>";
+                mensagem += string.Format("<td>{0}</td>", pedido.Cadastro.Nome);
+                mensagem += "</tr>";
+                mensagem += "<tr>";
+                mensagem += "<td>Prazo:</td>";
+                mensagem += string.Format("<td>{0}</td>", pedido.PrazoVencimento.Descricao);
+                mensagem += "</tr>";
+                mensagem += "<tr>";
+                mensagem += "<td>Frete:</td>";
+                mensagem += string.Format("<td>{0}</td>", pedido.TipoFrete);
+                mensagem += "</tr>";
+                mensagem += "<tr>";
+                mensagem += "<td>Data de Emissão:</td>";
+                mensagem += string.Format("<td>{0}</td>", pedido.DataEmissao.Date.ToString());
+                mensagem += "</tr>";
+                mensagem += "<tr>";
+                mensagem += "<td>Observação:</td>";
+                mensagem += string.Format("<td>{0}</td>", pedido.Observacao);
+                mensagem += "</tr>";
+                mensagem += "</table>";
+
+                mensagem += "<br>";
+
+                mensagem += "<table border='0' cellpadding='0' cellspacing='0'>";
+                mensagem += "<tr width='100%' height='30px' style='background-color: #d9d9d9'>";
+                mensagem += "<th width='30%'>";
+                mensagem += "Nome";
+                mensagem += "</th>";
+                mensagem += "<th width='10%'>";
+                mensagem += "Quantidade";
+                mensagem += "</th>";
+                mensagem += "<th width='15%'>";
+                mensagem += "Valor Unitário";
+                mensagem += "</th>";
+                mensagem += "<th width='15%'>";
+                mensagem += "Desconto Unit.";
+                mensagem += "</th>";
+                mensagem += "<th width='10%'>";
+                mensagem += "IPI";
+                mensagem += "</th>"; 
+                mensagem += "<th width='10%'>";
+                mensagem += "ST";
+                mensagem += "</th>";
+                mensagem += "<th width='20%'>";
+                mensagem += "Observação";
+                mensagem += "</th>";
+                mensagem += "</tr>";
+
+                foreach(var item in pedido.Itens)
+                {
+                    mensagem += "<tr width='100%'>";
+
+                    mensagem += "<td width='20%' style='text-align: center'>";
+                    //mensagem += 
+                    mensagem += "</td>";
+                    
+                    mensagem += "<td width='10%' style='text-align: center'>";
+                    mensagem += "</td>";
+                }
+                
 
             }
 
