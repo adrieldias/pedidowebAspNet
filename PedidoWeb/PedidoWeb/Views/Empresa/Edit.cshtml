@@ -44,6 +44,19 @@
             @Html.LabelFor(model => model.PrazoVencimentoPadrao, new { @class = "control-label" })
             @Html.DropDownList("PrazoVencimentoPadrao", null, string.Empty, new { @class = "form-control" })
         </div>
+        <br />
+        <div class="form-group">
+            @Html.LabelFor(model => model.TipoPesquisaProduto)
+            @Html.DropDownList("TipoPesquisaProduto",
+                new List<SelectListItem>()
+                {
+                    new SelectListItem(){Text="Descrição ou Cód. Produto", Value="PRODUTO"}
+                    , new SelectListItem(){Text="Descrição do Produto ou Núm. Fabricante", Value="FABRICANTE"}
+                }
+             , new { @class = "form-control" }
+            )
+            @Html.ValidationMessageFor(model => model.TipoPesquisaProduto)
+        </div>
 
         <br />
         <div class="form-group">
@@ -57,8 +70,7 @@
                 @Html.LabelFor(model => model.DescontoInformado)
                 @Html.ValidationMessageFor(model => model.DescontoInformado)
             </p>      
-        </div>
-
+        </div>        
         <div class="clearfix"></div>
         <br />
         <div class="form-group">           

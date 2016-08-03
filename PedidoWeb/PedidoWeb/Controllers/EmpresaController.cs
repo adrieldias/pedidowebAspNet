@@ -211,7 +211,7 @@ namespace PedidoWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Include="CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado,PrazoVencimentoPadrao,OperacaoPadrao,FilialID")] Empresa empresa)
+        public ActionResult Edit([Bind(Include="CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado,PrazoVencimentoPadrao,OperacaoPadrao,FilialID,TipoPesquisaProduto")] Empresa empresa)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
