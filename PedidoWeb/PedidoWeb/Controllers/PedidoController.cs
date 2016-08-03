@@ -696,23 +696,34 @@ namespace PedidoWeb.Controllers
         public JsonResult ProdutoAutoComplete(string term, string prazoVencimentoID, string cadastroID)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
+            Empresa emp = pedidoHelper.BuscaEmpresa();
             int codigo = 0;
             List<Produto> produtos;
-            if(int.TryParse(term, out codigo))
+            if (emp.TipoPesquisaProduto == "PRODUTO")
             {
-                produtos = db.Produtoes.Where(c => c.Descricao.Contains(term) || c.CodProduto == codigo)
-                    .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
+                if (int.TryParse(term, out codigo))
+                {
+                    produtos = db.Produtoes.Where(c => c.Descricao.Contains(term) || c.CodProduto == codigo)
+                        .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
+                }
+                else
+                {
+                    produtos = db.Produtoes.Where(c => c.Descricao.Contains(term))
+                        .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
+                }
             }
             else
             {
-                produtos = db.Produtoes.Where(c => c.Descricao.Contains(term))
-                    .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
+                produtos = db.Produtoes.Where(c => c.Descricao.Contains(term) || c.NumFabricante.Contains(term))
+                        .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
             }
 
             ValorUnitario v = new ValorUnitario();
             foreach(var p in produtos)
             {
-                p.Descricao = string.Format("{0} - {1}", p.CodProduto, p.Descricao);
+                p.Descricao = emp.TipoPesquisaProduto == "PRODUTO" ? 
+                    string.Format("{0} - {1}", p.CodProduto, p.Descricao) :
+                    string.Format("{0} - {1}", p.NumFabricante, p.Descricao);
 
                 // Buscar valor unitário
                 int prazo = 0;

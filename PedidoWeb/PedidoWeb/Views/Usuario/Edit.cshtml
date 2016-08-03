@@ -44,26 +44,7 @@
             @Html.PasswordFor(model => model.Senha, new{ @class = "form-control"})
             @Html.ValidationMessageFor(model => model.Senha)            
         </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.SenhaEmail)
-            @Html.PasswordFor(model => model.SenhaEmail, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.SenhaEmail)
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.SMTP)
-            @Html.TextBoxFor(model => model.SMTP, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.SMTP)
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.PortaSMTP)
-            @Html.TextBoxFor(model => model.PortaSMTP, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.PortaSMTP)
-        </div>
-        <div class="form-group">
-            @Html.CheckBoxFor(model => model.SSL, new { @class = "form-control" })
-            @Html.LabelFor(model => model.SSL)
-            @Html.ValidationMessageFor(model => model.SSL)
-        </div>
+        
         <div class="form-group">
             @Html.LabelFor(model => model.TipoUsuario)            
             @Html.TextBoxFor(model => model.TipoUsuario, new { @class = "form-control" })
@@ -91,6 +72,29 @@
             @Html.DropDownList("VendedorID", null, string.Empty, new { @class="form-control"})
             @Html.ValidationMessageFor(model => model.VendedorID)            
         </div>
+        <fieldset>
+            <legend>Dados para Envio de Emails</legend>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SenhaEmail)
+                    @Html.PasswordFor(model => model.SenhaEmail, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SenhaEmail)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SMTP)
+                    @Html.TextBoxFor(model => model.SMTP, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SMTP)
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PortaSMTP)
+                    @Html.TextBoxFor(model => model.PortaSMTP, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PortaSMTP)
+                </div>
+                <div class="form-group">
+                    @Html.CheckBoxFor(model => model.SSL)
+                    @Html.LabelFor(model => model.SSL)
+                    @Html.ValidationMessageFor(model => model.SSL)
+                </div>
+        </fieldset>    
 
         <div class="form-group">            
             <input type="submit" value="Salvar" class="btn btn-primary" />
@@ -110,7 +114,6 @@
             @Html.HiddenFor(model => model.VendedorID)
             @Html.HiddenFor(model => model.TipoUsuario)
         }
-        
     </div>
 }
 @section Scripts {
