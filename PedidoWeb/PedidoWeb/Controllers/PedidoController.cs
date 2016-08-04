@@ -924,6 +924,11 @@ namespace PedidoWeb.Controllers
                 return RedirectToAction("Details", new { id = id, mensagem = "Email não enviado - Cliente sem e-mail cadastrado" });
             }
 
+            if (string.IsNullOrEmpty(pedido.Status) || pedido.Status == "EM ANALISE")
+            {
+                return RedirectToAction("Details", new { id = id, mensagem = "Email não enviado - Pedido não aprovado" });
+            }
+
             if(string.IsNullOrEmpty(pedido.StatusSincronismo) || pedido.StatusSincronismo == "NOVO")
             {
                 return RedirectToAction("Details", new { id = id, mensagem = "Email não enviado - Pedido ainda não sincronizado com o servidor" });
