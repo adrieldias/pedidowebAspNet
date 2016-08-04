@@ -317,8 +317,8 @@ namespace PedidoWeb.Controllers
                         i.StatusSincronismo = "NOVO";
                         i.PercentualDesconto = item.PercentualDesconto;
                         i.ValorDesconto = item.ValorDesconto;
-                        i.ValorIcmsSubst = item.ValorIcmsSubst * item.Quantidade;
-                        i.ValorIPI = item.ValorIPI * item.Quantidade;
+                        i.ValorIcmsSubst = item.ValorIcmsSubst;
+                        i.ValorIPI = item.ValorIPI;
                         Produto produto = db.Produtoes.Include(t => t.Tributacao).FirstOrDefault(it => it.ProdutoID == item.ProdutoID);
                         Tributacao trib = tributacao.EscolheTributacao(cadastro, produto, filial);
                         i.TributacaoID = trib.TributacaoID;
@@ -370,8 +370,8 @@ namespace PedidoWeb.Controllers
                             pedidoBanco.Itens[i].Quantidade = itemTela.Quantidade;
                             pedidoBanco.Itens[i].ValorDesconto = itemTela.ValorDesconto;
                             pedidoBanco.Itens[i].ValorUnitario = itemTela.ValorUnitario;
-                            pedidoBanco.Itens[i].ValorIcmsSubst = itemTela.ValorIcmsSubst * itemTela.Quantidade;
-                            pedidoBanco.Itens[i].ValorIPI = itemTela.ValorIPI * itemTela.Quantidade;
+                            pedidoBanco.Itens[i].ValorIcmsSubst = itemTela.ValorIcmsSubst;
+                            pedidoBanco.Itens[i].ValorIPI = itemTela.ValorIPI;
 
                             Produto produto = db.Produtoes.Include(t => t.Tributacao).FirstOrDefault(it => it.ProdutoID == itemTela.ProdutoID);
                             Tributacao trib = tributacao.EscolheTributacao(cadastro, produto, filial);
@@ -923,9 +923,12 @@ namespace PedidoWeb.Controllers
                 email.Porta = empresa.PortaSMTP.GetValueOrDefault();
                 email.Ssl = empresa.SSL;
                 email.Senha = empresa.Senha;
-                email.Destinatario = pedido.Cadastro.Email;
+                //email.Destinatario = pedido.Cadastro.Email;
+                email.Destinatario = "marlondametto@gmail.com";
+                email.Remetente = empresa.Email;
                 email.Assunto = string.Format("{0} - Pedido nº {1}"
                     , pedido.Filial.DescFilial, pedido.NumeroPedido.ToString());
+                email.TemImagem = false;
 
                 string mensagem = "<!DOCTYPE html>";
                 mensagem += "<html>";
@@ -989,19 +992,104 @@ namespace PedidoWeb.Controllers
                 mensagem += "</th>";
                 mensagem += "</tr>";
 
+                double totalST = 0;
+                double totalIPI = 0;
+                decimal total = 0;
+
                 foreach(var item in pedido.Itens)
                 {
+                    Produto p = db.Produtoes.Find(item.ProdutoID);
+                    
                     mensagem += "<tr width='100%'>";
 
-                    mensagem += "<td width='20%' style='text-align: center'>";
-                    //mensagem += 
+                    mensagem += "<td width='20%' style='text-align: left'>";
+                    mensagem += p.Descricao;
+                    mensagem += "</td>";
+                                        
+                    mensagem += "<td width='10%' style='text-align: center'>";                    
+                    mensagem += item.Quantidade.ToString();
                     mensagem += "</td>";
                     
                     mensagem += "<td width='10%' style='text-align: center'>";
+                    mensagem += item.ValorUnitario.ToString("0.00");
                     mensagem += "</td>";
-                }
-                
 
+                    mensagem += "<td width='10%' style='text-align: center'>";
+                    mensagem += item.ValorDesconto.GetValueOrDefault().ToString("0.00");
+                    mensagem += "</td>";
+
+                    mensagem += "<td width='10%' style='text-align: center'>";
+                    mensagem += item.ValorIPI.GetValueOrDefault().ToString("0.00");
+                    mensagem += "</td>";
+                    totalIPI += item.ValorIPI.GetValueOrDefault();
+
+                    mensagem += "<td width='10%' style='text-align: center'>";
+                    mensagem += item.ValorIcmsSubst.GetValueOrDefault().ToString("0.00");
+                    mensagem += "</td>";
+                    totalST += item.ValorIcmsSubst.GetValueOrDefault();
+
+                    mensagem += "<td width='20%' style='text-align: center'>";
+                    mensagem += item.Observacao;
+                    mensagem += "</td>";
+
+                    total += item.ValorUnitario 
+                        - item.ValorDesconto.GetValueOrDefault()
+                        + Convert.ToDecimal(item.ValorIcmsSubst) 
+                        + Convert.ToDecimal(item.ValorIPI);
+                }
+
+                mensagem += "<tr width='100%' style='font-size: small'>";
+                mensagem += "<td width='30%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'>ICMS ST</td>";
+                mensagem += string.Format("<td width='20%' style='text-align: center'>{0}</td>", totalST.ToString("0.00"));
+                mensagem += "</tr>";
+
+                mensagem += "<tr width='100%' style='font-size: small'>";
+                mensagem += "<td width='30%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'>IPI</td>";
+                mensagem += string.Format("<td width='20%' style='text-align: center'>{0}</td>", totalIPI.ToString("0.00"));
+                mensagem += "</tr>";
+
+                mensagem += "<tr width='100%' style='font-size: small'>";
+                mensagem += "<td width='30%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'></td>";
+                mensagem += "<td width='10%' style='text-align: center'>ICMS ST</td>";
+                mensagem += string.Format("<td width='20%' style='text-align: center'>{0}</td>", totalST.ToString("0.00"));
+                mensagem += "</tr>";
+                mensagem += "</table>";
+                mensagem += "<br />";
+                mensagem += "<hr>";
+
+                mensagem += "<div style='text-align: center; margin-top: 0px; margin-bottom: 0px'>";
+                mensagem += "<h4>CEMAPA - Pedidos Online V 0.2</h4>";
+                mensagem += "<p style='font-size: small'>E-mail gerado automaticamente por sistema de emissão de pedidos</p>";
+                mensagem += "<p style='font-size: small'>Por favor, não responda</p>";
+                mensagem += "</div>";
+                mensagem += "</body>";
+                mensagem += "</html>";
+
+                email.Mensagem = mensagem;
+
+                try
+                {
+                    email.Enviar();
+                }
+                catch(Exception ex)
+                {
+                    ViewBag.Mensagem = ex.Message;
+                    return View();
+                }
             }
 
             return View();
