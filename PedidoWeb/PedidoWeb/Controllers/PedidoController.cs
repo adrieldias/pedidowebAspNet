@@ -157,7 +157,7 @@ namespace PedidoWeb.Controllers
 
         // GET: /Pedido/Details/5
         [Authorize]
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, string mensagem = "")
         {
             if (id == null)
             {
@@ -176,6 +176,10 @@ namespace PedidoWeb.Controllers
             StatusPedido sp = new StatusPedido();
             sp.CalculaStatus(pedido);
             ViewBag.MotivoStatus = sp.MotivoStatus;
+            if (!string.IsNullOrEmpty(mensagem))
+                ViewBag.Mensagem = mensagem;
+            else
+                ViewBag.Mensagem = null;
             return View(pedido);
         }        
 
@@ -695,7 +699,7 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public JsonResult ProdutoAutoComplete(string term, string prazoVencimentoID, string cadastroID)
         {
-            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
+           PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             Empresa emp = pedidoHelper.BuscaEmpresa();
             int codigo = 0;
             List<Produto> produtos;
@@ -902,7 +906,7 @@ namespace PedidoWeb.Controllers
         }   
      
         [Authorize]
-        public ActionResult EnviaEmailPedido(int id)
+        public ActionResult EnviaEmailPedido(int? id)
         {
             if (id == null)
             {
@@ -915,6 +919,16 @@ namespace PedidoWeb.Controllers
                 .Include(p => p.PrazoVencimento)
                 .FirstOrDefault(p => p.PedidoID == id);
 
+            if(string.IsNullOrEmpty(pedido.Cadastro.Email))
+            {
+                return RedirectToAction("Details", new { id = id, mensagem = "Email não enviado - Cliente sem e-mail cadastrado" });
+            }
+
+            if(string.IsNullOrEmpty(pedido.StatusSincronismo) || pedido.StatusSincronismo == "NOVO")
+            {
+                return RedirectToAction("Details", new { id = id, mensagem = "Email não enviado - Pedido ainda não sincronizado com o servidor" });
+            }
+
             if(pedido != null)
             {
                 Email email = new Email();
@@ -923,8 +937,7 @@ namespace PedidoWeb.Controllers
                 email.Porta = empresa.PortaSMTP.GetValueOrDefault();
                 email.Ssl = empresa.SSL;
                 email.Senha = empresa.Senha;
-                //email.Destinatario = pedido.Cadastro.Email;
-                email.Destinatario = "marlondametto@gmail.com";
+                email.Destinatario = pedido.Cadastro.Email;                
                 email.Remetente = empresa.Email;
                 email.Assunto = string.Format("{0} - Pedido nº {1}"
                     , pedido.Filial.DescFilial, pedido.NumeroPedido.ToString());
@@ -957,7 +970,7 @@ namespace PedidoWeb.Controllers
                 mensagem += "</tr>";
                 mensagem += "<tr>";
                 mensagem += "<td>Data de Emissão:</td>";
-                mensagem += string.Format("<td>{0}</td>", pedido.DataEmissao.Date.ToString());
+                mensagem += string.Format("<td>{0}</td>", pedido.DataEmissao.ToShortDateString());
                 mensagem += "</tr>";
                 mensagem += "<tr>";
                 mensagem += "<td>Observação:</td>";
@@ -1038,37 +1051,46 @@ namespace PedidoWeb.Controllers
                         + Convert.ToDecimal(item.ValorIPI);
                 }
 
-                mensagem += "<tr width='100%' style='font-size: small'>";
-                mensagem += "<td width='30%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'>ICMS ST</td>";
-                mensagem += string.Format("<td width='20%' style='text-align: center'>{0}</td>", totalST.ToString("0.00"));
-                mensagem += "</tr>";
+                //mensagem += "<tr width='100%' style='font-size: small'>";
+                //mensagem += "<td width='30%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'>ICMS ST</td>";
+                //mensagem += string.Format("<td width='20%' style='text-align: center'>{0}</td>", totalST.ToString("0.00"));
+                //mensagem += "</tr>";
 
-                mensagem += "<tr width='100%' style='font-size: small'>";
-                mensagem += "<td width='30%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'>IPI</td>";
-                mensagem += string.Format("<td width='20%' style='text-align: center'>{0}</td>", totalIPI.ToString("0.00"));
-                mensagem += "</tr>";
+                //mensagem += "<tr width='100%' style='font-size: small'>";
+                //mensagem += "<td width='30%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'>IPI</td>";
+                //mensagem += string.Format("<td width='20%' style='text-align: center'>{0}</td>", totalIPI.ToString("0.00"));
+                //mensagem += "</tr>";
 
-                mensagem += "<tr width='100%' style='font-size: small'>";
-                mensagem += "<td width='30%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'></td>";
-                mensagem += "<td width='10%' style='text-align: center'>ICMS ST</td>";
-                mensagem += string.Format("<td width='20%' style='text-align: center'>{0}</td>", totalST.ToString("0.00"));
-                mensagem += "</tr>";
+                //mensagem += "<tr width='100%' style='font-size: small'>";
+                //mensagem += "<td width='30%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'></td>";
+                //mensagem += "<td width='10%' style='text-align: center'>ICMS ST</td>";
+                //mensagem += string.Format("<td width='20%' style='text-align: center'>{0}</td>", totalST.ToString("0.00"));
+                //mensagem += "</tr>";
                 mensagem += "</table>";
+
                 mensagem += "<br />";
+
+                mensagem += "<p style='font-size: small; text-align: center'>";
+                mensagem += string.Format("ICMS ST R$ {0} &nbsp;&nbsp;&nbsp; IPI R$ {1} &nbsp;&nbsp;&nbsp; <strong>VALOR TOTAL R$ {2}</strong>"
+                    , totalST.ToString("0.00")
+                    , totalIPI.ToString("0.00")
+                    , total.ToString("0.00"));
+                mensagem += "</p>";
+
                 mensagem += "<hr>";
 
                 mensagem += "<div style='text-align: center; margin-top: 0px; margin-bottom: 0px'>";
@@ -1087,12 +1109,11 @@ namespace PedidoWeb.Controllers
                 }
                 catch(Exception ex)
                 {
-                    ViewBag.Mensagem = ex.Message;
-                    return View();
+                    return RedirectToAction("Details", new { id = id, mensagem = ex.Message });
                 }
             }
 
-            return View();
+            return RedirectToAction("Details", new { id = id, mensagem = "E-mail enviado com sucesso" });
         }
 
         protected override void Dispose(bool disposing)

@@ -5,6 +5,14 @@
 }
 
 <div class="principal1coluna">
+
+    @if(ViewBag.Mensagem != null)
+    {
+        <div class="alert alert-info">
+            @ViewBag.Mensagem
+        </div> 
+    }
+
     <h2>Informações</h2>
     <hr />
 
@@ -343,7 +351,7 @@
                 @Html.ActionLink("Excluir", "Delete", new { id = Model.PedidoID }, new { @class = "btn btn-danger" })
             }
 
-            @*@Html.ActionLink("Enviar por E-mail", "EnviaEmailPedido", new { id = Model.PedidoID }, new { @class = "btn btn-primary" })*@
+            @Html.ActionLink("Enviar por E-mail", "EnviaEmailPedido", new { id = Model.PedidoID }, new { @class = "btn btn-primary" })
           
             @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
 
