@@ -581,7 +581,7 @@
                             cadastroID: cadastroSelecionado
                             , produtoID: produtoSelecionado
                             , valUnitario: $('#ValorUnitario').val().trim().replace('.', ',')
-                            , valDesconto: $('#ValorDesconto').val().trim().replace('.', ',')
+                            , valDesconto: $('#ValorDesconto').val() == undefined ? '0' : $('#ValorDesconto').val().trim().replace('.', ',')
                             , quantidade: $('#Quantidade').val().trim().replace('.', ',')                            
                             , filialID: $('#FilialID').val().trim()
                         }),
