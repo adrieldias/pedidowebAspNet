@@ -445,7 +445,6 @@
 
                 if (emOperacao)
                     isValidItem = false;
-
                 if (tpCons == "LISTAGEM") {
                     if ($('#ProdutoID').val().trim() == '') {
                         isValidItem = false;
@@ -527,7 +526,7 @@
                         descProdutoSelecionado = $('#ProdutoID option:selected').text();
                         cadastroSelecionado = parseInt($('#CadastroID').val().trim());
                     }
-                    
+
                     // Cálculo de ST
                     $.ajax({
                         url: '/Pedido/CalculaImpostos',
@@ -536,7 +535,7 @@
                             cadastroID: cadastroSelecionado
                             , produtoID: produtoSelecionado
                             , valUnitario: $('#ValorUnitario').val().trim().replace('.', ',')
-                            , valDesconto: $('#ValorDesconto').val().trim().replace('.', ',')
+                            , valDesconto: $('#ValorDesconto').val() == undefined ? '0' : $('#ValorDesconto').val().trim().replace('.', ',')
                             , quantidade: $('#Quantidade').val().trim().replace('.', ',')                            
                             , filialID: $('#FilialID').val().trim()
                         }),
@@ -545,10 +544,11 @@
                         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
                         success: function (d) {
                             // Checa se o pedido foi salvo no banco de dados
+
                             if (d.status == true) {
                                 //window.location.href = '/Pedido/Index';                                
                                 //totalST += d.valor;
-
+   
                                 var i = pedidoItens.length - 1;
                                 pedidoItens[i].ValorIcmsSubst = d.valor;
                                 pedidoItens[i].ValorIPI = d.ipi;
@@ -556,6 +556,7 @@
                                 bloqueiaOperacoes(false);
                             }
                             else {
+
                                 bloqueiaOperacoes(false);
                                 alert(d.errorMessage);
                             }
@@ -566,7 +567,6 @@
                             alert('Erro ao calcular impostos. Por favor tente novamente.');
                         }
                     })
-                    
                     if ($('#ItemIndex').val() == '') { //adição de itens       
                         pedidoItens.push({                            
                             ProdutoID: produtoSelecionado,
