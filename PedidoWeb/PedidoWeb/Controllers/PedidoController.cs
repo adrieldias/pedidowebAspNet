@@ -937,7 +937,11 @@ namespace PedidoWeb.Controllers
             if(pedido != null)
             {
                 Email email = new Email();
-                Empresa empresa = db.Empresas.Find(pedido.CodEmpresa);                
+                Empresa empresa = db.Empresas.Find(pedido.CodEmpresa);   
+                if(string.IsNullOrEmpty(empresa.SMTP))
+                {
+                    return RedirectToAction("Details", new { id = id, mensagem = "E-mail não configurado para esta empresa" });
+                }
                 email.SMTP = empresa.SMTP;
                 email.Porta = empresa.PortaSMTP.GetValueOrDefault();
                 email.Ssl = empresa.SSL;
