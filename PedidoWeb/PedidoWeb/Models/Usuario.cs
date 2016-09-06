@@ -19,7 +19,7 @@ namespace PedidoWeb.Models
         [DisplayName("E-mail")]
         [Required(ErrorMessage="E-mail é obrigatório")]
         [RegularExpression(".+\\@.+\\..+", ErrorMessage = "Informe um email válido.")]
-        public string EMail { get; set; }
+        public string Email { get; set; }
 
         private string login;       
 

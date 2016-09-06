@@ -51,7 +51,7 @@ namespace PedidoWeb.Controllers
             if (!String.IsNullOrEmpty(search))
             {
                 if (search.Contains('@'))
-                    usuarios = usuarios.Where(s => s.EMail.ToLower().Contains(search.ToLower()));
+                    usuarios = usuarios.Where(s => s.Email.ToLower().Contains(search.ToLower()));
                 else
                     usuarios = usuarios.Where(s => s.Empresa.Nome.ToUpper().Contains(search.ToUpper()));
             }
@@ -127,7 +127,7 @@ namespace PedidoWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include="UsuarioID,Login,Senha,TipoUsuario,VendedorID,EMail,CodEmpresa,TipoConsulta")] Usuario usuario)
+        public ActionResult Create([Bind(Include="UsuarioID,Login,Senha,TipoUsuario,VendedorID,EMail,CodEmpresa,TipoConsulta,SenhaEmail,SMTP,PortaSMTP,SSL")] Usuario usuario)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
@@ -140,9 +140,9 @@ namespace PedidoWeb.Controllers
             }
 
             // Verifica se já não existe um usuário cadastrado com esse mesmo email
-            if (db.Usuarios.Count(u => u.EMail == usuario.EMail) > 0)
+            if (db.Usuarios.Count(u => u.Email == usuario.Email) > 0)
                 return RedirectToAction("Index", new { @mensagem = string.Format("{0} {1} {2}",
-                    "E-mail", usuario.EMail, "já cadastrado em outro usuário")});
+                    "E-mail", usuario.Email, "já cadastrado em outro usuário")});
             if (ModelState.IsValid)
             {
                 try
@@ -205,7 +205,7 @@ namespace PedidoWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Include="UsuarioID,Login,Senha,TipoUsuario,VendedorID,EMail,CodEmpresa,TipoConsulta")] Usuario usuario)
+        public ActionResult Edit([Bind(Include = "UsuarioID,Login,Senha,TipoUsuario,VendedorID,EMail,CodEmpresa,TipoConsulta,SenhaEmail,SMTP,PortaSMTP,SSL")] Usuario usuario)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();

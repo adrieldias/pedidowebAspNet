@@ -936,17 +936,30 @@ namespace PedidoWeb.Controllers
             if(pedido != null)
             {
                 Email email = new Email();
-                Empresa empresa = db.Empresas.Find(pedido.CodEmpresa);   
-                if(string.IsNullOrEmpty(empresa.SMTP))
+                PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
+                
+                Empresa empresa = db.Empresas.Find(pedido.CodEmpresa);
+                if (string.IsNullOrEmpty(pedidoHelper.UsuarioCorrente.SMTP))
                 {
-                    return RedirectToAction("Details", new { id = id, mensagem = "E-mail não configurado para esta empresa" });
+                    if (string.IsNullOrEmpty(empresa.SMTP))
+                    {
+                        return RedirectToAction("Details", new { id = id, mensagem = "E-mail não configurado para esta empresa" });
+                    }
+                    email.Remetente = empresa.Email;
+                    email.SMTP = empresa.SMTP;
+                    email.Porta = empresa.PortaSMTP.GetValueOrDefault();
+                    email.Ssl = empresa.SSL;
+                    email.Senha = empresa.Senha;                    
                 }
-                email.SMTP = empresa.SMTP;
-                email.Porta = empresa.PortaSMTP.GetValueOrDefault();
-                email.Ssl = empresa.SSL;
-                email.Senha = empresa.Senha;
+                else
+                {
+                    email.Remetente = pedidoHelper.UsuarioCorrente.Email;
+                    email.SMTP = pedidoHelper.UsuarioCorrente.SMTP;
+                    email.Porta = pedidoHelper.UsuarioCorrente.PortaSMTP.GetValueOrDefault();
+                    email.Ssl = pedidoHelper.UsuarioCorrente.SSL;
+                    email.Senha = pedidoHelper.UsuarioCorrente.SenhaEmail;
+                }
                 email.Destinatario = pedido.Cadastro.Email;                
-                email.Remetente = empresa.Email;
                 email.Assunto = string.Format("{0} - Pedido nº {1}"
                     , pedido.Filial.DescFilial, pedido.NumeroPedido.ToString());
                 email.TemImagem = false;

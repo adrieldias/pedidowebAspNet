@@ -130,7 +130,7 @@ namespace PedidoWeb.Models
                     TipoUsuario = "ADMINISTRADOR",           
                     VendedorID = 1,
                     CodEmpresa = "NIR",
-                    EMail = "administrador@administrador.com.br"
+                    Email = "administrador@administrador.com.br"
                 },
                 new Usuario{
                     UsuarioID = 2,
@@ -139,7 +139,7 @@ namespace PedidoWeb.Models
                     TipoUsuario = "VENDEDOR",
                     VendedorID = 2,
                     CodEmpresa = "NIR",
-                    EMail = "vendedor@vendedor.com.br"
+                    Email = "vendedor@vendedor.com.br"
                 },
                 new Usuario{
                     UsuarioID = 3,
@@ -148,7 +148,7 @@ namespace PedidoWeb.Models
                     TipoUsuario = "ADMINISTRADOR",           
                     VendedorID = 3,
                     CodEmpresa = "NIR",
-                    EMail = "administrador@gmail.com"
+                    Email = "administrador@gmail.com"
                 },
                 new Usuario{
                     UsuarioID = 4,
@@ -157,7 +157,7 @@ namespace PedidoWeb.Models
                     TipoUsuario = "VENDEDOR",
                     VendedorID = 2,
                     CodEmpresa = "NIR",
-                    EMail = "vendedor@gmail.com"
+                    Email = "vendedor@gmail.com"
                 }
             }.ForEach(u => context.Usuarios.Add(u));
 

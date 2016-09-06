@@ -17,7 +17,7 @@ namespace PedidoWeb.Controllers.Negocio
             this.Autorizado = false;
             try
             {                
-                var usuario = db.Usuarios.Single(u => u.EMail == email);
+                var usuario = db.Usuarios.Single(u => u.Email == email);
                 if (usuario.Senha == senha)
                     this.Autorizado = true;
                 else

@@ -20,7 +20,7 @@ namespace PedidoWeb.Controllers.Negocio
                 mail = email;
             else
                 mail = HttpContext.Current.User.Identity.Name;
-            UsuarioCorrente = this.db.Usuarios.Single(u => u.EMail == mail); 
+            UsuarioCorrente = this.db.Usuarios.Single(u => u.Email == mail); 
         }        
 
         public Empresa BuscaEmpresa()
