@@ -385,6 +385,10 @@
     <Compile Include="Migrations\201608031336435_pesquisa_fabricante.Designer.cs">
       <DependentUpon>201608031336435_pesquisa_fabricante.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201609052100132_fretePadraoAdicionado.cs" />
+    <Compile Include="Migrations\201609052100132_fretePadraoAdicionado.Designer.cs">
+      <DependentUpon>201609052100132_fretePadraoAdicionado.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Estado.cs" />
@@ -701,6 +705,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608031336435_pesquisa_fabricante.resx">
       <DependentUpon>201608031336435_pesquisa_fabricante.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201609052100132_fretePadraoAdicionado.resx">
+      <DependentUpon>201609052100132_fretePadraoAdicionado.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

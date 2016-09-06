@@ -122,7 +122,6 @@ namespace PedidoWeb.Controllers
             ViewBag.FilialPadrao = new SelectList(
                 db.Filials.Where(f => f.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
                 , "FilialID", "DescFilial");
-
             return View();
         }
 
@@ -132,7 +131,7 @@ namespace PedidoWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include = "CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado,PrazoVencimentoPadrao,OperacaoPadrao,FilialID")] Empresa empresa)
+        public ActionResult Create([Bind(Include = "CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado,PrazoVencimentoPadrao,OperacaoPadrao,FilialID,TipoPesquisaProduto,FretePadrao")] Empresa empresa)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
@@ -211,7 +210,7 @@ namespace PedidoWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Include="CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado,PrazoVencimentoPadrao,OperacaoPadrao,FilialID,TipoPesquisaProduto")] Empresa empresa)
+        public ActionResult Edit([Bind(Include="CodEmpresa,Nome,AlteraValorUnitario,DescontoInformado,PrazoVencimentoPadrao,OperacaoPadrao,FilialID,TipoPesquisaProduto,FretePadrao")] Empresa empresa)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();

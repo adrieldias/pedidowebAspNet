@@ -216,7 +216,6 @@ namespace PedidoWeb.Controllers
                 .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
                 .OrderBy(p => p.Descricao), "ProdutoID", "Descricao");
             ViewBag.Empresa = pedidoHelper.BuscaEmpresa();
-            
             ViewBag.VendedorID = new SelectList(db.Vendedors.Where(v => v.VendedorID == usuario.VendedorID)
                 , "VendedorID", "Nome");
 

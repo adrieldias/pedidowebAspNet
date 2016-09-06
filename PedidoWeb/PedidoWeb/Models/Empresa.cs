@@ -31,6 +31,9 @@ namespace PedidoWeb.Models
         [DisplayName("Filial Padrão")]
         public int? FilialID { get; set; }
 
+        [DisplayName("Frete Padrão")]
+        public string FretePadrao { get; set; }
+
         
         // Properties
 

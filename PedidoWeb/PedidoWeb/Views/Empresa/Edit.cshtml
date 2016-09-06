@@ -45,6 +45,14 @@
             @Html.DropDownList("PrazoVencimentoPadrao", null, string.Empty, new { @class = "form-control" })
         </div>
         <div class="form-group">
+            @Html.LabelFor(model => model.FretePadrao, new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.FretePadrao,
+        new List<SelectListItem>() {
+            new SelectListItem(){Text="", Value=""},
+            new SelectListItem(){Text="CIF", Value="CIF"},
+            new SelectListItem(){Text="FOB", Value="FOB" }}, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
             @Html.LabelFor(model => model.TipoPesquisaProduto)
             @Html.DropDownList("TipoPesquisaProduto",
                 new List<SelectListItem>()
