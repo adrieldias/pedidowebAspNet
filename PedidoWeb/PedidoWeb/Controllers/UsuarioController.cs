@@ -194,7 +194,17 @@ namespace PedidoWeb.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", usuario.VendedorID);
+
+            List<Vendedor> vendedores = new List<Vendedor>();
+            foreach (var v in db.Vendedors.OrderBy(v => v.CodEmpresa).ThenBy(v => v.CodVendedor))
+            {
+                Vendedor vendedor = new Vendedor();
+                vendedor.VendedorID = v.VendedorID;
+                vendedor.Nome = string.Format("{0} {1} - {2}", v.CodVendedor, v.Nome, v.CodEmpresa);
+                vendedores.Add(vendedor);
+            }
+
+            ViewBag.VendedorID = new SelectList(vendedores, "VendedorID", "Nome", usuario.VendedorID);
             ViewBag.CodEmpresa = new SelectList(db.Empresas, "CodEmpresa", "Nome", usuario.CodEmpresa);
             return View(usuario);
         }
