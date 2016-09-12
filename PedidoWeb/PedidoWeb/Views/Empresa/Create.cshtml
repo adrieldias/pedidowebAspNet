@@ -28,7 +28,7 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.FilialID)
-            @Html.DropDownList("FilialID", null, string.Empty, new { @class="form-control"})
+            @Html.DropDownList("FilialID", null, string.Empty, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.FilialID)
 
         </div>
@@ -47,6 +47,18 @@
             @Html.DropDownList("TipoFrete",
                 new List<SelectListItem>() { new SelectListItem(){Text="CIF", Value="CIF"},
                     new SelectListItem(){Text="FOB", Value="FOB" }}, string.Empty, new { @class = "form-control" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.TipoPesquisaProduto)
+            @Html.DropDownList("TipoPesquisaProduto",
+                new List<SelectListItem>()
+                {
+                    new SelectListItem(){Text="Descrição ou Cód. Produto", Value="PRODUTO"}
+                    , new SelectListItem(){Text="Descrição do Produto ou Núm. Fabricante", Value="FABRICANTE"}
+                }
+             , new { @class = "form-control" }
+            )
+            @Html.ValidationMessageFor(model => model.TipoPesquisaProduto)
         </div>
         <br />
         <div class="form-group">

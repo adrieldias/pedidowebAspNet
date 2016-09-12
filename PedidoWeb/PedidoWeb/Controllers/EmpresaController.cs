@@ -119,7 +119,7 @@ namespace PedidoWeb.Controllers
                 db.PrazoVencimentoes.Where(p => p.Situacao == "ATIVO" && p.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
                 , "PrazoVencimentoID", "Descricao");
 
-            ViewBag.FilialPadrao = new SelectList(
+            ViewBag.FilialID = new SelectList(
                 db.Filials.Where(f => f.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
                 , "FilialID", "DescFilial");
             return View();
