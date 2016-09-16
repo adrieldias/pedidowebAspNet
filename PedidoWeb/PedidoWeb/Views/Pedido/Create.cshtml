@@ -257,6 +257,8 @@
             var stItem = 0;
             var emOperacao = false;
             var tpCons = '@(ViewBag.TipoConsulta)';
+
+            $('#submit').prop('disabled', true);
             
             $('#ProdutoAux').autocomplete({
                 source: function (request, response) {
@@ -758,6 +760,7 @@
                                 '</span></button>').click(function () {
                             pedidoItens.splice(i, 1);                            
                             GeneratedItemsTable();
+                            habilitaSubmit();
                         }));
                         var $col = $('<td style="text-align:right"/>');
                         $col.append($span);
@@ -803,16 +806,24 @@
                         + '</p>'                        
                         );                    
                 }
-                totalPedido = 0;
+                totalPedido = 0;               
             };
 
             // Mantém uma flag e desabilita botões enquanto
             // um processamento está sendo feito do lado do servidor
             function bloqueiaOperacoes(bloqueio) {
                 $('#add').prop('disabled', bloqueio);
-                $('#submit').prop('disabled', bloqueio);
+                //$('#submit').prop('disabled', bloqueio);
                 emOperacao = bloqueio;
-            }
+
+                habilitaSubmit();
+            };
+            
+            // Habilita/Desabilita botão para salvar pedido
+            function habilitaSubmit() {
+                $('#submit').prop('disabled', (pedidoItens.length === 0))                
+            };
+
         });
     </script>
 }

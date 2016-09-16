@@ -422,28 +422,28 @@
                 {
                     var d = 0;
                     
-                    totalST += Number(String(pedidoItens[i].ValorIcmsSubst).replace(',', '.'));
-                        //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
+                    totalST += Number(String(pedidoItens[i].ValorIcmsSubst == undefined ? 0 : pedidoItens[i].ValorIcmsSubst).replace(',', '.'));
+                    //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
 
-                    totalIPI += Number(String(pedidoItens[i].ValorIPI).replace(',', '.'));
+                    totalIPI += Number(String(pedidoItens[i].ValorIPI + 0).replace(',', '.'));
                         //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'));                    
                     
                     if(!isNaN(Number(String(itens[i].ValorDesconto).replace(',','.'))))
                         d = Number(String(itens[i].ValorDesconto).replace(',','.')) 
-                            * Number(String(itens[i].Quantidade).replace(',','.'));                            
-                    
+                            * Number(String(itens[i].Quantidade).replace(',','.'));
+                                        
                     totalPedido += Number(
                         Number(String(itens[i].Quantidade).replace(',','.')) 
                         * Number(String(itens[i].ValorUnitario).replace(',','.'))
                         // Desconto
                         - Number(d)
                         // ST
-                        + (Number(String(pedidoItens[i].ValorIcmsSubst).replace(',', '.')))
+                        + (Number(String(pedidoItens[i].ValorIcmsSubst == undefined ? 0 : pedidoItens[i].ValorIcmsSubst).replace(',', '.')))
                             //* Number(String(pedidoItens[i].Quantidade).replace(',', '.')))
                         // IPI
                         + Number(String(pedidoItens[i].ValorIPI).replace(',', '.'))
                             //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'))
-                    );
+                    );                    
                 }
             };
 
@@ -560,7 +560,7 @@
                 } else {
                     $('#PercDesconto').siblings('span.error').css('visibility', 'hidden');
                 }
-
+                
                 // Add item to list if valid                
                 if (isValidItem) {
                     //var el = document.getElementById('ProdutoID');
@@ -572,7 +572,7 @@
                         descProdutoSelecionado = $('#ProdutoID option:selected').text();
                         cadastroSelecionado = parseInt($('#CadastroID').val().trim());
                     }       
-
+                    
                     // Cálculo de ST
                     $.ajax({
                         url: '/Pedido/CalculaImpostos',
@@ -592,7 +592,7 @@
                             if (d.status == true) {
                                 //window.location.href = '/Pedido/Index';                                
                                 //totalST += d.valor;                                
-                                var i = indexEdicao;
+                                var i = indexEdicao == undefined ? 0 : indexEdicao;
                                 pedidoItens[i].ValorIcmsSubst = d.valor;
                                 pedidoItens[i].ValorIPI = d.ipi;
                                 GeneratedItemsTable();
@@ -637,6 +637,9 @@
                         pedidoItens[i].ValorIcmsSubst = '0,00';
                         pedidoItens[i].ValorIPI = '0,00';
                     }
+
+                    // Chama novamente para garantir que botões não fiquem desabilitados
+                    bloqueiaOperacoes(false);
 
                     if(tpCons == 'FILTRO')
                         $('#ProdutoAux').val('').focus();
@@ -781,7 +784,8 @@
                             //$row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
                             $row.append($('<td/>').html(parseFloat(val.ValorDesconto.toString().replace(',', '.')).toFixed(2).trim().replace('.', ',')));
                         $row.append($('<td/>').html(val.ValorUnitario));
-                        $row.append($('<td />').html(parseFloat(val.ValorIcmsSubst).toFixed(2).trim().replace('.', ',')));
+                        //$row.append($('<td />').html(parseFloat(val.ValorIcmsSubst).toFixed(2).trim().replace('.', ',')));
+                        $row.append($('<td />').html(parseFloat((val.ValorIcmsSubst == undefined ? 0 : val.ValorIcmsSubst)).toFixed(2).trim().replace('.', ',')));
                         $row.append($('<td />').html(parseFloat(val.ValorIPI).toFixed(2).trim().replace('.', ',')));
                         var $span = $('<span class="input-group-btn btn-group-sm" style="width:50px"/>');
                         $span.append($('<button id=editarItem class="btn btn-primary">' +
@@ -806,6 +810,7 @@
                                 '</span></button>').click(function(){
                                     pedidoItens.splice(i, 1);                                    
                                     GeneratedItemsTable();
+                                    habilitaSubmit();
                                 }));
                         var $col = $('<td style="text-align:right"/>');
                         $col.append($span);
@@ -858,9 +863,16 @@
             // um processamento está sendo feito do lado do servidor
             function bloqueiaOperacoes(bloqueio) {
                 $('#add').prop('disabled', bloqueio);
-                $('#submit').prop('disabled', bloqueio);
+                //$('#submit').prop('disabled', bloqueio);
                 emOperacao = bloqueio;
+
+                habilitaSubmit();
             }
+
+            // Habilita/Desabilita botão para salvar pedido
+            function habilitaSubmit() {
+                $('#submit').prop('disabled', (pedidoItens.length === 0))                
+            };
         });
     </script>
 }
