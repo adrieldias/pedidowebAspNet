@@ -253,22 +253,25 @@ namespace PedidoWeb.Controllers
             if(cadastroID == 0)
             {
                 status = false;
-                errorMessage = "Não foi possível buscar o preço do item. Cadastro não informado";
+                errorMessage = "Não foi possível buscar o preço do item. Cliente não informado";
             }
 
-            ValorUnitario v = new ValorUnitario();
-            try
+            if (status)
             {
-                valor = v.BuscaValor(produtoID.GetValueOrDefault(), prazoVencimentoID, cadastroID);
+                ValorUnitario v = new ValorUnitario();
+                try
+                {
+                    valor = v.BuscaValor(produtoID.GetValueOrDefault(), prazoVencimentoID, cadastroID);
+                }
+                catch (Exception ex)
+                {
+                    status = false;
+                    errorMessage = string.Format("{0} - {1}", ex.Message, ex.InnerException);
+                }
+                return new JsonResult { Data = new { status = status, valor = valor, errorMessage = errorMessage } };
             }
-            catch(Exception ex)
-            {
-                status = false;
-                errorMessage = string.Format("{0} - {1}", ex.Message, ex.InnerException);
-            }
-            
 
-            return new JsonResult { Data = new { status = status, valor = valor, errorMessage = errorMessage } };
+            return new JsonResult { Data = new { status = status, valor = 0, errorMessage = errorMessage } };
         }
 
         [HttpPost]

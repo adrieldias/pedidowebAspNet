@@ -412,13 +412,13 @@
             });
 
             // Add ValorUnitario change function
-            $('#ProdutoID').change(function () {
+            $('#ProdutoID').change(function () {                
                 bloqueiaOperacoes(true);
                 $.ajax({
                     url: '/Pedido/ValorUnitario',
                     type: 'POST',
                     data: jQuery.param({
-                        cadastroID: $('#CadastroID').val()
+                        cadastroID: $('#CadastroID').val() == '' ? 0 : $('#CadastroID').val()
                         , produtoID: $('#ProdutoID').val()
                         , prazoVencimentoID: $('#PrazoVencimentoID').val()                        
                     }),
