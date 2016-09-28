@@ -44,7 +44,7 @@ namespace PedidoWeb.Models
 
         [DisplayName("Nome")]
         [Required(ErrorMessage = "Nome é obrigatório")]
-        [RegularExpression(@"[A-Za-z0-9\s]+", ErrorMessage="Nome não aceita caracteres especiais.")]        
+        //[RegularExpression(@"[A-Za-z0-9\s]+", ErrorMessage="Nome não aceita caracteres especiais.")]        
         public string Login 
         { 
             get{ return this.login == null ? string.Empty : this.login.ToUpper(); }
