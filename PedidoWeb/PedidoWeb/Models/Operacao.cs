@@ -23,5 +23,7 @@ namespace PedidoWeb.Models
         public string CodEmpresa { get; set; }
         public virtual Empresa Empresa { get; set; }
         public string Situacao { get; set; }
+        public int CodTributacao { get; set; }
+        public virtual Tributacao Tributacao { get; set; }
     }
 }

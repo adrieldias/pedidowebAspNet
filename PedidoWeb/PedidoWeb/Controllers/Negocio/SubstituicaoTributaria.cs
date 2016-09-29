@@ -40,18 +40,19 @@ namespace PedidoWeb.Controllers.Negocio
         /// <param name="produto"></param>
         /// <param name="filial"></param>
         /// <returns>Tributacao</returns>
-        public Tributacao EscolheTributacao(Cadastro cadastro, Produto produto, Filial filial)
+        public Tributacao EscolheTributacao(Cadastro cadastro, Produto produto, Filial filial, Operacao operacao)
         {
             Tributacao trib = produto.Tributacao;
             if (filial.CodEstado != cadastro.CodEstado && cadastro.Estado.Tributacao != null)
                 trib = cadastro.Estado.Tributacao;
-
+            if (operacao.Tributacao != null)
+                trib = operacao.Tributacao;
             return trib;
         }
 
         public double CalculaSubstituicaoTributaria(Cadastro cadastro
             , Produto produto, double valUnitario, double valDesconto
-            , int quantidade, Filial filial)
+            , int quantidade, Filial filial, Operacao operacao)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(string.Empty);
 
@@ -63,7 +64,7 @@ namespace PedidoWeb.Controllers.Negocio
             double valIcmsReduzido = 0;
             double valST = 0;
 
-            Tributacao tributacao = EscolheTributacao(cadastro, produto, filial);
+            Tributacao tributacao = EscolheTributacao(cadastro, produto, filial, operacao);
 
             if (tributacao == null)
                 return 0.00;

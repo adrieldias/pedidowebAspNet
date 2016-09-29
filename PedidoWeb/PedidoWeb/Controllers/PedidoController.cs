@@ -287,6 +287,7 @@ namespace PedidoWeb.Controllers
                 SubstituicaoTributaria tributacao = new SubstituicaoTributaria();
                 Cadastro cadastro = db.Cadastroes.Find(pedido.CadastroID);
                 Filial filial = db.Filials.Find(pedido.FilialID);
+                Operacao operacao = db.Operacaos.Include(t => t.Tributacao).First(o => o.OperacaoID == pedido.OperacaoID);
 
                 if(pedido.PedidoID == 0) // Pedido não existe - Inclusão
                 { 
@@ -326,7 +327,7 @@ namespace PedidoWeb.Controllers
                         i.ValorIcmsSubst = item.ValorIcmsSubst;
                         i.ValorIPI = item.ValorIPI;
                         Produto produto = db.Produtoes.Include(t => t.Tributacao).FirstOrDefault(it => it.ProdutoID == item.ProdutoID);
-                        Tributacao trib = tributacao.EscolheTributacao(cadastro, produto, filial);
+                        Tributacao trib = tributacao.EscolheTributacao(cadastro, produto, filial, operacao);
                         i.TributacaoID = trib.TributacaoID;
                         i.CodTributacao = trib.CodTributacao;
                         valorPedido += item.ValorUnitario * item.Quantidade;
@@ -380,7 +381,7 @@ namespace PedidoWeb.Controllers
                             pedidoBanco.Itens[i].ValorIPI = itemTela.ValorIPI;
 
                             Produto produto = db.Produtoes.Include(t => t.Tributacao).FirstOrDefault(it => it.ProdutoID == itemTela.ProdutoID);
-                            Tributacao trib = tributacao.EscolheTributacao(cadastro, produto, filial);
+                            Tributacao trib = tributacao.EscolheTributacao(cadastro, produto, filial, operacao);
                             pedidoBanco.Itens[i].TributacaoID = trib.TributacaoID;
                             pedidoBanco.Itens[i].CodTributacao = trib.CodTributacao;
                         }
@@ -454,7 +455,7 @@ namespace PedidoWeb.Controllers
         [Authorize]
         public JsonResult CalculaImpostos(
             string cadastroID, string produtoID, string valUnitario, string valDesconto
-            , string quantidade, string filialID)
+            , string quantidade, string filialID, string operacaoID)
         {
             bool status = true;
             double valor = 0.00;
@@ -493,6 +494,13 @@ namespace PedidoWeb.Controllers
                 errorMessage = "Impossível calcular impostos - Produto sem tributação";
                 status = false;
             }
+            var idOperacao = Convert.ToInt32(operacaoID);
+            var operacao = db.Operacaos.Include(t => t.Tributacao).First(o => o.OperacaoID == idOperacao);
+            if(string.IsNullOrEmpty(operacaoID) || operacaoID == "0")
+            {
+                errorMessage = "Impossível calcular impostos - Operação não informada";
+                status = false;
+            }
 
             if(status)
             {
@@ -505,7 +513,7 @@ namespace PedidoWeb.Controllers
                 var filial = db.Filials.Include(e => e.Estado).First(f => f.FilialID == idFilial);
 
                 SubstituicaoTributaria st = new Negocio.SubstituicaoTributaria();
-                valor = st.CalculaSubstituicaoTributaria(cadastro, produto, valorUnitario, desconto, qtQuantidade, filial);
+                valor = st.CalculaSubstituicaoTributaria(cadastro, produto, valorUnitario, desconto, qtQuantidade, filial, operacao);
 
                 // IPI                
                 if(produto.PercIPI != null && produto.PercIPI > 0)
