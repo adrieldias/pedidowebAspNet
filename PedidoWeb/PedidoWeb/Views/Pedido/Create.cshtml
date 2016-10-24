@@ -69,9 +69,10 @@
             <div class="form-group">
                 @Html.Label("Tipo de Frete (opcional)")
                 @Html.DropDownList("TipoFrete",
-                new List<SelectListItem>() { new SelectListItem(){Text="CIF", Value="CIF"},
-                    new SelectListItem(){Text="FOB", Value="FOB" }},
-                    ViewBag.Empresa.FretePadrao == null?string.Empty:(string)ViewBag.Empresa.FretePadrao, 
+                new List<SelectListItem>() { 
+                    new SelectListItem(){Text="", Value=string.Empty, Selected=ViewBag.Empresa.FretePadrao == null},
+                    new SelectListItem(){Text="CIF", Value="CIF", Selected=(string)ViewBag.Empresa.FretePadrao == "CIF"},
+                    new SelectListItem(){Text="FOB", Value="FOB", Selected=(string)ViewBag.Empresa.FretePadrao == "FOB"}},
                     new { @class = "form-control" })
             </div>
 
