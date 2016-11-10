@@ -7,13 +7,13 @@ namespace PedidoWeb.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.0.0-20911")]
-    public sealed partial class CodTributacaoOperacao : IMigrationMetadata
+    public sealed partial class TributacaoID : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(CodTributacaoOperacao));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(TributacaoID));
         
         string IMigrationMetadata.Id
         {
-            get { return "201609291214263_CodTributacaoOperacao"; }
+            get { return "201610311925562_TributacaoID"; }
         }
         
         string IMigrationMetadata.Source

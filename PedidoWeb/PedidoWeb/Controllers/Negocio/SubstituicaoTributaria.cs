@@ -27,7 +27,7 @@ namespace PedidoWeb.Controllers.Negocio
 
         private bool TemST(Tributacao trib)
         {
-            List<string> ListaCst = new List<string> {"10", "30", "60", "70"};
+            List<string> ListaCst = new List<string> {"010", "030", "060", "070"};
             List<string> ListaCsosn = new List<string> {"201", "202", "203", "900"};
 
             return (ListaCst.Contains(trib.DescSituacaoTrib) || ListaCsosn.Contains(trib.DescCSOSN));                
@@ -54,7 +54,7 @@ namespace PedidoWeb.Controllers.Negocio
             , Produto produto, double valUnitario, double valDesconto
             , int quantidade, Filial filial, Operacao operacao)
         {
-            PedidoHelper pedidoHelper = new PedidoHelper(string.Empty);
+            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.Current.User.Identity.Name);
 
             var valorTotal = (valUnitario - valDesconto) * quantidade;
             double? percAliqSubst = 0;
@@ -80,7 +80,8 @@ namespace PedidoWeb.Controllers.Negocio
                 {
                     prodSubst = db.ProdutoSubstTribs.First(p => p.CodProduto == produto.CodProduto
                         && p.CodEstado == cadastro.CodEstado
-                        && p.CodFilial == filial.CodFilial);
+                        && p.CodFilial == filial.CodFilial
+                        && p.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa);
                 }
                 catch(Exception)
                 {
