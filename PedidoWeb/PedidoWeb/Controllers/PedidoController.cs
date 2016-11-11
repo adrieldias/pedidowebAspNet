@@ -505,7 +505,8 @@ namespace PedidoWeb.Controllers
             if(status)
             {
                 var idCadastro = Convert.ToInt32(cadastroID);                
-                var cadastro = db.Cadastroes.Include(e => e.Estado).First(c => c.CadastroID == idCadastro);                
+                var cadastro = db.Cadastroes.Include(e => e.Estado).First(c => c.CadastroID == idCadastro);    
+                 
                 double desconto = string.IsNullOrEmpty(valDesconto) == true ? 0.00 : Convert.ToDouble(valDesconto);
                 double valorUnitario = Convert.ToDouble(valUnitario);
                 int qtQuantidade = Convert.ToInt32(quantidade);
