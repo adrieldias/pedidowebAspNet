@@ -127,7 +127,7 @@ namespace PedidoWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include="UsuarioID,Login,Senha,TipoUsuario,VendedorID,EMail,CodEmpresa,TipoConsulta,SenhaEmail,SMTP,PortaSMTP,SSL")] Usuario usuario)
+        public ActionResult Create([Bind(Include="UsuarioID,Login,Senha,TipoUsuario,VendedorID,EMail,CodEmpresa,TipoConsulta,SenhaEmail,SMTP,PortaSMTP,SSL,Situacao")] Usuario usuario)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();
@@ -215,7 +215,7 @@ namespace PedidoWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Include = "UsuarioID,Login,Senha,TipoUsuario,VendedorID,EMail,CodEmpresa,TipoConsulta,SenhaEmail,SMTP,PortaSMTP,SSL")] Usuario usuario)
+        public ActionResult Edit([Bind(Include = "UsuarioID,Login,Senha,TipoUsuario,VendedorID,EMail,CodEmpresa,TipoConsulta,SenhaEmail,SMTP,PortaSMTP,SSL,Situacao")] Usuario usuario)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ValidaFuncoesUsuario valida = new ValidaFuncoesUsuario();

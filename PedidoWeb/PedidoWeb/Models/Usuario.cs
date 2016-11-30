@@ -27,6 +27,10 @@ namespace PedidoWeb.Models
         [Required(ErrorMessage = "Senha é obrigatório")]
         public string Senha { get; set; }
 
+        [DisplayName("Situação")]
+        [DefaultValue("LIBERADO")]
+        public string Situacao { get; set; }
+
         [DisplayName("Tipo de Usuário")]
         public string TipoUsuario { get; set; }
 

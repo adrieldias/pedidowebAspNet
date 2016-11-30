@@ -19,7 +19,11 @@ namespace PedidoWeb.Controllers.Negocio
             {                
                 var usuario = db.Usuarios.Single(u => u.Email == email);
                 if (usuario.Senha == senha)
+                {
+                    if(usuario.Situacao != "LIBERADO")
+                        throw new Exception("Usuário bloqueado");
                     this.Autorizado = true;
+                }
                 else
                     throw new Exception("Senha inválida");
                 

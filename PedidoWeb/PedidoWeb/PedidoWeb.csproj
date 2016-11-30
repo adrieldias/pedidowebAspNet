@@ -394,6 +394,10 @@
     <Compile Include="Migrations\201610311925562_TributacaoID.Designer.cs">
       <DependentUpon>201610311925562_TributacaoID.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201611301705144_SituacaoUsuario.cs" />
+    <Compile Include="Migrations\201611301705144_SituacaoUsuario.Designer.cs">
+      <DependentUpon>201611301705144_SituacaoUsuario.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Estado.cs" />
@@ -718,6 +722,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201610311925562_TributacaoID.resx">
       <DependentUpon>201610311925562_TributacaoID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201611301705144_SituacaoUsuario.resx">
+      <DependentUpon>201611301705144_SituacaoUsuario.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
