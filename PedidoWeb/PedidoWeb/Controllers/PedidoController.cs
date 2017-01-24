@@ -234,7 +234,7 @@ namespace PedidoWeb.Controllers
 
         [HttpPost]
         [Authorize]
-        public JsonResult ValorUnitario(int? produtoID, int prazoVencimentoID, int cadastroID)
+        public JsonResult ValorUnitario(int? produtoID, int prazoVencimentoID, int cadastroID, int filialID)
         {
             var status = true;
             string errorMessage = string.Empty;
@@ -255,13 +255,18 @@ namespace PedidoWeb.Controllers
                 status = false;
                 errorMessage = "Não foi possível buscar o preço do item. Cliente não informado";
             }
+            if(filialID == 0)
+            {
+                status = false;
+                errorMessage = "Não foi possível buscar o preço do item. Filial não informada";
+            }
 
             if (status)
             {
                 ValorUnitario v = new ValorUnitario();
                 try
                 {
-                    valor = v.BuscaValor(produtoID.GetValueOrDefault(), prazoVencimentoID, cadastroID);
+                    valor = v.BuscaValor(produtoID.GetValueOrDefault(), prazoVencimentoID, cadastroID, filialID);
                 }
                 catch (Exception ex)
                 {
@@ -708,7 +713,7 @@ namespace PedidoWeb.Controllers
 
         [HttpPost]
         [Authorize]
-        public JsonResult ProdutoAutoComplete(string term, string prazoVencimentoID, string cadastroID)
+        public JsonResult ProdutoAutoComplete(string term, string prazoVencimentoID, string cadastroID, string filialID)
         {
            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             Empresa emp = pedidoHelper.BuscaEmpresa();
@@ -743,11 +748,13 @@ namespace PedidoWeb.Controllers
                 // Buscar valor unitário
                 int prazo = 0;
                 int cadastro = 0;
+                int filial = 0;
                 int.TryParse(prazoVencimentoID, out prazo);
                 int.TryParse(cadastroID, out cadastro);
+                int.TryParse(filialID, out filial);
                 if (prazo > 0 && cadastro > 0)
                 {
-                    p.PrecoVarejo = v.BuscaValor(p.ProdutoID, prazo, cadastro);
+                    p.PrecoVarejo = v.BuscaValor(p.ProdutoID, prazo, cadastro, filial);
                 }
             }
             return Json(produtos, JsonRequestBehavior.AllowGet);

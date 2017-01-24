@@ -275,6 +275,7 @@
                             term: request.term
                             , prazoVencimentoID: $('#PrazoVencimentoID').val()
                             , cadastroID: cadastroSelecionado
+                            , filialID: $('#FilialID').val()
                         }),
                         success: function (json) {                            
                             var autoc = [];
@@ -421,7 +422,8 @@
                     data: jQuery.param({
                         cadastroID: $('#CadastroID').val() == '' ? 0 : $('#CadastroID').val()
                         , produtoID: $('#ProdutoID').val()
-                        , prazoVencimentoID: $('#PrazoVencimentoID').val()                        
+                        , prazoVencimentoID: $('#PrazoVencimentoID').val()
+                        , filialID: $('#FilialID').val()
                     }),
                     datatype: "JSON",
                     //contentType: "application/json",

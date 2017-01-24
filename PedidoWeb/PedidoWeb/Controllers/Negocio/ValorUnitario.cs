@@ -12,7 +12,7 @@ namespace PedidoWeb.Controllers.Negocio
     public class ValorUnitario
     {
         private PedidoWebContext db = new PedidoWebContext();
-        public decimal BuscaValor(int produtoID, int prazoVencimentoID, int cadastroID)
+        public decimal BuscaValor(int produtoID, int prazoVencimentoID, int cadastroID, int filialID)
         {
             try
             {
@@ -25,6 +25,10 @@ namespace PedidoWeb.Controllers.Negocio
 
                 if (precoPrazoVendedor.Count(p => p.ValorProduto > 0) > 0)
                     valorUnitario = Convert.ToDecimal(precoPrazoVendedor.Single().ValorProduto);
+
+                // Para B.T.M. (Desafio), deve calcular um percentual de 23,93 a mais do que o valor unitário.
+                if (filialID == 16)
+                    valorUnitario = decimal.Round(valorUnitario + (valorUnitario * Convert.ToDecimal(23.93) / 100), 2);
 
                 return valorUnitario;
             }
