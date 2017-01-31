@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using PedidoWeb.Models;
-using System.Data.Entity.Validation;
-using System.Data.Entity.Infrastructure;
-using System.Data.Entity;
 
 namespace PedidoWeb.Controllers.Negocio
 {

@@ -45,7 +45,7 @@
         <div class="form-group">
             * @Html.Label("Forma de Pagamento")
             @Html.DropDownList("PrazoVencimentoID", null, string.Empty, new { @class = "form-control" })            
-            <span class="error" style="visibility: hidden">Prazo de Vencimento</span>
+            <span class="error" style="visibility: hidden">Forma de Pagamento é obrigatória</span>
         </div> 
             
         <button type="button" style="min-width:160px" id="btOpcionais" class="btn btn-default btn-sm" onclick="toggleDiv('opcionais')">
@@ -455,7 +455,7 @@
                 if (tpCons == "LISTAGEM") {
                     if ($('#ProdutoID').val().trim() == '') {
                         isValidItem = false;
-                        $('#ProdutoID').siblings('span.error').css('visibility', 'visible');
+                        $('#ProdutoID').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
                     }
                     else {
                         $('#ProdutoID').siblings('span.error').css('visibility', 'hidden');
@@ -464,7 +464,7 @@
                 else {
                     if ($('#ProdutoAux').val().trim() == '' || produtoSelecionado == 0) {
                         isValidItem = false;
-                        $('#ProdutoAux').siblings('span.error').css('visibility', 'visible');
+                        $('#ProdutoAux').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
                     }
                     else {
                         $('#ProdutoAux').siblings('span.error').css('visibility', 'hidden');
@@ -473,7 +473,7 @@
 
                 if ($('#Quantidade').val().trim() == '' || isNaN($('#Quantidade').val().trim().replace(',', '.'))) {
                     isValidItem = false;
-                    $('#Quantidade').siblings('span.error').css('visibility', 'visible');
+                    $('#Quantidade').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
                 }
                 else {
                     $('#Quantidade').siblings('span.error').css('visibility', 'hidden');
@@ -481,7 +481,7 @@
                 $('#ValorUnitario').val($('#ValorUnitario').val().trim().replace(',', '.'));
                 if ($('#ValorUnitario').val().trim() == '' || isNaN($('#ValorUnitario').val().trim().replace(',', '.'))) {
                     isValidItem = false;
-                    $('#ValorUnitario').siblings('span.error').css('visibility', 'visible');
+                    $('#ValorUnitario').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
                 }
                 else {
                     $('#ValorUnitario').siblings('span.error').css('visibility', 'hidden');
@@ -489,7 +489,7 @@
                 if ($('#ObservacaoItem').val() != undefined) {
                     if ($('#ObservacaoItem').val().length > 30) {
                         isValidItem = false;
-                        $('#ObservacaoItem').siblings('span.error').css('visibility', 'visible');
+                        $('#ObservacaoItem').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
                     }
                     else {
                         $('#ObservacaoItem').siblings('span.error').css('visibility', 'hidden');
@@ -498,17 +498,18 @@
                 
                 if (isNaN($('#PercDesconto').val().trim().replace(',', '.'))) {
                     isValidItem = false;
-                    $('#PercDesconto').siblings('span.error').css('visibility', 'visible');
+                    $('#PercDesconto').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
                 } else {
                     $('#PercDesconto').siblings('span.error').css('visibility', 'hidden');
                 }
+
 
                 // Precisa que o cadastro tenha sido informado
 
                 if (tpCons == 'FILTRO') {
                     if ($('#CadastroAux').val().trim() == '' || cadastroSelecionado == 0) {
                         isValidItem = false;
-                        $('#CadastroAux').siblings('span.error').css('visibility', 'visible');
+                        $('#CadastroAux').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
                         $('#CadastroAux').focus();
                     }
                     else {
@@ -517,11 +518,49 @@
                 } else {
                     if ($('#CadastroID').val().trim() == '') {
                         isValidItem = false;
-                        $('#CadastroID').siblings('span.error').css('visibility', 'visible');
+                        $('#CadastroID').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
                         $('#CadastroID').focus();
                     }
+                    else {
+                        $('#CadastroID').siblings('span.error').css('visibility', 'hidden');
+                    }
                 }
-                
+
+
+                // Precisa que a filial tenha sido informada
+
+                if ($('#FilialID').val().trim() == '') {
+                    isValidItem = false;
+                    $('#FilialID').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    $('#FilialID').focus();
+                }
+                else {
+                    $('#FilialID').siblings('span.error').css('visibility', 'hidden');
+                }
+
+
+                // Precisa que a operação tenha sido informada
+
+                if ($('#OperacaoID').val().trim() == '') {
+                    isValidItem = false;
+                    $('#OperacaoID').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    $('#OperacaoID').focus();
+                }
+                else {
+                    $('#OperacaoID').siblings('span.error').css('visibility', 'hidden');
+                }
+
+                // Precisa que a forma de pagamento tenha sido informada
+                if ($('#PrazoVencimentoID').val().trim() == '') {
+                    isValidItem = false;
+                    $('#PrazoVencimentoID').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    $('#PrazoVencimentoID').focus();
+                }
+                else {
+                    $('#PrazoVencimentoID').siblings('span.error').css('visibility', 'hidden');
+                }
+
+
                 // Add item to list if valid
                 if (isValidItem) {                    
                     //var el = document.getElementById('ProdutoAux');
