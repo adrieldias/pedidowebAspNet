@@ -37,22 +37,15 @@
             @Html.LabelFor(model => model.Login)            
             @Html.TextBoxFor(model => model.Login, new { @class = "form-control"})
             @Html.ValidationMessageFor(model => model.Login)            
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Senha)            
-            @Html.PasswordFor(model => model.Senha, new{ @class = "form-control"})
-            @Html.ValidationMessageFor(model => model.Senha)            
-        </div>
+        </div>  
         
-        <div class="form-group">
-            @Html.LabelFor(model => model.TipoUsuario)            
-            @Html.TextBoxFor(model => model.TipoUsuario, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.TipoUsuario)
-            
-        </div>
         @if (ViewBag.TipoUsuario == "MASTER")
         {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Senha)
+                @Html.TextBoxFor(model => model.Senha, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Senha)
+            </div>            
             <div class="form-group">
                 @Html.LabelFor(model => model.Situacao)
                 @Html.DropDownListFor(model => model.Situacao, new List<SelectListItem>()
@@ -63,8 +56,21 @@
                 @Html.ValidationMessageFor(model => model.Situacao)
 
             </div>
+        }        
+        else
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Senha)
+                @Html.PasswordFor(model => model.Senha, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Senha)
+            </div>
         }
+        <div class="form-group">
+            @Html.LabelFor(model => model.TipoUsuario)
+            @Html.TextBoxFor(model => model.TipoUsuario, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.TipoUsuario)
 
+        </div>
         <div class="form-group">
             @Html.LabelFor(model => model.TipoConsulta)
             @Html.DropDownList("TipoConsulta",
@@ -143,11 +149,13 @@
                     $('#CodEmpresa').prop('disabled', false)
                     $('#TipoUsuario').prop('disabled', false)
                     $('#VendedorID').prop('disabled', false)
+                    $('#Situacao').prop('disabled', false)
                 }
                 else {
                     $('#CodEmpresa').prop('disabled', true)
                     $('#TipoUsuario').prop('disabled', true)
                     $('#VendedorID').prop('disabled', true)
+                    $('#Situacao').prop('disabled', true)
                 }
             }
         );
