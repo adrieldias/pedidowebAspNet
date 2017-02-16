@@ -43,7 +43,8 @@ namespace PedidoWeb.Controllers.Negocio
         public Tributacao EscolheTributacao(Cadastro cadastro, Produto produto, Filial filial, Operacao operacao)
         {
             Tributacao trib = produto.Tributacao;
-            if (filial.CodEstado != cadastro.CodEstado && cadastro.Estado.Tributacao != null)
+            if (filial.CodEstado != cadastro.CodEstado && cadastro.Estado.TributacaoID != null && 
+                    cadastro.Estado.TributacaoID > 0)
                 trib = cadastro.Estado.Tributacao;
             if (operacao.Tributacao != null)
                 trib = operacao.Tributacao;

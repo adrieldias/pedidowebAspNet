@@ -304,8 +304,11 @@
                     @Html.DisplayName("Emissão")
                 </th>
 
-                @if(ViewBag.TipoUsuario == "MASTER")
+                @if (ViewBag.TipoUsuario == "MASTER")
                 {
+                    <th>
+                        @Html.DisplayName("Vendedor")
+                    </th>
                     <th>
                         @Html.DisplayName("Empresa")
                     </th>
@@ -373,6 +376,9 @@
                     
                     @if (ViewBag.TipoUsuario == "MASTER")
                     {
+                        <td class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Pedido", new { id = item.PedidoID }))'">
+                            @Html.DisplayFor(modelItem => item.Vendedor.Nome)
+                        </td>
                         <td class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Pedido", new { id = item.PedidoID }))'">
                             @Html.DisplayFor(modelItem => item.CodEmpresa)
                         </td>
