@@ -55,7 +55,7 @@ namespace PedidoWeb.Controllers
                 else
                     usuarios = usuarios.Where(s => s.Empresa.Nome.ToUpper().Contains(search.ToUpper()));
             }
-            usuarios = usuarios.OrderBy(s => s.Vendedor.Nome).ThenBy(s => s.CodEmpresa);
+            usuarios = usuarios.OrderBy(s => s.CodEmpresa).ThenBy(s => s.Vendedor.Nome);
             int pageSize = 10;
             int pageNumber = (page ?? 1);
 
