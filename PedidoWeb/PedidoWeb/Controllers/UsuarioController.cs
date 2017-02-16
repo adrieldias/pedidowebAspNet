@@ -55,8 +55,7 @@ namespace PedidoWeb.Controllers
                 else
                     usuarios = usuarios.Where(s => s.Empresa.Nome.ToUpper().Contains(search.ToUpper()));
             }
-            usuarios = usuarios.OrderBy(s => s.Login);            
-
+            usuarios = usuarios.OrderBy(s => s.Vendedor.Nome).ThenBy(s => s.CodEmpresa);
             int pageSize = 10;
             int pageNumber = (page ?? 1);
 
@@ -197,7 +196,7 @@ namespace PedidoWeb.Controllers
             }
 
             List<Vendedor> vendedores = new List<Vendedor>();
-            foreach (var v in db.Vendedors.OrderBy(v => v.Nome).ThenBy(v => v.CodEmpresa))
+            foreach (var v in db.Vendedors.OrderBy(v => v.CodEmpresa).ThenBy(v => v.Nome))
             {
                 Vendedor vendedor = new Vendedor();
                 vendedor.VendedorID = v.VendedorID;
