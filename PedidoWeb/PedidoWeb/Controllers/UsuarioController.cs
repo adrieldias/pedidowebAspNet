@@ -197,7 +197,7 @@ namespace PedidoWeb.Controllers
             }
 
             List<Vendedor> vendedores = new List<Vendedor>();
-            foreach (var v in db.Vendedors.OrderBy(v => v.CodEmpresa).ThenBy(v => v.CodVendedor))
+            foreach (var v in db.Vendedors.OrderBy(v => v.Nome).ThenBy(v => v.CodEmpresa))
             {
                 Vendedor vendedor = new Vendedor();
                 vendedor.VendedorID = v.VendedorID;
