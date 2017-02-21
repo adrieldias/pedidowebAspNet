@@ -23,7 +23,7 @@ namespace PedidoWeb.Controllers.Negocio
 
                 // Para B.T.M. (Desafio), deve calcular um percentual de 23,93 a mais do que o valor unitário.
                 if (filialID == 16)
-                    valorUnitario = decimal.Round(valorUnitario + (valorUnitario * Convert.ToDecimal(23.93) / 100), 2);
+                    valorUnitario = decimal.Round(valorUnitario + (valorUnitario * Convert.ToDecimal(25) / 100), 2);
 
                 return valorUnitario;
             }
