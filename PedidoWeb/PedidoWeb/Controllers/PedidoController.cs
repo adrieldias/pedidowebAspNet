@@ -1085,8 +1085,8 @@ namespace PedidoWeb.Controllers
                     mensagem += item.Observacao;
                     mensagem += "</td>";
 
-                    total += item.ValorUnitario 
-                        - item.ValorDesconto.GetValueOrDefault()
+                    total += (item.Quantidade * (item.ValorUnitario 
+                        - item.ValorDesconto.GetValueOrDefault()))
                         + Convert.ToDecimal(item.ValorIcmsSubst) 
                         + Convert.ToDecimal(item.ValorIPI);
                 }

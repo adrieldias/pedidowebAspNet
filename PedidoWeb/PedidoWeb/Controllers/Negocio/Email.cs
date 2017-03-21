@@ -96,18 +96,41 @@ namespace PedidoWeb.Controllers.Negocio
 
                     // fim imagem
                     SmtpClient mailer = new SmtpClient(SMTP, Porta);
-                    mailer.Credentials = new NetworkCredential(Remetente, Senha);
                     mailer.EnableSsl = Ssl;
+                    mailer.UseDefaultCredentials = false;
+                    mailer.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+                    mailer.Credentials = new NetworkCredential(Remetente, Senha);
                     mailer.Send(message);
                 }
                 else
                 {
-                    var mensagem = new MailMessage(Remetente, Destinatario, Assunto, Mensagem);
-                    mensagem.IsBodyHtml = true;
-                    SmtpClient mailer = new SmtpClient(SMTP, Porta);
-                    mailer.Credentials = new NetworkCredential(Remetente, Senha);
-                    mailer.EnableSsl = Ssl;
-                    mailer.Send(mensagem);
+                    using (var client = new SmtpClient(SMTP)
+                    {
+                        Port = Porta,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false,
+                        EnableSsl = Ssl,
+                        Credentials = new NetworkCredential(Remetente, Senha)
+                    })
+                    {
+                        using (var mail = new MailMessage(Remetente, Destinatario)
+                        {
+                            Subject = Assunto,
+                            Body = Mensagem,
+                            IsBodyHtml = true
+                        })
+                        {
+                            client.Send(mail);
+                        }
+                    }
+                    //var mensagem = new MailMessage(Remetente, Destinatario, Assunto, Mensagem);
+                    //mensagem.IsBodyHtml = true;
+                    //SmtpClient mailer = new SmtpClient(SMTP, Porta);                    
+                    //mailer.EnableSsl = Ssl;
+                    //mailer.UseDefaultCredentials = false;
+                    //mailer.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+                    //mailer.Credentials = new NetworkCredential(Remetente, Senha);
+                    //mailer.Send(mensagem);
                 }
             }
             catch(Exception ex)
