@@ -337,6 +337,16 @@
     <div id="historico"></div>
     
     <br />
+    @if (!string.IsNullOrEmpty(Model.Faturamento))
+    {        
+        <div id="faturamento" class="opcionais"> 
+            <p>Emissão de NF-e</p> 
+            <p style="font-size: small">
+                @Model.Faturamento
+            </p>
+        </div>
+        <br />
+    }    
 
     <div class="form-group">
         <div>

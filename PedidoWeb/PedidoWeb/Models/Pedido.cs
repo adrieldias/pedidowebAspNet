@@ -77,6 +77,9 @@ namespace PedidoWeb.Models
         public int? FilialID { get; set; }
         public virtual Filial Filial { get; set; }
 
+        [DisplayName("Status do Faturamento")]
+        public string Faturamento { get; set; }
+
         // Lazy Load
         public virtual List<PedidoItem> Itens { get; set; }
         public virtual Empresa Empresa { get; set; }
