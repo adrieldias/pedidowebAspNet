@@ -781,7 +781,9 @@ namespace PedidoWeb.Controllers
 
             foreach (var p in cadastros)
             {
-                p.Nome = string.Format("{0} - {1}", p.CodCadastro, p.Nome);
+                p.Nome = string.Format("{0} - {1}"
+                    , string.Format("{0} - {1} - {2}", p.CodCadastro, p.Nome, p.Fantasia)
+                    , p.DescCidade);
             }
             return Json(cadastros, JsonRequestBehavior.AllowGet);
         }
