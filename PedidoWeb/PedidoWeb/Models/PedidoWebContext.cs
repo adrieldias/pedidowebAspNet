@@ -52,6 +52,8 @@ namespace PedidoWeb.Models
 
         public System.Data.Entity.DbSet<PedidoWeb.Models.Estado> Estadoes { get; set; }
 
+        public System.Data.Entity.DbSet<PedidoWeb.Models.Tributacao> Tributacaos { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Pedido>()
