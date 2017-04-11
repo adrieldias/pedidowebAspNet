@@ -48,11 +48,16 @@ namespace PedidoWeb.Models
         public System.Data.Entity.DbSet<PedidoWeb.Models.Filial> Filials { get; set; }
 
         public System.Data.Entity.DbSet<PedidoWeb.Models.ProdutoSubstTrib> ProdutoSubstTribs { get; set; }
+
         public System.Data.Entity.DbSet<PedidoWeb.Models.PrecoPrazoVendedor> PrecoPrazoVendedors { get; set; }
 
         public System.Data.Entity.DbSet<PedidoWeb.Models.Estado> Estadoes { get; set; }
 
         public System.Data.Entity.DbSet<PedidoWeb.Models.Tributacao> Tributacaos { get; set; }
+
+        public System.Data.Entity.DbSet<PedidoWeb.Models.TabelaPreco> TabelaPrecoes { get; set; }
+
+        public System.Data.Entity.DbSet<PedidoWeb.Models.TabelaPrecoItem> TabelaPrecoItems { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
