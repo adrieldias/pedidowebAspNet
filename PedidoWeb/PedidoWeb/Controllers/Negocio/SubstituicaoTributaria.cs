@@ -48,7 +48,7 @@ namespace PedidoWeb.Controllers.Negocio
                     cadastro.Estado.TributacaoID > 0)
                 trib = cadastro.Estado.Tributacao;
 
-            if (operacao.Tributacao != null || operacao.TributacaoID > 0)
+            if (operacao.Tributacao != null || operacao.TributacaoID != null  || operacao.TributacaoID > 0)
             {
                 if (operacao.Tributacao != null)
                     trib = operacao.Tributacao;

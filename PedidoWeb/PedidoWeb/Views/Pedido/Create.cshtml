@@ -88,8 +88,9 @@
 
         </div>
 
-        <br />        
-        
+        <br />  
+        <br />
+
         <div class="details">
             <h2>Itens do Pedido</h2>
             <hr />
@@ -98,6 +99,14 @@
             <div id="MsgAddItem" class="alert alert-success">
                 <p>Item adicionado com sucesso. Você pode adicionar mais itens ao pedido.</p>
             </div>
+
+            @if (ViewBag.TemTabelaPreco)
+            {
+                <div class="form-group">
+                    @Html.Label("Tabela de Preço")
+                    @Html.DropDownList("TabelaPrecoID", null, string.Empty, new { @class = "form-control" })
+                </div>
+            }
 
             @if (ViewBag.TipoConsulta == "LISTAGEM") { 
                 
@@ -415,34 +424,11 @@
 
             // Add ValorUnitario change function
             $('#ProdutoID').change(function () {                
-                bloqueiaOperacoes(true);
-                $.ajax({
-                    url: '/Pedido/ValorUnitario',
-                    type: 'POST',
-                    data: jQuery.param({
-                        cadastroID: $('#CadastroID').val() == '' ? 0 : $('#CadastroID').val()
-                        , produtoID: $('#ProdutoID').val()
-                        , prazoVencimentoID: $('#PrazoVencimentoID').val()
-                        , filialID: $('#FilialID').val()
-                    }),
-                    datatype: "JSON",
-                    //contentType: "application/json",
-                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-                    success: function (d) {                        
-                        if (d.status == true) {
-                            $('#ValorUnitario').val(d.valor);
-                            bloqueiaOperacoes(false);
-                        }
-                        else {
-                            bloqueiaOperacoes(false);
-                            alert(d.errorMessage);
-                        }
-                    },
-                    error: function () {
-                        bloqueiaOperacoes(false);
-                        alert('Erro ao buscar valor do item. Por favor tente novamente.');
-                    }
-                })
+                buscaValorUnitario();
+            });
+
+            $('#TabelaPrecoID').change(function () {
+                buscaValorUnitario();
             });
 
             // Add button click function
@@ -625,7 +611,8 @@
                             ValorDesconto: $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.', ','),
                             PercentualDesconto: $('#PercDesconto').val().trim().replace('.', ','),
                             ValorImcsSubst: '0,00',
-                            ValorIPI: '0,00'
+                            ValorIPI: '0,00',
+                            tabelaPrecoID: $('#TabelaPrecoID').val()
                         });
                     } else { //edição de itens                    
                         var i = $('#ItemIndex').val();
@@ -638,6 +625,7 @@
                         pedidoItens[i].PercentualDesconto = $('#PercDesconto').val().trim().replace('.', ',');
                         pedidoItens[i].ValorIcmsSubst = '0,00';
                         pedidoItens[i].ValorIPI = '0,00';
+                        pedidoItens[i].TabelaPrecoID = $('#TabelaPrecoID').val();
                     }
                     if (tpCons == 'LISTAGEM')
                         $('#ProdutoID').val('').focus();
@@ -866,6 +854,41 @@
             function habilitaSubmit() {
                 $('#submit').prop('disabled', (pedidoItens.length === 0))                
             };
+
+            // Busca valor unitário
+            function buscaValorUnitario() {
+                if ($('#ProdutoID').val() == '')
+                    return;
+                bloqueiaOperacoes(true);
+                $.ajax({
+                    url: '/Pedido/ValorUnitario',
+                    type: 'POST',
+                    data: jQuery.param({
+                        cadastroID: $('#CadastroID').val() == '' ? 0 : $('#CadastroID').val()
+                        , produtoID: $('#ProdutoID').val()
+                        , prazoVencimentoID: $('#PrazoVencimentoID').val()
+                        , filialID: $('#FilialID').val()
+                        , tabelaPrecoID: $('#TabelaPrecoID').val()
+                    }),
+                    datatype: "JSON",
+                    //contentType: "application/json",
+                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                    success: function (d) {
+                        if (d.status == true) {
+                            $('#ValorUnitario').val(d.valor);
+                            bloqueiaOperacoes(false);
+                        }
+                        else {
+                            bloqueiaOperacoes(false);
+                            alert(d.errorMessage);
+                        }
+                    },
+                    error: function () {
+                        bloqueiaOperacoes(false);
+                        alert('Erro ao buscar valor do item. Por favor tente novamente.');
+                    }
+                })
+            }
 
         });
     </script>

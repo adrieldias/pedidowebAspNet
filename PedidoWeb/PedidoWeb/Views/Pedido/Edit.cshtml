@@ -118,6 +118,7 @@
     </div>
     
     <br />
+    <br/>
     <div class="details">
         <h2>Itens do Pedido</h2>
         <hr />
@@ -126,6 +127,14 @@
         <div id="MsgAddItem" class="alert alert-success">
             <p>Item adicionado com sucesso. Você pode adicionar mais itens ao pedido.</p>
         </div>
+
+        @if (ViewBag.TemTabelaPreco)
+        {
+            <div class="form-group">
+                @Html.Label("Tabela de Preço")
+                @Html.DropDownList("TabelaPrecoID", null, string.Empty, new { @class = "form-control" })            
+            </div>
+        }
 
         @if (ViewBag.TipoConsulta == "LISTAGEM") {
             AjaxOptions ajaxOptions = new AjaxOptions()
@@ -626,7 +635,8 @@
                             ValorDesconto: $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.',','),
                             PercentualDesconto: $('#PercDesconto').val().trim().replace('.',','),
                             ValorImcsSubst: '0,00',
-                            ValorIPI: '0,00'
+                            ValorIPI: '0,00',
+                            TabelaPrecoID: $('#TabelaPrecoID').val()
                         });
                     } else { //edição de itens                    
                         var i = $('#ItemIndex').val();
@@ -639,6 +649,7 @@
                         pedidoItens[i].PercentualDesconto = $('#PercDesconto').val().trim().replace('.',',');
                         pedidoItens[i].ValorIcmsSubst = '0,00';
                         pedidoItens[i].ValorIPI = '0,00';
+                        pedidoItens[i].TabelaPrecoID = $('#TabelaPrecoID').val();
                     }
 
                     // Chama novamente para garantir que botões não fiquem desabilitados
@@ -804,6 +815,7 @@
                                     $('#PercDesconto').val(val.percDesconto);
                                     $('#ValorDesconto').val(val.ValorDesconto);
                                     $('#ItemIndex').val(i);
+                                    $('#TabelaPrecoID').val(val.TabelaPrecoID);
                                     produtoSelecionado = val.ProdutoID;
                                     descProdutoSelecionado = val.DescProduto;
                                     indexEdicao = i;
