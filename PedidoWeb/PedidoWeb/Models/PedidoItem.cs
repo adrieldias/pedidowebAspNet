@@ -47,6 +47,9 @@ namespace PedidoWeb.Models
 
         public int? CodTributacao { get; set; }
 
+        public int? TabelaPrecoID { get; set; }
+        public virtual TabelaPreco TabelaPreco { get; set; } //Lazy Load
+
         public virtual Tributacao Tributacao { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true, NullDisplayText = "0,00")]

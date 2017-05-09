@@ -43,7 +43,8 @@ namespace PedidoWeb.Controllers.Negocio
                     // Verifica se tem cadastro na tabela PrecoPrazoVendedor
                     ValorUnitario v = new ValorUnitario();
                     produtoPadrao.PrecoVarejo =
-                        v.BuscaValor(produtoPadrao.ProdutoID, p.PrazoVencimentoID.GetValueOrDefault(), p.CadastroID, p.FilialID.Value);
+                        v.BuscaValor(produtoPadrao.ProdutoID, p.PrazoVencimentoID.GetValueOrDefault(), p.CadastroID, p.FilialID.Value
+                            , item.TabelaPrecoID);
                     
                     if((item.ValorUnitario - Convert.ToDecimal(item.ValorDesconto)) < produtoPadrao.PrecoVarejo)
                     {

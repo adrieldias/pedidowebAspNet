@@ -229,12 +229,30 @@ namespace PedidoWeb.Controllers
                     .Where(f => f.CodEmpresa == usuario.CodEmpresa && f.Situacao == "ATIVO")
                     , "FilialID", "DescFilial");
             ViewBag.TipoConsulta = usuario.TipoConsulta;
+
+            SelectList tabela = new SelectList(db.TabelaPrecoes
+                .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
+                .OrderBy(o => o.Descricao)
+                , "TabelaPrecoID", "Descricao");
+            if(tabela.Count() > 0)
+            {
+                ViewBag.TabelaPrecoID = tabela;
+                ViewBag.TemTabelaPreco = true;
+            }
+            else
+            {
+                ViewBag.TemTabelaPreco = false;
+            }
+
+
+            
+            
             return View();
         }
 
         [HttpPost]
         [Authorize]
-        public JsonResult ValorUnitario(int? produtoID, int prazoVencimentoID, int cadastroID, int filialID)
+        public JsonResult ValorUnitario(int? produtoID, int prazoVencimentoID, int cadastroID, int filialID, int? tabelaPrecoID)
         {
             var status = true;
             string errorMessage = string.Empty;
@@ -266,7 +284,8 @@ namespace PedidoWeb.Controllers
                 ValorUnitario v = new ValorUnitario();
                 try
                 {
-                    valor = v.BuscaValor(produtoID.GetValueOrDefault(), prazoVencimentoID, cadastroID, filialID);
+                    valor = v.BuscaValor(produtoID.GetValueOrDefault(), prazoVencimentoID, cadastroID, filialID
+                        , tabelaPrecoID);
                 }
                 catch (Exception ex)
                 {
@@ -335,6 +354,7 @@ namespace PedidoWeb.Controllers
                         Tributacao trib = tributacao.EscolheTributacao(cadastro, produto, filial, operacao);
                         i.TributacaoID = trib.TributacaoID;
                         i.CodTributacao = trib.CodTributacao;
+                        i.TabelaPrecoID = item.TabelaPrecoID;
                         valorPedido += item.ValorUnitario * item.Quantidade;
                         valorProduto += produto.PrecoVarejo * item.Quantidade;                        
                         db.PedidoItems.Add(i);
@@ -384,6 +404,7 @@ namespace PedidoWeb.Controllers
                             pedidoBanco.Itens[i].ValorUnitario = itemTela.ValorUnitario;
                             pedidoBanco.Itens[i].ValorIcmsSubst = itemTela.ValorIcmsSubst;
                             pedidoBanco.Itens[i].ValorIPI = itemTela.ValorIPI;
+                            pedidoBanco.Itens[i].TabelaPrecoID = itemTela.TabelaPrecoID;
 
                             Produto produto = db.Produtoes.Include(t => t.Tributacao).FirstOrDefault(it => it.ProdutoID == itemTela.ProdutoID);
                             Tributacao trib = tributacao.EscolheTributacao(cadastro, produto, filial, operacao);
@@ -610,6 +631,21 @@ namespace PedidoWeb.Controllers
                     , "FilialID", "DescFilial"
                     , pedido.FilialID);
                 ViewBag.TipoConsulta = usuario.TipoConsulta;
+
+                SelectList tabela = new SelectList(db.TabelaPrecoes
+                .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
+                .OrderBy(o => o.Descricao)
+                , "TabelaPrecoID", "Descricao");
+                if (tabela.Count() > 0)
+                {
+                    ViewBag.TabelaPrecoID = tabela;
+                    ViewBag.TemTabelaPreco = true;
+                }
+                else
+                {
+                    ViewBag.TemTabelaPreco = false;
+                }
+
                 return View(pedido);
             }
             
@@ -713,7 +749,7 @@ namespace PedidoWeb.Controllers
 
         [HttpPost]
         [Authorize]
-        public JsonResult ProdutoAutoComplete(string term, string prazoVencimentoID, string cadastroID, string filialID)
+        public JsonResult ProdutoAutoComplete(string term, string prazoVencimentoID, string cadastroID, string filialID, string tabelaPrecoID)
         {
            PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             Empresa emp = pedidoHelper.BuscaEmpresa();
@@ -749,12 +785,17 @@ namespace PedidoWeb.Controllers
                 int prazo = 0;
                 int cadastro = 0;
                 int filial = 0;
+                int tabelaPrecoAux = 0;
                 int.TryParse(prazoVencimentoID, out prazo);
                 int.TryParse(cadastroID, out cadastro);
                 int.TryParse(filialID, out filial);
+                int.TryParse(tabelaPrecoID, out tabelaPrecoAux);
+                int? tabelaPreco = null;
+                if (tabelaPrecoAux > 0)
+                    tabelaPreco = tabelaPrecoAux;
                 if (prazo > 0 && cadastro > 0)
                 {
-                    p.PrecoVarejo = v.BuscaValor(p.ProdutoID, prazo, cadastro, filial);
+                    p.PrecoVarejo = v.BuscaValor(p.ProdutoID, prazo, cadastro, filial, tabelaPreco);
                 }
             }
             return Json(produtos, JsonRequestBehavior.AllowGet);

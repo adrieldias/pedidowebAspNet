@@ -142,6 +142,10 @@ namespace PedidoWeb.Models
             set { this.codEmpresa = value == null ? string.Empty : value.ToUpper(); }
         }
 
+        [ForeignKey("TabelaPreco")]
+        [DisplayName("Tabela de Preço")]
+        public int? TabelaPrecoID { get; set; }
+
 
         [DisplayName("Código do Estado")]
         public int? EstadoID { get; set; }
@@ -152,6 +156,7 @@ namespace PedidoWeb.Models
 
         //Lazy Load
         public virtual Empresa Empresa { get; set; }
+        public virtual TabelaPreco TabelaPreco { get; set; }
 
     }
 }

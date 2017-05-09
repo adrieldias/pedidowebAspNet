@@ -404,6 +404,18 @@
     <Compile Include="Migrations\201703231502483_Faturamento.Designer.cs">
       <DependentUpon>201703231502483_Faturamento.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704111828534_TabelaPreco.cs" />
+    <Compile Include="Migrations\201704111828534_TabelaPreco.Designer.cs">
+      <DependentUpon>201704111828534_TabelaPreco.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704121247489_CadastroTabelaPreco.cs" />
+    <Compile Include="Migrations\201704121247489_CadastroTabelaPreco.Designer.cs">
+      <DependentUpon>201704121247489_CadastroTabelaPreco.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704131436237_TabelaPreco_PedidoItem.cs" />
+    <Compile Include="Migrations\201704131436237_TabelaPreco_PedidoItem.Designer.cs">
+      <DependentUpon>201704131436237_TabelaPreco_PedidoItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Estado.cs" />
@@ -736,6 +748,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703231502483_Faturamento.resx">
       <DependentUpon>201703231502483_Faturamento.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704111828534_TabelaPreco.resx">
+      <DependentUpon>201704111828534_TabelaPreco.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704121247489_CadastroTabelaPreco.resx">
+      <DependentUpon>201704121247489_CadastroTabelaPreco.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704131436237_TabelaPreco_PedidoItem.resx">
+      <DependentUpon>201704131436237_TabelaPreco_PedidoItem.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

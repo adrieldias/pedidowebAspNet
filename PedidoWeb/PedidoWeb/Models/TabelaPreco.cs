@@ -6,6 +6,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 
 namespace PedidoWeb.Models
 {
@@ -15,8 +16,8 @@ namespace PedidoWeb.Models
         public int TabelaPrecoID { get; set; }
 
         [ForeignKey("Empresa")]
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string CodEmpresa { get; set; }
+        public virtual Empresa Empresa { get; set; } //Lazy Load
 
         [DisplayName("Código")]
         public int CodTabelaPrecoCab { get; set; }
