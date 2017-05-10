@@ -44,7 +44,7 @@ namespace PedidoWeb.Controllers
             ViewBag.CurrentFilter = search;
 
             var codEmpresa = pedidoHelper.UsuarioCorrente.CodEmpresa;
-            var produtos = db.Produtoes.Where(p => p.CodEmpresa == codEmpresa);
+            var produtos = db.Produtoes.Where(p => p.CodEmpresa == codEmpresa && p.Situacao == "ATIVO");
             
 
             if (!String.IsNullOrEmpty(search))
