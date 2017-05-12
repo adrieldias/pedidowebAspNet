@@ -64,8 +64,8 @@ namespace PedidoWeb.Controllers.Negocio
                 }
             }
             Cadastro cadastro = db.Cadastroes.Find(p.CadastroID);
-            if (cadastro.AtrasoPagamento)
-            {
+            if (cadastro.AtrasoPagamento && cadastro.CodEmpresa != "LACTOMIL")
+            {                
                 MotivoStatus.Add("Cliente com títulos sem pagamento");
                 analise = true;
                 //return "EM ANALISE";
