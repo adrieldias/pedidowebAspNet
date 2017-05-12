@@ -321,6 +321,7 @@
                             , prazoVencimentoID: $('#PrazoVencimentoID').val()
                             , cadastroID: cadastroSelecionado
                             , filialID: $('#FilialID').val()
+                            , tabelaPrecoID: $('#TabelaPrecoID').val()
                         }),
                         success: function (json) {                            
                             var autoc = [];
@@ -488,34 +489,12 @@
 
             // Add ValorUnitario change function
             $('#ProdutoID').change(function () {
-                bloqueiaOperacoes(true);
-                $.ajax({
-                    url: '/Pedido/ValorUnitario',
-                    type: 'POST',
-                    data: jQuery.param({
-                        cadastroID: $('#CadastroID').val()
-                        , produtoID: $('#ProdutoID').val()
-                        , prazoVencimentoID: $('#PrazoVencimentoID').val()
-                        , filialID: $('#FilialID').val()
-                    }),
-                    datatype: "JSON",
-                    //contentType: "application/json",
-                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-                    success: function (d) {                        
-                        if (d.status == true) {
-                            $('#ValorUnitario').val(d.valor);
-                            bloqueiaOperacoes(false);
-                        }
-                        else {
-                            bloqueiaOperacoes(false);
-                            alert(d.errorMessage);
-                        }
-                    },
-                    error: function () {
-                        bloqueiaOperacoes(false);
-                        alert('Erro ao buscar valor do item. Por favor tente novamente.');
-                    }
-                })
+                buscaValorUnitario();
+            });
+
+            // Add TabelaPreco change function
+            $('#TabelaPrecoID').change(function(){
+                buscaValorUnitario();
             });
 
             // Add button click function
@@ -887,6 +866,48 @@
             // Habilita/Desabilita botão para salvar pedido
             function habilitaSubmit() {
                 $('#submit').prop('disabled', (pedidoItens.length === 0))                
+            };
+
+            function buscaValorUnitario(){
+                
+                bloqueiaOperacoes(true);
+
+                //alert(
+                //    tpCons == 'FILTRO' ? cadastroSelecionado : $('#CadastroID').val()
+                //      +'\n'+ tpCons == 'FILTRO' ? produtoSelecionado : $('#ProdutoID').val()
+                //      +'\n'+ $('#PrazoVencimentoID').val()
+                //      +'\n'+ $('#FilialID').val()
+                //      +'\n'+ $('#TabelaPrecoID').val()
+                //    );
+
+                $.ajax({
+                    url: '/Pedido/ValorUnitario',
+                    type: 'POST',
+                    data: jQuery.param({
+                        cadastroID: tpCons == 'FILTRO' ? cadastroSelecionado : $('#CadastroID').val()
+                        , produtoID: tpCons == 'FILTRO' ? produtoSelecionado : $('#ProdutoID').val()
+                        , prazoVencimentoID: $('#PrazoVencimentoID').val()
+                        , filialID: $('#FilialID').val()
+                        , tabelaPrecoID: $('#TabelaPrecoID').val()
+                    }),
+                    datatype: "JSON",
+                    //contentType: "application/json",
+                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                    success: function (d) {                        
+                        if (d.status == true) {
+                            $('#ValorUnitario').val(d.valor);
+                            bloqueiaOperacoes(false);
+                        }
+                        else {
+                            bloqueiaOperacoes(false);
+                            alert(d.errorMessage);
+                        }
+                    },
+                    error: function () {
+                        bloqueiaOperacoes(false);
+                        alert('Erro ao buscar valor do item. Por favor tente novamente.');
+                    }
+                })
             };
         });
     </script>

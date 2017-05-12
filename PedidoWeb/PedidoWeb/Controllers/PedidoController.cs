@@ -244,9 +244,6 @@ namespace PedidoWeb.Controllers
                 ViewBag.TemTabelaPreco = false;
             }
 
-
-            
-            
             return View();
         }
 
@@ -549,6 +546,23 @@ namespace PedidoWeb.Controllers
                 }
             }
             return new JsonResult { Data = new { status = status, valor = valor, ipi = ipi ,errorMessage = errorMessage } };
+        }
+
+        /// <summary>
+        /// Método assincrono para retornar a tabela de preços quando um cliente é informado no pedido
+        /// </summary>
+        /// <param name="CadastroID"></param>
+        /// <returns>JsonResult com a tabela de preços</returns>
+        [HttpPost]
+        [Authorize]
+        public JsonResult TabelaPreco(int CadastroID)
+        {
+            var cadastro = db.Cadastroes.Find(CadastroID);
+
+            if (cadastro.TabelaPrecoID != null && cadastro.TabelaPrecoID > 0)
+                return new JsonResult { Data = new { tabela = cadastro.TabelaPrecoID } };
+            else
+                return new JsonResult { Data = new { tabela = string.Empty } };
         }
 
         // POST: /Pedido/Create

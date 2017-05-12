@@ -285,6 +285,7 @@
                             , prazoVencimentoID: $('#PrazoVencimentoID').val()
                             , cadastroID: cadastroSelecionado
                             , filialID: $('#FilialID').val()
+                            , tabelaPrecoID: $('#TabelaPrecoID').val()
                         }),
                         success: function (json) {                            
                             var autoc = [];
@@ -329,7 +330,7 @@
                                     label: data.Nome,
                                     value: data.CadastroID                                    
                                 });
-                            });
+                            });                            
                             response(autoc);
                         },
                         error: function (xmlHttpRequest, textStatus, errorThrown) {
@@ -341,7 +342,8 @@
                 select: function (event, ui, json) {
                     //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value);
                     $('#CadastroAux').val(ui.item.label);
-                    cadastroSelecionado = ui.item.value;                    
+                    cadastroSelecionado = ui.item.value;
+                    buscaTabelaPreco();
                     return false;
                 }
             });
@@ -427,8 +429,14 @@
                 buscaValorUnitario();
             });
 
+            // Add TabelaPreco change function
             $('#TabelaPrecoID').change(function () {
                 buscaValorUnitario();
+            });
+
+            // Add CadastroID change function
+            $('#CadastroID').change(function () {
+                buscaTabelaPreco();
             });
 
             // Add button click function
@@ -568,9 +576,9 @@
                             , produtoID: produtoSelecionado
                             , valUnitario: $('#ValorUnitario').val().trim().replace('.', ',')
                             , valDesconto: $('#ValorDesconto').val() == undefined ? '0' : $('#ValorDesconto').val().trim().replace('.', ',')
-                            , quantidade: $('#Quantidade').val().trim().replace('.', ',')                            
+                            , quantidade: $('#Quantidade').val().trim().replace('.', ',')
                             , filialID: $('#FilialID').val().trim()
-                            , operacaoID : $('#OperacaoID').val().trim()
+                            , operacaoID: $('#OperacaoID').val().trim()
                         }),
                         datatype: "JSON",
                         //contentType: "application/json",
@@ -585,7 +593,7 @@
                                 var i = pedidoItens.length - 1;
                                 pedidoItens[i].ValorIcmsSubst = d.valor;
                                 pedidoItens[i].ValorIPI = d.ipi;
-                                GeneratedItemsTable();                                
+                                GeneratedItemsTable();
                                 bloqueiaOperacoes(false);
                             }
                             else {
@@ -599,7 +607,8 @@
                             bloqueiaOperacoes(false);
                             alert('Erro ao calcular impostos. Por favor tente novamente.');
                         }
-                    })
+                    });
+                    
                     if ($('#ItemIndex').val() == '') { //adição de itens       
                         pedidoItens.push({                            
                             ProdutoID: produtoSelecionado,
@@ -857,15 +866,15 @@
 
             // Busca valor unitário
             function buscaValorUnitario() {
-                if ($('#ProdutoID').val() == '')
-                    return;
+                
                 bloqueiaOperacoes(true);
+
                 $.ajax({
                     url: '/Pedido/ValorUnitario',
                     type: 'POST',
                     data: jQuery.param({
-                        cadastroID: $('#CadastroID').val() == '' ? 0 : $('#CadastroID').val()
-                        , produtoID: $('#ProdutoID').val()
+                        cadastroID: tpCons == 'FILTRO' ? cadastroSelecionado : $('#CadastroID').val()
+                        , produtoID: tpCons == 'FILTRO' ? produtoSelecionado : $('#ProdutoID').val()
                         , prazoVencimentoID: $('#PrazoVencimentoID').val()
                         , filialID: $('#FilialID').val()
                         , tabelaPrecoID: $('#TabelaPrecoID').val()
@@ -889,6 +898,32 @@
                     }
                 })
             }
+
+            // Busca Tabela de Preço
+            function buscaTabelaPreco() {                
+                $.ajax({
+                    url: '/Pedido/TabelaPreco',
+                    type: 'POST',
+                    data: jQuery.param({
+                        cadastroID: (tpCons == 'LISTAGEM' ? $('#CadastroID').val() : cadastroSelecionado)
+                    }),
+                    datatype: "JSON",
+                    //contentType: "application/json",
+                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                    success: function (d) {
+                        if (d.tabela != '') {
+                            $('#TabelaPrecoID').val(d.tabela);
+                        }
+                        else
+                        {
+                            $('#TabelaPrecoID').val('');
+                        }
+                    },
+                    error: function () {
+                        alert('Erro ao buscar tabela de preço.');
+                    }
+                });
+            };
 
         });
     </script>
