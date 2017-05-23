@@ -89,6 +89,21 @@ namespace PedidoWeb.Controllers
             return View(cadastro);
         }
 
+        // Teste
+        public JsonResult Teste(int? id)
+        {
+            if (id == null)
+            {
+                return Json(new JsonResult { Data = new { cadastro = string.Empty } }, JsonRequestBehavior.AllowGet);
+            }
+            Cadastro cadastro = db.Cadastroes.First(c => c.CadastroID == id);
+            if (cadastro == null)
+            {
+                return Json(new JsonResult { Data = new { cadastro = string.Empty } }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new JsonResult { Data = new { cadastro = cadastro } }, JsonRequestBehavior.AllowGet);
+        }
+
         // GET: /Cadastro/Create
         //[Authorize]
         //public ActionResult Create()
