@@ -532,7 +532,7 @@ namespace PedidoWeb.Controllers
                  
                 double desconto = string.IsNullOrEmpty(valDesconto) == true ? 0.00 : Convert.ToDouble(valDesconto);
                 double valorUnitario = Convert.ToDouble(valUnitario);
-                int qtQuantidade = Convert.ToInt32(quantidade);
+                double qtQuantidade = Convert.ToDouble(quantidade);
                 int idFilial = Convert.ToInt32(filialID);
                 var filial = db.Filials.Include(e => e.Estado).First(f => f.FilialID == idFilial);
 

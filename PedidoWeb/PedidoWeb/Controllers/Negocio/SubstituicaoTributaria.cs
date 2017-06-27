@@ -62,7 +62,7 @@ namespace PedidoWeb.Controllers.Negocio
 
         public double CalculaSubstituicaoTributaria(Cadastro cadastro
             , Produto produto, double valUnitario, double valDesconto
-            , int quantidade, Filial filial, Operacao operacao)
+            , double quantidade, Filial filial, Operacao operacao)
         {
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.Current.User.Identity.Name);
 

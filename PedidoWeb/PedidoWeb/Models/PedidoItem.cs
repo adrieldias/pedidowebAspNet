@@ -22,8 +22,8 @@ namespace PedidoWeb.Models
         public int ProdutoID { get; set; }
         public virtual Produto Produto { get; set; }
 
-        public int Quantidade { get; set; }
-
+        public decimal Quantidade { get; set; }
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true, NullDisplayText = "0,00")]
         [DisplayName("Observações")]
         public string Observacao { get; set; }
 
