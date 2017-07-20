@@ -775,19 +775,19 @@ namespace PedidoWeb.Controllers
             {
                 if (int.TryParse(term, out codigo))
                 {
-                    produtos = db.Produtoes.Where(c => c.Descricao.Contains(term) || c.CodProduto == codigo)
-                        .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
+                    produtos = db.Produtoes.Where(c => c.Descricao.StartsWith(term) || c.CodProduto == codigo)
+                        .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).Take(100).OrderBy(c => c.CodProduto).ToList();
                 }
                 else
                 {
-                    produtos = db.Produtoes.Where(c => c.Descricao.Contains(term))
-                        .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
+                    produtos = db.Produtoes.Where(c => c.Descricao.StartsWith(term))
+                        .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).Take(100).OrderBy(c => c.Descricao).ToList();
                 }
             }
             else
             {
-                produtos = db.Produtoes.Where(c => c.Descricao.Contains(term) || c.NumFabricante.Contains(term))
-                        .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).ToList();
+                produtos = db.Produtoes.Where(c => c.Descricao.StartsWith(term) || c.NumFabricante.StartsWith(term))
+                        .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).Take(100).OrderBy(c => c.Descricao).ToList();
             }
 
             ValorUnitario v = new ValorUnitario();
@@ -825,15 +825,17 @@ namespace PedidoWeb.Controllers
             List<Cadastro> cadastros;
             if (int.TryParse(term, out codigo))
             {
-                cadastros = db.Cadastroes.Where(c => c.Nome.Contains(term) || c.CodCadastro == codigo)
+                cadastros = db.Cadastroes.Where(c => c.Nome.StartsWith(term) || c.CodCadastro == codigo)
                     .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
-                    .Where(c => c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID || pedidoHelper.UsuarioCorrente.CodEmpresa == "NUTRIVET").ToList();
+                    .Where(c => c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID || pedidoHelper.UsuarioCorrente.CodEmpresa == "NUTRIVET")
+                    .Take(100).OrderBy(c => c.CodCadastro).ToList();
             }
             else
             {
-                cadastros = db.Cadastroes.Where(c => c.Nome.Contains(term))
+                cadastros = db.Cadastroes.Where(c => c.Nome.StartsWith(term))
                     .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
-                    .Where(c => c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID || pedidoHelper.UsuarioCorrente.CodEmpresa == "NUTRIVET").ToList();
+                    .Where(c => c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID || pedidoHelper.UsuarioCorrente.CodEmpresa == "NUTRIVET")
+                    .Take(100).OrderBy(c => c.Nome).ToList();
             }
 
             foreach (var p in cadastros)

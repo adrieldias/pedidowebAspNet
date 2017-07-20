@@ -1,7 +1,7 @@
 ﻿
 @{
     ViewBag.Title = "Create";
-
+    
 }    
     <div class="principal1coluna">
         <h2>Novo Pedido</h2>
@@ -307,7 +307,7 @@
                 select: function (event, ui, json) {                    
                     //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value + 'Valor ' + ui.item.valor );
                     $('#ProdutoAux').val(ui.item.label);
-                    $('#ValorUnitario').val(ui.item.valor);
+                    $('#ValorUnitario').val(ui.item.valor.toFixed(2).replace(".",","));
                     descProdutoSelecionado = ui.item.label;
                     produtoSelecionado = ui.item.value;
                     return false;
@@ -403,7 +403,7 @@
             // Add desconto change function        
             $('#PercDesconto').change(function () {
                 var percDesconto = Number($('#PercDesconto').val().replace(',', '.'));
-                var valUnitario = Number($('#ValorUnitario').val().replace(',', '.'));
+                var valUnitario = Number($('#ValorUnitario').val().replace(",","."));
 
                 if (isNaN(percDesconto)) {
                     $('#PercDesconto').siblings('span.error').css('visibility', 'visible');
@@ -574,8 +574,8 @@
                         data: jQuery.param({
                             cadastroID: cadastroSelecionado
                             , produtoID: produtoSelecionado
-                            , valUnitario: $('#ValorUnitario').val().trim().replace('.', ',')
-                            , valDesconto: $('#ValorDesconto').val() == undefined ? '0' : $('#ValorDesconto').val().trim().replace('.', ',')
+                            , valUnitario: $('#ValorUnitario').val().trim().replace(".", ",")
+                            , valDesconto: $('#ValorDesconto').val() == undefined ? '0' : $('#ValorDesconto').val().trim().replace(".", ",")
                             , quantidade: $('#Quantidade').val().trim().replace('.', ',')
                             , filialID: $('#FilialID').val().trim()
                             , operacaoID: $('#OperacaoID').val().trim()
@@ -613,12 +613,12 @@
                         pedidoItens.push({                            
                             ProdutoID: produtoSelecionado,
                             Quantidade: $('#Quantidade').val().trim().replace('.',','),
-                            ValorUnitario: $('#ValorUnitario').val().trim().replace('.',','),
+                            ValorUnitario: $('#ValorUnitario').val().trim().replace(".", ","),
                             Observacao: $('#ObservacaoItem').val() == undefined ? '' : $('#ObservacaoItem').val().trim(),
                             //DescProduto: el.options[el.selectedIndex].text,
                             DescProduto: descProdutoSelecionado,
-                            ValorDesconto: $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.', ','),
-                            PercentualDesconto: $('#PercDesconto').val().trim().replace('.', ','),
+                            ValorDesconto: $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace(".", ","),
+                            PercentualDesconto: $('#PercDesconto').val().trim().replace(".", ","),
                             ValorImcsSubst: '0,00',
                             ValorIPI: '0,00',
                             tabelaPrecoID: $('#TabelaPrecoID').val()
@@ -627,11 +627,11 @@
                         var i = $('#ItemIndex').val();
                         pedidoItens[i].ProdutoID = produtoSelecionado;
                         pedidoItens[i].Quantidade = $('#Quantidade').val().trim().replace('.', ',');
-                        pedidoItens[i].ValorUnitario = $('#ValorUnitario').val().trim().replace('.', ',');
+                        pedidoItens[i].ValorUnitario = $('#ValorUnitario').val().trim().replace(".", ",");
                         pedidoItens[i].Observacao = $('#ObservacaoItem').val() == undefined ? '' : $('#ObservacaoItem').val().trim();
                         pedidoItens[i].DescProduto = descProdutoSelecionado;
-                        pedidoItens[i].ValorDesconto = $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace('.', ',');
-                        pedidoItens[i].PercentualDesconto = $('#PercDesconto').val().trim().replace('.', ',');
+                        pedidoItens[i].ValorDesconto = $('#ValorDesconto').val() == undefined ? '' : $('#ValorDesconto').val().trim().replace(".", ",");
+                        pedidoItens[i].PercentualDesconto = $('#PercDesconto').val().trim().replace(".", ",");
                         pedidoItens[i].ValorIcmsSubst = '0,00';
                         pedidoItens[i].ValorIPI = '0,00';
                         pedidoItens[i].TabelaPrecoID = $('#TabelaPrecoID').val();
@@ -775,9 +775,9 @@
                         else
                             $row.append($('<td/>').html(parseFloat(val.ValorDesconto.trim().replace(',', '.')).toFixed(2).trim().replace('.', ',')));
                         
-                        $row.append($('<td/>').html(val.ValorUnitario));
+                        $row.append($('<td/>').html(parseFloat(val.ValorUnitario).toFixed(2).replace(".", ",")));
                         $row.append($('<td />').html(parseFloat(val.ValorIcmsSubst).toFixed(2).trim().replace('.', ',')));
-                        $row.append($('<td />').html(parseFloat(val.ValorIPI).toFixed(2).trim().replace('.', ',')));
+                        $row.append($('<td />').html(parseFloat(val.ValorIPI).toFixed(2).trim().replace(".", ",")));
                         var $span = $('<span class="input-group-btn btn-group-sm" style="width:50px"/>');
                         $span.append($('<button id=editarItem class="btn btn-primary">' +
                             '<span class="glyphicon glyphicon-pencil" aria-hidden="true">' +
@@ -787,10 +787,10 @@
                                     else
                                         $('#ProdutoID').val(val.ProdutoID).focus();
                                     $('#Quantidade').val(val.Quantidade);
-                                    $('#ValorUnitario').val(val.ValorUnitario);
+                                    $('#ValorUnitario').val(parseFloat(val.ValorUnitario).toFixed(2).replace(".", ","));
                                     $('#ObservacaoItem').val(val.Observacao);
-                                    $('#PercDesconto').val(val.percDesconto);
-                                    $('#ValorDesconto').val(val.ValorDesconto);
+                                    $('#PercDesconto').val(parseFloat(val.percDesconto).toFixed(2).replace(".", ","));
+                                    $('#ValorDesconto').val(parseFloat(val.ValorDesconto).toFixed(2).replace(".", ","));
                                     $('#ItemIndex').val(i);
                                     produtoSelecionado = val.ProdutoID;
                                     descProdutoSelecionado = val.DescProduto;
@@ -884,7 +884,8 @@
                     contentType: "application/x-www-form-urlencoded; charset=UTF-8",
                     success: function (d) {
                         if (d.status == true) {
-                            $('#ValorUnitario').val(d.valor);
+                            alert(Number.prototype.formatMoney(d.valor));
+                            $('#ValorUnitario').val(d.valor.toFixed(2).replace(".",","));
                             bloqueiaOperacoes(false);
                         }
                         else {
@@ -925,6 +926,6 @@
                 });
             };
 
-        });
+        });        
     </script>
 }
