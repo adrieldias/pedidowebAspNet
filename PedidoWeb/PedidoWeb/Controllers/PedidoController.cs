@@ -190,7 +190,8 @@ namespace PedidoWeb.Controllers
             PedidoHelper pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             var usuario = pedidoHelper.UsuarioCorrente;
             var cadastrosViewBag = db.Cadastroes
-                .Where(c => c.CodEmpresa == usuario.CodEmpresa && c.Situacao == "ATIVO" && c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID)
+                .Where(c => c.CodEmpresa == usuario.CodEmpresa && c.Situacao == "ATIVO" && 
+                    (c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID || usuario.CodEmpresa == "NUTRIVET"))
                 .OrderBy(c => c.Nome);
             foreach(var c in cadastrosViewBag)
             {
@@ -626,7 +627,8 @@ namespace PedidoWeb.Controllers
 
                 ViewBag.VendedorID = new SelectList(db.Vendedors, "VendedorID", "Nome", pedido.VendedorID);
                 ViewBag.CadastroID = new SelectList(db.Cadastroes
-                .Where(c => c.CodEmpresa == usuario.CodEmpresa)
+                .Where(c => c.CodEmpresa == usuario.CodEmpresa && c.Situacao == "ATIVO" &&
+                    (c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID || usuario.CodEmpresa == "NUTRIVET"))
                 .OrderBy(c => c.Nome), "CadastroID", "Nome", pedido.CadastroID);
                 ViewBag.PrazoVencimentoID = new SelectList(db.PrazoVencimentoes
                     .Where(p => p.CodEmpresa == usuario.CodEmpresa && p.Situacao == "ATIVO")
@@ -825,13 +827,13 @@ namespace PedidoWeb.Controllers
             {
                 cadastros = db.Cadastroes.Where(c => c.Nome.Contains(term) || c.CodCadastro == codigo)
                     .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
-                    .Where(c => c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID).ToList();
+                    .Where(c => c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID || pedidoHelper.UsuarioCorrente.CodEmpresa == "NUTRIVET").ToList();
             }
             else
             {
                 cadastros = db.Cadastroes.Where(c => c.Nome.Contains(term))
                     .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
-                    .Where(c => c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID).ToList();
+                    .Where(c => c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID || pedidoHelper.UsuarioCorrente.CodEmpresa == "NUTRIVET").ToList();
             }
 
             foreach (var p in cadastros)

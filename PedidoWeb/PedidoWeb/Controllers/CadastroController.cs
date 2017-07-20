@@ -48,7 +48,7 @@ namespace PedidoWeb.Controllers
 
             var cadastros = from s in db.Cadastroes.Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
                           select s;
-            if (ViewBag.TipoUsuario == "VENDEDOR")
+            if (ViewBag.TipoUsuario == "VENDEDOR" && pedidoHelper.UsuarioCorrente.CodEmpresa != "NUTRIVET")
                 cadastros = cadastros.Where(c => c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID);
             if (!String.IsNullOrEmpty(search))
                 cadastros = cadastros.Where(s => s.Nome.ToUpper().Contains(search.ToUpper()));
