@@ -343,7 +343,7 @@
                 select: function (event, ui, json) {                    
                     //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value + 'Valor ' + ui.item.valor );
                     $('#ProdutoAux').val(ui.item.label);
-                    $('#ValorUnitario').val(ui.item.valor);
+                    $('#ValorUnitario').val(ui.item.valor.toFixed(2).replace(".",","));
                     descProdutoSelecionado = ui.item.label;
                     produtoSelecionado = ui.item.value;                    
                     return false;
@@ -776,7 +776,7 @@
                         else
                             //$row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
                             $row.append($('<td/>').html(parseFloat(val.ValorDesconto.toString().replace(',', '.')).toFixed(2).trim().replace('.', ',')));
-                        $row.append($('<td/>').html(val.ValorUnitario));
+                        $row.append($('<td/>').html(parseFloat(val.ValorUnitario).toFixed(2).replace(".",",")));
                         //$row.append($('<td />').html(parseFloat(val.ValorIcmsSubst).toFixed(2).trim().replace('.', ',')));
                         $row.append($('<td />').html(parseFloat((val.ValorIcmsSubst == undefined ? 0 : val.ValorIcmsSubst)).toFixed(2).trim().replace('.', ',')));
                         $row.append($('<td />').html(parseFloat(val.ValorIPI).toFixed(2).trim().replace('.', ',')));
@@ -789,10 +789,10 @@
                                     else
                                         $('#ProdutoID').val(val.ProdutoID).focus();
                                     $('#Quantidade').val(val.Quantidade);
-                                    $('#ValorUnitario').val(val.ValorUnitario);
+                                    $('#ValorUnitario').val(parseFloat(val.ValorUnitario).toFixed(2).replace(".",","));
                                     $('#ObservacaoItem').val(val.Observacao);
-                                    $('#PercDesconto').val(val.percDesconto);
-                                    $('#ValorDesconto').val(val.ValorDesconto);
+                                    $('#PercDesconto').val(parseFloat(val.percDesconto).toFixed(2).replace(".",","));
+                                    $('#ValorDesconto').val(parseFloat(val.ValorDesconto).toFixed(2).replace(".",","));
                                     $('#ItemIndex').val(i);
                                     $('#TabelaPrecoID').val(val.TabelaPrecoID);
                                     produtoSelecionado = val.ProdutoID;
@@ -895,7 +895,7 @@
                     contentType: "application/x-www-form-urlencoded; charset=UTF-8",
                     success: function (d) {                        
                         if (d.status == true) {
-                            $('#ValorUnitario').val(d.valor);
+                            $('#ValorUnitario').val(d.valor.toFixed(2).replace(".",","));
                             bloqueiaOperacoes(false);
                         }
                         else {
