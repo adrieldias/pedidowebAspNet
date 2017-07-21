@@ -777,10 +777,10 @@
                         else
                             //$row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
                             $row.append($('<td/>').html(parseFloat(val.ValorDesconto.toString().replace(',', '.')).toFixed(2).trim().replace('.', ',')));
-                        $row.append($('<td/>').html(parseFloat(val.ValorUnitario).toFixed(2).replace(".",",")));
+                        $row.append($('<td/>').html(parseFloat(val.ValorUnitario.replace(",",".")).toFixed(2).replace(".",",")));
                         //$row.append($('<td />').html(parseFloat(val.ValorIcmsSubst).toFixed(2).trim().replace('.', ',')));
-                        $row.append($('<td />').html(parseFloat((val.ValorIcmsSubst == undefined ? 0 : val.ValorIcmsSubst)).toFixed(2).trim().replace('.', ',')));
-                        $row.append($('<td />').html(parseFloat(val.ValorIPI).toFixed(2).trim().replace('.', ',')));
+                        $row.append($('<td />').html(parseFloat((val.ValorIcmsSubst == undefined ? 0 : val.ValorIcmsSubst.replace(",","."))).toFixed(2).trim().replace('.', ',')));
+                        $row.append($('<td />').html(parseFloat(val.ValorIPI.replace(",",".")).toFixed(2).trim().replace('.', ',')));
                         var $span = $('<span class="input-group-btn btn-group-sm" style="width:50px"/>');
                         $span.append($('<button id=editarItem class="btn btn-primary">' +
                                 '<span class="glyphicon glyphicon-pencil" aria-hidden="true">' +
@@ -790,10 +790,10 @@
                                     else
                                         $('#ProdutoID').val(val.ProdutoID).focus();
                                     $('#Quantidade').val(val.Quantidade);
-                                    $('#ValorUnitario').val(parseFloat(val.ValorUnitario).toFixed(2).replace(".",","));
+                                    $('#ValorUnitario').val(parseFloat(val.ValorUnitario.replace(",",".")).toFixed(2).replace(".",","));
                                     $('#ObservacaoItem').val(val.Observacao);
-                                    $('#PercDesconto').val(parseFloat(val.percDesconto).toFixed(2).replace(".",","));
-                                    $('#ValorDesconto').val(parseFloat(val.ValorDesconto).toFixed(2).replace(".",","));
+                                    $('#PercDesconto').val(parseFloat(val.percDesconto.replace(",",".")).toFixed(2).replace(".",","));
+                                    $('#ValorDesconto').val(parseFloat(val.ValorDesconto.replace(",",".")).toFixed(2).replace(".",","));
                                     $('#ItemIndex').val(i);
                                     $('#TabelaPrecoID').val(val.TabelaPrecoID);
                                     produtoSelecionado = val.ProdutoID;
