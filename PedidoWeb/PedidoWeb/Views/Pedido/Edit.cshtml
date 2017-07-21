@@ -771,16 +771,13 @@
                         $row.append($('<td/>').html(val.ProdutoID));
                         $row.append($('<td/>').html(val.DescProduto));
                         $row.append($('<td/>').html(val.Quantidade));            
-          
-                        if (val.ValorDesconto == null || val.ValorDesconto == '')
-                            $row.append($('<td/>').html('0.00'));
-                        else
-                            //$row.append($('<td/>').html(parseFloat(val.ValorDesconto).toFixed(2)));
-                            $row.append($('<td/>').html(parseFloat(val.ValorDesconto.toString().replace(',', '.')).toFixed(2).trim().replace('.', ',')));
-                        $row.append($('<td/>').html(parseFloat(val.ValorUnitario.replace(",",".")).toFixed(2).replace(".",",")));
-                        //$row.append($('<td />').html(parseFloat(val.ValorIcmsSubst).toFixed(2).trim().replace('.', ',')));
-                        $row.append($('<td />').html(parseFloat((val.ValorIcmsSubst == undefined ? 0 : val.ValorIcmsSubst.replace(",","."))).toFixed(2).trim().replace('.', ',')));
-                        $row.append($('<td />').html(parseFloat(val.ValorIPI.replace(",",".")).toFixed(2).trim().replace('.', ',')));
+                        
+                        $row.append($('<td/>').html(parseFloat(val.ValorDesconto == '' || val.ValorDesconto == null || val.ValorDesconto == undefined ? 0 : val.ValorDesconto.toString().replace(',', '.')).toFixed(2).toString().replace('.', ',')));
+                        
+                        $row.append($('<td/>').html(parseFloat(val.ValorUnitario.toString().replace(',','.')).toFixed(2).toString().replace('.', ',')));
+                        $row.append($('<td/>').html(parseFloat(val.ValorIcmsSubst == null || val.ValorIcmsSubst == undefined ? 0 : val.ValorIcmsSubst.toString().replace(',','.')).toFixed(2).toString().replace('.', ',')));
+                        $row.append($('<td/>').html(parseFloat(val.ValorIPI == undefined ? 0 : val.ValorIPI.toString().replace(',','.')).toFixed(2).toString().replace('.', ',')));
+                        
                         var $span = $('<span class="input-group-btn btn-group-sm" style="width:50px"/>');
                         $span.append($('<button id=editarItem class="btn btn-primary">' +
                                 '<span class="glyphicon glyphicon-pencil" aria-hidden="true">' +
@@ -790,10 +787,12 @@
                                     else
                                         $('#ProdutoID').val(val.ProdutoID).focus();
                                     $('#Quantidade').val(val.Quantidade);
-                                    $('#ValorUnitario').val(parseFloat(val.ValorUnitario.replace(",",".")).toFixed(2).replace(".",","));
+                                    $('#ValorUnitario').val(parseFloat(val.ValorUnitario == null || val.ValorUnitario == undefined ? 0 : val.ValorUnitario.toString().replace(',','.')).toFixed(2).toString().replace('.', ','));
                                     $('#ObservacaoItem').val(val.Observacao);
-                                    $('#PercDesconto').val(parseFloat(val.percDesconto.replace(",",".")).toFixed(2).replace(".",","));
-                                    $('#ValorDesconto').val(parseFloat(val.ValorDesconto.replace(",",".")).toFixed(2).replace(".",","));
+                                    $('#PercDesconto').val(parseFloat(val.percDesconto == null || val.percDesconto == undefined ? 0 : val.percDesconto.toString().replace(',','.')).toFixed(2).toString().replace('.', ','));
+                                    alert(val.ValorDesconto);
+                                    $('#ValorDesconto').val(parseFloat(val.ValorDesconto == '' || val.ValorDesconto == null || val.ValorDesconto == undefined ? 0 : val.ValorDesconto.toString().replace(',','.')).toFixed(2).toString().replace('.', ','));
+                                    
                                     $('#ItemIndex').val(i);
                                     $('#TabelaPrecoID').val(val.TabelaPrecoID);
                                     produtoSelecionado = val.ProdutoID;
@@ -870,7 +869,6 @@
             };
 
             function buscaValorUnitario(){
-                
                 bloqueiaOperacoes(true);
 
                 //alert(
@@ -895,7 +893,7 @@
                     //contentType: "application/json",
                     contentType: "application/x-www-form-urlencoded; charset=UTF-8",
                     success: function (d) {                        
-                        if (d.status == true) {
+                        if (d.status == true) {                            
                             $('#ValorUnitario').val(d.valor.toFixed(2).replace(".",","));
                             bloqueiaOperacoes(false);
                         }
