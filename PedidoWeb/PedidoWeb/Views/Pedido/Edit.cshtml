@@ -342,6 +342,7 @@
                 minLength: 0,
                 select: function (event, ui, json) {                    
                     //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value + 'Valor ' + ui.item.valor );
+                    alert(ui.item.valor.toFixed(2).replace(".", ","));
                     $('#ProdutoAux').val(ui.item.label);
                     $('#ValorUnitario').val(ui.item.valor.toFixed(2).replace(".",","));
                     descProdutoSelecionado = ui.item.label;
