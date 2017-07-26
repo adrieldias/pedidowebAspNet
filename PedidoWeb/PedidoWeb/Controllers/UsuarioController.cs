@@ -53,7 +53,7 @@ namespace PedidoWeb.Controllers
                 if (search.Contains('@'))
                     usuarios = usuarios.Where(s => s.Email.ToLower().Contains(search.ToLower()));
                 else
-                    usuarios = usuarios.Where(s => s.Empresa.Nome.ToUpper().Contains(search.ToUpper()));
+                    usuarios = usuarios.Where(s => s.Empresa.CodEmpresa.ToUpper().Contains(search.ToUpper()));
             }
             usuarios = usuarios.OrderBy(s => s.CodEmpresa).ThenBy(s => s.Vendedor.Nome);
             int pageSize = 10;
