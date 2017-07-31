@@ -790,7 +790,7 @@
                                     $('#ValorUnitario').val(parseFloat(val.ValorUnitario == null || val.ValorUnitario == undefined ? 0 : val.ValorUnitario.toString().replace(',','.')).toFixed(2).toString().replace('.', ','));
                                     $('#ObservacaoItem').val(val.Observacao);
                                     $('#PercDesconto').val(parseFloat(val.percDesconto == null || val.percDesconto == undefined ? 0 : val.percDesconto.toString().replace(',','.')).toFixed(2).toString().replace('.', ','));
-                                    alert(val.ValorDesconto);
+                                    
                                     $('#ValorDesconto').val(parseFloat(val.ValorDesconto == '' || val.ValorDesconto == null || val.ValorDesconto == undefined ? 0 : val.ValorDesconto.toString().replace(',','.')).toFixed(2).toString().replace('.', ','));
                                     
                                     $('#ItemIndex').val(i);
