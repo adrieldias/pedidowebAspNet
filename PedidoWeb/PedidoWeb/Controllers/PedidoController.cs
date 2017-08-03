@@ -775,19 +775,25 @@ namespace PedidoWeb.Controllers
             {
                 if (int.TryParse(term, out codigo))
                 {
-                    produtos = db.Produtoes.Where(c => c.Descricao.StartsWith(term) || c.CodProduto == codigo)
-                        .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).Take(100).OrderBy(c => c.CodProduto).ToList();
+                    produtos = db.Produtoes.Where(c => (c.Descricao.Contains(term) || c.CodProduto == codigo) &&
+                        c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                        .OrderBy(m => m.Descricao.StartsWith(term) ? (m.Descricao == term ? 0 : 1) : 2)
+                        .Take(100).ToList();
                 }
                 else
                 {
-                    produtos = db.Produtoes.Where(c => c.Descricao.StartsWith(term))
-                        .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).Take(100).OrderBy(c => c.Descricao).ToList();
+                    produtos = db.Produtoes.Where(c => c.Descricao.Contains(term) &&
+                        c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                        .OrderBy(m => m.Descricao.StartsWith(term) ? (m.Descricao == term ? 0 : 1) : 2)
+                        .Take(100).ToList();
                 }
             }
             else
             {
-                produtos = db.Produtoes.Where(c => c.Descricao.StartsWith(term) || c.NumFabricante.StartsWith(term))
-                        .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa).Take(100).OrderBy(c => c.Descricao).ToList();
+                produtos = db.Produtoes.Where(c => (c.Descricao.Contains(term) || c.NumFabricante.StartsWith(term)) &&
+                        c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                        .OrderBy(m => m.Descricao.StartsWith(term) ? (m.Descricao == term ? 0 : 1) : 2)
+                        .Take(100).ToList();
             }
 
             ValorUnitario v = new ValorUnitario();
@@ -825,17 +831,19 @@ namespace PedidoWeb.Controllers
             List<Cadastro> cadastros;
             if (int.TryParse(term, out codigo))
             {
-                cadastros = db.Cadastroes.Where(c => c.Nome.StartsWith(term) || c.CodCadastro == codigo)
-                    .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
-                    .Where(c => c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID || pedidoHelper.UsuarioCorrente.CodEmpresa == "NUTRIVET")
-                    .Take(100).OrderBy(c => c.CodCadastro).ToList();
+                cadastros = db.Cadastroes.Where(c => (c.Fantasia.Contains(term) || c.Nome.Contains(term) || c.CodCadastro == codigo) &&
+                    c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa &&
+                    (c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID || pedidoHelper.UsuarioCorrente.CodEmpresa == "NUTRIVET"))
+                    .OrderBy(m => m.Nome.StartsWith(term)?(m.Nome == term?0:1):2)
+                    .Take(100).ToList();
             }
             else
             {
-                cadastros = db.Cadastroes.Where(c => c.Nome.StartsWith(term))
-                    .Where(c => c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
-                    .Where(c => c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID || pedidoHelper.UsuarioCorrente.CodEmpresa == "NUTRIVET")
-                    .Take(100).OrderBy(c => c.Nome).ToList();
+                cadastros = db.Cadastroes.Where(c => (c.Fantasia.Contains(term) || c.Nome.Contains(term)) &&
+                    c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa &&
+                    (c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID || pedidoHelper.UsuarioCorrente.CodEmpresa == "NUTRIVET"))
+                    .OrderBy(m => m.Nome.StartsWith(term) ? (m.Nome == term ? 0 : 1) : 2)
+                    .Take(100).ToList();
             }
 
             foreach (var p in cadastros)
