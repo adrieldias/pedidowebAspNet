@@ -790,7 +790,7 @@ namespace PedidoWeb.Controllers
             }
             else
             {
-                produtos = db.Produtoes.Where(c => (c.Descricao.Contains(term) || c.NumFabricante.StartsWith(term)) &&
+                produtos = db.Produtoes.Where(c => (c.Descricao.Contains(term) || c.NumFabricante.Contains(term)) &&
                         c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
                         .OrderBy(m => m.Descricao.StartsWith(term) ? (m.Descricao == term ? 0 : 1) : 2)
                         .Take(100).ToList();
