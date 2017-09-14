@@ -776,14 +776,14 @@ namespace PedidoWeb.Controllers
                 if (int.TryParse(term, out codigo))
                 {
                     produtos = db.Produtoes.Where(c => (c.Descricao.Contains(term) || c.CodProduto == codigo) &&
-                        c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                        c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa && c.Situacao == "ATIVO")
                         .OrderBy(m => m.Descricao.StartsWith(term) ? (m.Descricao == term ? 0 : 1) : 2)
                         .Take(100).ToList();
                 }
                 else
                 {
                     produtos = db.Produtoes.Where(c => c.Descricao.Contains(term) &&
-                        c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                        c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa && c.Situacao == "ATIVO")
                         .OrderBy(m => m.Descricao.StartsWith(term) ? (m.Descricao == term ? 0 : 1) : 2)
                         .Take(100).ToList();
                 }
@@ -791,7 +791,7 @@ namespace PedidoWeb.Controllers
             else
             {
                 produtos = db.Produtoes.Where(c => (c.Descricao.Contains(term) || c.NumFabricante.Contains(term)) &&
-                        c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa)
+                        c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa && c.Situacao == "ATIVO")
                         .OrderBy(m => m.Descricao.StartsWith(term) ? (m.Descricao == term ? 0 : 1) : 2)
                         .Take(100).ToList();
             }
