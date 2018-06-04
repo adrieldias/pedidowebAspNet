@@ -59,6 +59,10 @@ namespace PedidoWeb.Models
 
         public System.Data.Entity.DbSet<PedidoWeb.Models.TabelaPrecoItem> TabelaPrecoItems { get; set; }
 
+        public System.Data.Entity.DbSet<PedidoWeb.Models.Cor> Cors { get; set; }
+
+        public System.Data.Entity.DbSet<PedidoWeb.Models.Lote> Lotes { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Pedido>()

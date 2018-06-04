@@ -415,6 +415,10 @@
     <Compile Include="Migrations\201706271810392_mudancaTipoQuantidade.Designer.cs">
       <DependentUpon>201706271810392_mudancaTipoQuantidade.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806041354034_adicaoModelsCorLote.cs" />
+    <Compile Include="Migrations\201806041354034_adicaoModelsCorLote.Designer.cs">
+      <DependentUpon>201806041354034_adicaoModelsCorLote.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Lote.cs" />
@@ -761,6 +765,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706271810392_mudancaTipoQuantidade.resx">
       <DependentUpon>201706271810392_mudancaTipoQuantidade.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806041354034_adicaoModelsCorLote.resx">
+      <DependentUpon>201806041354034_adicaoModelsCorLote.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
