@@ -57,5 +57,11 @@ namespace PedidoWeb.Models
 
         [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true, NullDisplayText = "0,00")]
         public double? ValorIPI { get; set; }
+
+        public int? LoteID { get; set; }
+        public virtual Lote Lote { get; set; } //Lazy Load
+
+        public int? CorID { get; set; }
+        public virtual Cor Cor { get; set; } //Lazy Load
     }
 }
