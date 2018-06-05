@@ -31,7 +31,7 @@
         { 
             <div class="form-group">
                 * @Html.Label("Cliente")
-            @Html.TextBox("CadastroAux", null, string.Empty, new { @class = "form-control" })
+            @Html.TextBox("CadastroAux", null, string.Empty, new { @class = "form-control", @placeholder = "Digite o nome ou código do cliente" })
                 <span class="error" style="visibility: hidden">Cliente é obrigatório</span>
             </div>
         }
@@ -154,11 +154,28 @@
             
                 <div class="form-group">
                     @Html.Label("* Produto")
-                @Html.TextBox("ProdutoAux", null, string.Empty, new { @class = "form-control" })
+                @Html.TextBox("ProdutoAux", null, string.Empty, new { @class = "form-control", @placeholder = "Digite o nome ou código do produto" })
                     <span class="error" style="visibility: hidden">Produto é obrigatório</span>
                 </div>
                             
             }
+
+            @if(ViewBag.Empresa.CodEmpresa == "DALLMOVEIS")
+            {
+                <div class="form-group btn-group-justified" role="group" aria-label="...">
+                    <div class="btn-group" style="padding: 0px 10px 0px 0px" role="group">
+                        @Html.Label("* Cor")
+                        @Html.DropDownList("CorID", null, string.Empty, new { @class = "form-control" })
+                        <span class="error" style="visibility: hidden">Cor é obrigatória</span>
+                    </div>
+                    <div class="btn-group" role="group" style="padding: 0px 0px 0px 10px">
+                        @Html.Label("* Tecido")
+                        @Html.DropDownList("LoteID", null, string.Empty, new { @class = "form-control" })    
+                        <span class="error" style="visibility: hidden">Tecido é obrigatório</span>
+                    </div>
+                </div>
+            }
+
             <div class="form-group">
                 * @Html.Label("Quantidade")
                 <input type="text" id="Quantidade" class="form-control" />
@@ -169,31 +186,34 @@
                 * @Html.Label("Valor Unitário")
                 <input type="text" id="ValorUnitario" class="form-control" />
                 <span class="error" style="visibility: hidden">Valor Unitário é obrigatório</span>
-            </div>  
+            </div>
 
-            <div class="form-group col-md-5" style="padding: 0 0 0 0">                
+            
+            <div class="form-group col-md-5" style="padding: 0px 0px 0px 0px">                
                 @Html.Label("Percentual de Desconto")
                 <input type="text" id="PercDesconto" name="PercDesconto" class="form-control" />
                 <span class="error" style="visibility: hidden">Percentual de desconto inválido</span>
             </div>
-            <div class="form-group col-md-2">
-                
-            </div>
-            @if (ViewBag.Empresa.CodEmpresa != "BISSOLOTTI")
-            {
-                <div class="form-group col-md-5" style="padding: 0 0 0 0">                
-                    @Html.Label("Valor de Desconto")
-                    <input type="text" id="ValorDesconto" name="ValorDesconto" class="form-control" />
-                    <span class="error" style="visibility: hidden">Valor de desconto inválido</span>
-                </div>  
-                <div class="clearfix"></div>
 
-                <div class="form-group">
-                    @Html.Label("Observação do Item (opcional)")
-                    <textarea id="ObservacaoItem" class="form-control"></textarea>
-                    <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>               
-                </div>  
-            }      
+            <div class="form-group col-md-2"></div>
+
+               
+            <div class="form-group col-md-5" style="padding: 0px 0px 0px 0px">                
+                @Html.Label("Valor de Desconto")
+                <input type="text" id="ValorDesconto" name="ValorDesconto" class="form-control" />
+                <span class="error" style="visibility: hidden">Valor de desconto inválido</span>
+            </div>  
+            
+            
+            @*<div class="clearfix"></div>*@
+
+            <div class="form-group">
+                @Html.Label("Observação do Item (opcional)")
+                <textarea id="ObservacaoItem" class="form-control"></textarea>
+                <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>               
+            </div>  
+               
+            
             @Html.Hidden("ItemIndex")
             <div class="clearfix"></div>      
             
@@ -240,24 +260,25 @@
     @Scripts.Render("~/bundles/jqueryui")   
     @Scripts.Render("~/bundles/jqueryui/stylesheet")
         
-    <script>       
-        
+    <script>
+
+
         function toggleDiv(divid) {
             var div = document.getElementById(divid);
             var disp = div.style.display;
             div.style.display = disp == 'none' ? 'block' : 'none';
-            
+
             if (disp == 'none') {
                 $("#testeglyph2").show();
                 $("#testeglyph1").hide();
             }
-            if (disp == 'block') {                
+            if (disp == 'block') {
                 $("#testeglyph2").hide();
-                $("#testeglyph1").show();                
+                $("#testeglyph1").show();
             }
         };
-        
-        $("document").ready(function () {           
+
+        $("document").ready(function () {
 
             var produtoSelecionado = 0;
             var cadastroSelecionado = 0;
@@ -267,9 +288,10 @@
             var stItem = 0;
             var emOperacao = false;
             var tpCons = '@(ViewBag.TipoConsulta)';
+            var codEmpresa = '@(ViewBag.Empresa.CodEmpresa)';
 
             $('#submit').prop('disabled', true);
-            
+
             $('#ProdutoAux').autocomplete({
                 source: function (request, response) {
                     // prepare url : for example '/api/artistapi?query=sonu
@@ -287,11 +309,11 @@
                             , filialID: $('#FilialID').val()
                             , tabelaPrecoID: $('#TabelaPrecoID').val()
                         }),
-                        success: function (json) {                            
+                        success: function (json) {
                             var autoc = [];
-                            $.each(json, function (id, data) {                                
+                            $.each(json, function (id, data) {
                                 autoc.push({
-                                    label: data.Descricao,                                                                   
+                                    label: data.Descricao,
                                     value: data.ProdutoID,
                                     valor: data.PrecoVarejo
                                 });
@@ -304,15 +326,15 @@
                     });
                 },
                 minLength: 0,
-                select: function (event, ui, json) {                    
-                    //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value + 'Valor ' + ui.item.valor );   
+                select: function (event, ui, json) {
+                    //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value + 'Valor ' + ui.item.valor );
                     $('#ProdutoAux').val(ui.item.label);
                     $('#ValorUnitario').val(ui.item.valor.toFixed(2).replace(".",","));
                     descProdutoSelecionado = ui.item.label;
                     produtoSelecionado = ui.item.value;
                     return false;
                 }
-            });           
+            });
 
             $('#CadastroAux').autocomplete({
                 source: function (request, response) {
@@ -328,9 +350,9 @@
                             $.each(json, function (id, data) {
                                 autoc.push({
                                     label: data.Nome,
-                                    value: data.CadastroID                                    
+                                    value: data.CadastroID
                                 });
-                            });                            
+                            });
                             response(autoc);
                         },
                         error: function (xmlHttpRequest, textStatus, errorThrown) {
@@ -347,16 +369,16 @@
                     return false;
                 }
             });
-            
+
             $("#VendedorID").prop("disabled", true);
-            $("#ValorDesconto").prop("disabled", true);            
+            $("#ValorDesconto").prop("disabled", true);
             $("#MsgAddItem").hide();
             $("#testeglyph2").hide();
             $('#totalPedido').hide();
-            
+
             var valorUnitario = '@(ViewBag.Empresa.AlteraValorUnitario)';
-            var percDesconto = '@(ViewBag.Empresa.DescontoInformado)'; 
-            
+            var percDesconto = '@(ViewBag.Empresa.DescontoInformado)';
+
             if(valorUnitario.toString() === 'True')
                 $("#ValorUnitario").prop("disabled", false);
             else
@@ -367,7 +389,7 @@
                 $("#PercDesconto").prop("disabled", true);
 
             var pedidoItens = [];
-            var totalPedido = 0;           
+            var totalPedido = 0;
 
             var calulaTotal = function () {
                 totalST = 0;
@@ -399,8 +421,8 @@
                     );
                 }
             };
-            
-            // Add desconto change function        
+
+            // Add desconto change function
             $('#PercDesconto').change(function () {
                 var percDesconto = Number($('#PercDesconto').val().replace(',', '.'));
                 var valUnitario = Number($('#ValorUnitario').val().replace(",","."));
@@ -412,7 +434,7 @@
                     $('#ValorDesconto').val(parseFloat(percDesconto * valUnitario / 100).toFixed(2).replace('.', ','));
                 }
             })
-            
+
             // Add  CancelaItem change function
             $('#del').click(function () {
                 $('#ProdutoAux').val('').focus();
@@ -425,7 +447,7 @@
             });
 
             // Add ValorUnitario change function
-            $('#ProdutoID').change(function () {                
+            $('#ProdutoID').change(function () {
                 buscaValorUnitario();
             });
 
@@ -441,7 +463,7 @@
 
             // Add button click function
             $('#add').click(function () {
-                // Validações                
+                // Validações
                 var isValidItem = true;
 
                 if (emOperacao)
@@ -463,7 +485,7 @@
                     else {
                         $('#ProdutoAux').siblings('span.error').css('visibility', 'hidden');
                     }
-                }                
+                }
 
                 if ($('#Quantidade').val().trim() == '' || isNaN($('#Quantidade').val().trim().replace(',', '.'))) {
                     isValidItem = false;
@@ -480,6 +502,7 @@
                 else {
                     $('#ValorUnitario').siblings('span.error').css('visibility', 'hidden');
                 }
+
                 if ($('#ObservacaoItem').val() != undefined) {
                     if ($('#ObservacaoItem').val().length > 30) {
                         isValidItem = false;
@@ -489,7 +512,7 @@
                         $('#ObservacaoItem').siblings('span.error').css('visibility', 'hidden');
                     }
                 }
-                
+
                 if (isNaN($('#PercDesconto').val().trim().replace(',', '.'))) {
                     isValidItem = false;
                     $('#PercDesconto').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
@@ -554,9 +577,25 @@
                     $('#PrazoVencimentoID').siblings('span.error').css('visibility', 'hidden');
                 }
 
+                // Validações de lote e cor para dallmoveis
+                if (codEmpresa == 'DALLMOVEIS') {
+                    if ($('#CorID').val().trim() == '') {
+                        isValidItem = false;
+                        $('#CorID').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    } else {
+                        $('#CorID').siblings('span.error').css('visibility', 'hidden');
+                    }
+                    if ($('#LoteID').val().trim() == '') {
+                        isValidItem = false;
+                        $('#LoteID').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    } else {
+                        $('#LoteID').siblings('span.error').css('visibility', 'hidden');
+                    }
+                }
+
 
                 // Add item to list if valid
-                if (isValidItem) {                    
+                if (isValidItem) {
                     //var el = document.getElementById('ProdutoAux');
 
                     bloqueiaOperacoes(true);
@@ -566,7 +605,7 @@
                         descProdutoSelecionado = $('#ProdutoID option:selected').text();
                         cadastroSelecionado = parseInt($('#CadastroID').val().trim());
                     }
-                    
+
                     // Cálculo de ST
                     $.ajax({
                         url: '/Pedido/CalculaImpostos',
@@ -587,7 +626,7 @@
                             // Checa se o pedido foi salvo no banco de dados
 
                             if (d.status == true) {
-                                //window.location.href = '/Pedido/Index';                                
+                                //window.location.href = '/Pedido/Index';
                                 //totalST += d.valor;
 
                                 var i = pedidoItens.length - 1;
@@ -608,9 +647,9 @@
                             alert('Erro ao calcular impostos. Por favor tente novamente.');
                         }
                     });
-                    
-                    if ($('#ItemIndex').val() == '') { //adição de itens       
-                        pedidoItens.push({                            
+
+                    if ($('#ItemIndex').val() == '') { //adição de itens
+                        pedidoItens.push({
                             ProdutoID: produtoSelecionado,
                             Quantidade: $('#Quantidade').val().trim().replace('.',','),
                             ValorUnitario: $('#ValorUnitario').val().trim().replace(".", ","),
@@ -623,7 +662,7 @@
                             ValorIPI: '0,00',
                             tabelaPrecoID: $('#TabelaPrecoID').val()
                         });
-                    } else { //edição de itens                    
+                    } else { //edição de itens
                         var i = $('#ItemIndex').val();
                         pedidoItens[i].ProdutoID = produtoSelecionado;
                         pedidoItens[i].Quantidade = $('#Quantidade').val().trim().replace('.', ',');
@@ -646,19 +685,21 @@
                     $('#PercDesconto').val('');
                     $('#ValorDesconto').val('');
                     $('#ItemIndex').val('');
+                    $('#CorID').val('');
+                    $('#LoteID').val('');
                     produtoSelecionado = 0;
-                    $("#MsgAddItem").show();                    
+                    $("#MsgAddItem").show();
                     setTimeout("$('#MsgAddItem').hide()", 3500);
                 }
 
-                GeneratedItemsTable();                
+                GeneratedItemsTable();
             });
 
             // Save button click function
             $('#submit').click(function () {
 
                 // Validação do pedido
-                var isValidOrder = true;                                
+                var isValidOrder = true;
                 if (tpCons == 'FILTRO') {
                     if ($('#CadastroAux').val().trim() == '' || cadastroSelecionado == 0) {
                         isValidOrder = false;
@@ -668,12 +709,12 @@
                     else {
                         $('#CadastroAux').siblings('span.error').css('visibility', 'hidden');
                     }
-                } else {                    
+                } else {
                     if ($('#CadastroID').val().trim() == '') {
-                        isValidOrder = false;                        
+                        isValidOrder = false;
                         $('#CadastroID').siblings('span.error').css('visibility', 'visible');
                         $('#CadastroID').focus();
-                    }                    
+                    }
                 }
 
                 if ($('#PrazoVencimentoID').val().trim() == '') {
@@ -708,14 +749,14 @@
                 } else {
                     $('#FilialID').siblings('span.error').css('visibility', 'hidden');
                 }
-                
+
                 // Salvar
-                if (isValidOrder) {                    
+                if (isValidOrder) {
                     if (tpCons == 'LISTAGEM')
                     {
-                        cadastroSelecionado = parseInt($('#CadastroID').val().trim());                        
+                        cadastroSelecionado = parseInt($('#CadastroID').val().trim());
                     }
-                    var data = {                        
+                    var data = {
                         CadastroID: cadastroSelecionado,
                         PrazoVencimentoID: $('#PrazoVencimentoID').val().trim(),
                         VendedorID: $('#VendedorID').val().trim(),
@@ -804,7 +845,7 @@
                         $span.append($('<button id=excluir class="btn btn-danger">' +
                                 '<span class="glyphicon glyphicon-remove" aria-hidden="true">' +
                                 '</span></button>').click(function () {
-                            pedidoItens.splice(i, 1);                            
+                            pedidoItens.splice(i, 1);
                             GeneratedItemsTable();
                             habilitaSubmit();
                         }));
@@ -829,30 +870,30 @@
                         + 'Total do Pedido R$: 0,00'
                         + '</p>'
                         );
-                    
+
                 } else {
                     var htmlST = '';
                     if (totalST != 0)
                         htmlST = "<p style='font-size: small'>ICMS ST R$: " + parseFloat(totalST).toFixed(2).trim().replace('.', ',') + "</p>";
-                    else 
-                        htmlST = '';     
-                    
+                    else
+                        htmlST = '';
+
                     var htmlIPI = '';
                     if (totalIPI != 0)
                         htmlIPI = "<p style='font-size: small'>IPI R$: " + parseFloat(totalIPI).toFixed(2).trim().replace('.', ',') + "</p>";
                     else
                         htmlIPI = '';
 
-                        $('#totalPedido').html(                        
+                        $('#totalPedido').html(
                         htmlST
                         + htmlIPI
                         + '<p>'
                         + 'Total do Pedido R$: '
                         + parseFloat(totalPedido).toFixed(2).trim().replace('.', ',')
-                        + '</p>'                        
-                        );                    
+                        + '</p>'
+                        );
                 }
-                totalPedido = 0;               
+                totalPedido = 0;
             };
 
             // Mantém uma flag e desabilita botões enquanto
@@ -864,15 +905,15 @@
 
                 habilitaSubmit();
             };
-            
+
             // Habilita/Desabilita botão para salvar pedido
             function habilitaSubmit() {
-                $('#submit').prop('disabled', (pedidoItens.length === 0))                
+                $('#submit').prop('disabled', (pedidoItens.length === 0))
             };
 
             // Busca valor unitário
             function buscaValorUnitario() {
-                
+
                 bloqueiaOperacoes(true);
 
                 $.ajax({
@@ -906,7 +947,7 @@
             }
 
             // Busca Tabela de Preço
-            function buscaTabelaPreco() {                
+            function buscaTabelaPreco() {
                 $.ajax({
                     url: '/Pedido/TabelaPreco',
                     type: 'POST',
@@ -930,6 +971,6 @@
                     }
                 });
             };
-        });        
+        });
     </script>
 }

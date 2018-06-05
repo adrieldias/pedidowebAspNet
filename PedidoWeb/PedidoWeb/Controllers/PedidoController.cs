@@ -245,6 +245,14 @@ namespace PedidoWeb.Controllers
                 ViewBag.TemTabelaPreco = false;
             }
 
+            if(pedidoHelper.BuscaEmpresa().CodEmpresa == "DALLMOVEIS")
+            {
+                ViewBag.CorID = new SelectList(db.Cors.Where(c => c.CodEmpresa == usuario.CodEmpresa).OrderBy(o => o.Descricao)
+                    , "CorID", "Descricao");
+                ViewBag.LoteID = new SelectList(db.Lotes.Where(l => l.CodEmpresa == usuario.CodEmpresa && l.Situacao == "ATIVO").OrderBy(o => o.Descricao)
+                    , "LoteID", "Descricao");
+            }
+
             return View();
         }
 

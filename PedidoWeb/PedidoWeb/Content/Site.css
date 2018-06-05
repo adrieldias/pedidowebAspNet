@@ -1,8 +1,8 @@
 ﻿body {
     /*padding-top: 50px;*/
     padding-bottom: 20px;
-    /*background-color: #666666;*/
-    background-image: linear-gradient(90deg, #194d33, #1a344c);
+    background-color: #1a344c;
+    /*background-image: linear-gradient(90deg, #194d33, #1a344c);*/
 }
 
 footer{
@@ -78,11 +78,11 @@ input[type="checkbox"].input-validation-error {
     cursor:pointer;
 }
 
-.opcionais{
+.opcionais {
     padding: 10px 15px 10px 15px;
-    /*background-color: #d9d9d9;*/
-    background-image: linear-gradient(90deg, #f2f2f2 , #d9d9d9);  
-    color: #595959;  
+    background-color: #d9d9d9;
+    /*background-image: linear-gradient(90deg, #f2f2f2 , #d9d9d9);*/
+    color: #595959;
 }
 
 .gridRodape{
