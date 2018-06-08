@@ -96,71 +96,83 @@
             <hr />
             <br />
 
+            <div class="form-group" style="text-align: right">
+                <button type="button" id="del" class="btn btn-warning btn-sm">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Limpar Campos
+                </button>
+            </div>
+
             <div id="MsgAddItem" class="alert alert-success">
                 <p>Item adicionado com sucesso. Você pode adicionar mais itens ao pedido.</p>
             </div>
 
             @if (ViewBag.TemTabelaPreco)
-            {
-                <div class="form-group">
-                    @Html.Label("Tabela de Preço")
-                    @Html.DropDownList("TabelaPrecoID", null, string.Empty, new { @class = "form-control" })
-                </div>
-            }
+    {
+        <div class="form-group">
+            @Html.Label("Tabela de Preço")
+            @Html.DropDownList("TabelaPrecoID", null, string.Empty, new { @class = "form-control" })
+        </div>
+}
 
-            @if (ViewBag.TipoConsulta == "LISTAGEM") { 
-                
-                AjaxOptions ajaxOptions = new AjaxOptions() {
-                        UpdateTargetId = "ValorUnitario",
-                        OnSuccess = "SuccessRequest",
-                        OnFailure = "FailureRequest",
-                        HttpMethod = "POST"
-                    };
+            @if (ViewBag.TipoConsulta == "LISTAGEM")
+    {
 
-                //using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
-                //{                    
-                    <div class="form-group">
-                        * @Html.Label("Produto")
-                        @Html.DropDownList("ProdutoID", null, string.Empty, new { @class = "form-control" @*, onchange = "buscaValor()"*@ })
-                        <span class="error" style="visibility: hidden">Produto é obrigatório</span>                                
-                    </div>
-                
-                    @*<script type="text/javascript">
-                        function buscaValor() {
-                            bloqueiaOperacoes(true);
-                            $("#ProdutoID").submit();                        
-                        }
+        AjaxOptions ajaxOptions = new AjaxOptions()
+        {
+            UpdateTargetId = "ValorUnitario",
+            OnSuccess = "SuccessRequest",
+            OnFailure = "FailureRequest",
+            HttpMethod = "POST"
+        };
 
-                        function SuccessRequest(response) {
-                            //alert(response);
-                            $('#ValorUnitario').val(response);
-                            bloqueiaOperacoes(false);
-                        }
+        //using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
+        //{
+        <div class="form-group">
+            * @Html.Label("Produto")
+            @Html.DropDownList("ProdutoID", null, string.Empty, new
+    {
+        @class = "form-control"@*, onchange = "buscaValor()"*@})
+            <span class="error" style="visibility: hidden">Produto é obrigatório</span>
+        </div>
 
-                        function FailureRequest(response) {
-                            alert("Não foi possível buscar o preço do produto");
-                            bloqueiaOperacoes(false);
-                        }
+        @*<script type="text/javascript">
+        function buscaValor() {
+            bloqueiaOperacoes(true);
+            $("#ProdutoID").submit();
+        }
 
-                        function bloqueiaOperacoes(bloqueio) {
-                            $('#add').prop('disabled', bloqueio);
-                            $('#submit').prop('disabled', bloqueio);                            
-                        }
-                    </script>*@    
-                //}
+        function SuccessRequest(response) {
+            //alert(response);
+            $('#ValorUnitario').val(response);
+            bloqueiaOperacoes(false);
+        }
 
-            }
-            else { 
-            
-                <div class="form-group">
-                    @Html.Label("* Produto")
-                @Html.TextBox("ProdutoAux", null, string.Empty, new { @class = "form-control", @placeholder = "Digite o nome ou código do produto" })
-                    <span class="error" style="visibility: hidden">Produto é obrigatório</span>
-                </div>
-                            
-            }
+        function FailureRequest(response) {
+            alert("Não foi possível buscar o preço do produto");
+            bloqueiaOperacoes(false);
+        }
 
-            @if(ViewBag.Empresa.CodEmpresa == "DALLMOVEIS")
+        function bloqueiaOperacoes(bloqueio) {
+            $('#add').prop('disabled', bloqueio);
+            $('#submit').prop('disabled', bloqueio);
+        }
+    </script>*@
+//}
+
+    }
+    else
+    {
+
+        <div class="form-group">
+            @Html.Label("* Produto")
+            @Html.TextBox("ProdutoAux", null, string.Empty, new { @class = "form-control", @placeholder = "Digite o nome ou código do produto" })
+            <span class="error" style="visibility: hidden">Produto é obrigatório</span>
+        </div>
+
+    }
+
+            @if (ViewBag.Empresa.CodEmpresa == "DALLMOVEIS")
             {
                 <div class="form-group btn-group-justified" role="group" aria-label="...">
                     <div class="btn-group" style="padding: 0px 10px 0px 0px" role="group">
@@ -170,7 +182,7 @@
                     </div>
                     <div class="btn-group" role="group" style="padding: 0px 0px 0px 10px">
                         @Html.Label("* Tecido")
-                        @Html.DropDownList("LoteID", null, string.Empty, new { @class = "form-control" })    
+                        @Html.DropDownList("LoteID", null, string.Empty, new { @class = "form-control" })
                         <span class="error" style="visibility: hidden">Tecido é obrigatório</span>
                     </div>
                 </div>
@@ -188,8 +200,8 @@
                 <span class="error" style="visibility: hidden">Valor Unitário é obrigatório</span>
             </div>
 
-            
-            <div class="form-group col-md-5" style="padding: 0px 0px 0px 0px">                
+
+            <div class="form-group col-md-5" style="padding: 0px 0px 0px 0px">
                 @Html.Label("Percentual de Desconto")
                 <input type="text" id="PercDesconto" name="PercDesconto" class="form-control" />
                 <span class="error" style="visibility: hidden">Percentual de desconto inválido</span>
@@ -197,45 +209,39 @@
 
             <div class="form-group col-md-2"></div>
 
-               
-            <div class="form-group col-md-5" style="padding: 0px 0px 0px 0px">                
+
+            <div class="form-group col-md-5" style="padding: 0px 0px 0px 0px">
                 @Html.Label("Valor de Desconto")
                 <input type="text" id="ValorDesconto" name="ValorDesconto" class="form-control" />
                 <span class="error" style="visibility: hidden">Valor de desconto inválido</span>
-            </div>  
-            
-            
+            </div>
+
+
             @*<div class="clearfix"></div>*@
 
             <div class="form-group">
                 @Html.Label("Observação do Item (opcional)")
                 <textarea id="ObservacaoItem" class="form-control"></textarea>
-                <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>               
-            </div>  
-               
-            
+                <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>
+            </div>
+
+
             @Html.Hidden("ItemIndex")
-            <div class="clearfix"></div>      
-            
-        <div class="btn-group btn-group-justified" role="group" aria-label="...">
-            <div class="btn-group" role="group">
-                <button type="button" id="add" class="btn btn-default">
-                    <span class="glyphicon glyphicon-ok"></span>
-                    Salvar Item
-                </button>
+            <div class="clearfix"></div>
+
+            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                <div class="btn-group" role="group">
+                    <button type="button" id="add" class="btn btn-default">
+                        <span class="glyphicon glyphicon-ok"></span>
+                        Salvar Item
+                    </button>
+                </div>                
             </div>
-            <div class="btn-group" role="group">
-                <button type="button" id="del" class="btn btn-warning">
-                    <span class="glyphicon glyphicon-remove"></span>
-                    Limpar Campos
-                </button>
-            </div>
-        </div>
-            <br />        
-            <div id="pedidoItens"></div>  
-            <div id="totalPedido" class="gridRodape"></div>        
             <br />
-            
+            <div id="pedidoItens"></div>
+            <div id="totalPedido" class="gridRodape"></div>
+            <br />
+
         </div>
 
 
@@ -371,7 +377,7 @@
             });
 
             $("#VendedorID").prop("disabled", true);
-            $("#ValorDesconto").prop("disabled", true);
+            
             $("#MsgAddItem").hide();
             $("#testeglyph2").hide();
             $('#totalPedido').hide();
@@ -387,6 +393,10 @@
                 $("#PercDesconto").prop("disabled", false);
             else
                 $("#PercDesconto").prop("disabled", true);
+            if (percDesconto.toString() === 'True')
+                $("#ValorDesconto").prop("disabled", false);
+            else
+                $("#ValorDesconto").prop("disabled", true);
 
             var pedidoItens = [];
             var totalPedido = 0;
@@ -422,18 +432,45 @@
                 }
             };
 
-            // Add desconto change function
+            // Add PercDesconto change function
             $('#PercDesconto').change(function () {
                 var percDesconto = Number($('#PercDesconto').val().replace(',', '.'));
-                var valUnitario = Number($('#ValorUnitario').val().replace(",","."));
+                var valUnitario = Number($('#ValorUnitario').val().replace(",", "."));
 
-                if (isNaN(percDesconto)) {
-                    $('#PercDesconto').siblings('span.error').css('visibility', 'visible');
-                }
-                else {
-                    $('#ValorDesconto').val(parseFloat(percDesconto * valUnitario / 100).toFixed(2).replace('.', ','));
-                }
-            })
+                if (isNaN(valUnitario) || valUnitario == 0 || valUnitario.toString() === '') {
+                    $('#ValorUnitario').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    $('#PercDesconto').val('');
+                    $('#ValorDesconto').val('');
+                    $('#ValorUnitario').focus();
+                } else
+                    if (isNaN(percDesconto)) {
+                        $('#PercDesconto').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                        $('#PercDesconto').focus();
+                    }
+                    else {
+                        $('#ValorDesconto').val(parseFloat(percDesconto * valUnitario / 100).toFixed(2).replace('.', ','));
+                    }
+            });
+
+            // Add ValorDesconto change function
+            $('#ValorDesconto').change(function () {
+                var valorDesconto = Number($('#ValorDesconto').val().replace(',', '.'));
+                var valUnitario = Number($('#ValorUnitario').val().replace(",", "."));
+
+                if (isNaN(valUnitario) || valUnitario == 0 || valUnitario.toString() === '') {
+                    $('#ValorUnitario').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    $('#PercDesconto').val('');
+                    $('#ValorDesconto').val('');
+                    $('#ValorUnitario').focus();
+                } else
+                    if (isNaN(valorDesconto)) {
+                        $('#ValorDesconto').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');                        
+                        $('#ValorDesconto').focus();
+                    }
+                    else {
+                        $('#PercDesconto').val(parseFloat(valorDesconto * 100 / valUnitario).toFixed(2).replace('.', ','));
+                    }
+            });
 
             // Add  CancelaItem change function
             $('#del').click(function () {
@@ -444,6 +481,8 @@
                 $('#PercDesconto').val('');
                 $('#ValorDesconto').val('');
                 $('#ItemIndex').val('');
+                $('#CorID').val(0);
+                $('#LoteID').val(0);
             });
 
             // Add ValorUnitario change function
@@ -453,7 +492,9 @@
 
             // Add TabelaPreco change function
             $('#TabelaPrecoID').change(function () {
-                buscaValorUnitario();
+                if (($('#ProdutoID').val() != '' || produtoSelecionado > 0) && ($('#CadastroID').val() != '' || cadastroSelecionado > 0)
+                    && ($('#PrazoVencimentoID').val() != '') && ($('#FilialID').val() != '')) 
+                    buscaValorUnitario();
             });
 
             // Add CadastroID change function
@@ -660,7 +701,9 @@
                             PercentualDesconto: $('#PercDesconto').val().trim().replace(".", ","),
                             ValorImcsSubst: '0,00',
                             ValorIPI: '0,00',
-                            tabelaPrecoID: $('#TabelaPrecoID').val()
+                            tabelaPrecoID: $('#TabelaPrecoID').val(),
+                            CorID: $('#CorID').val(),
+                            LoteID: $('#LoteID').val()
                         });
                     } else { //edição de itens
                         var i = $('#ItemIndex').val();
@@ -674,6 +717,8 @@
                         pedidoItens[i].ValorIcmsSubst = '0,00';
                         pedidoItens[i].ValorIPI = '0,00';
                         pedidoItens[i].TabelaPrecoID = $('#TabelaPrecoID').val();
+                        pedidoItens[i].CorID = $('#CorID').val();
+                        pedidoItens[i].LoteID = $('#LoteID').val();
                     }
                     if (tpCons == 'LISTAGEM')
                         $('#ProdutoID').val('').focus();

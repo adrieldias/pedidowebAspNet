@@ -336,7 +336,7 @@ namespace PedidoWeb.Controllers
                     p.CodEmpresa = pedidoHelper.UsuarioCorrente.CodEmpresa;
                     p.StatusSincronismo = "NOVO";
                     p.OperacaoID = pedido.OperacaoID;
-                    p.FilialID = pedido.FilialID;
+                    p.FilialID = pedido.FilialID;                
                     db.Pedidoes.Add(p);                    
                     db.SaveChanges();                    
 
@@ -361,6 +361,8 @@ namespace PedidoWeb.Controllers
                         i.TributacaoID = trib.TributacaoID;
                         i.CodTributacao = trib.CodTributacao;
                         i.TabelaPrecoID = item.TabelaPrecoID;
+                        i.CorID = item.CorID;
+                        i.LoteID = item.LoteID;
                         valorPedido += item.ValorUnitario * item.Quantidade;
                         valorProduto += produto.PrecoVarejo * item.Quantidade;                        
                         db.PedidoItems.Add(i);
@@ -411,6 +413,8 @@ namespace PedidoWeb.Controllers
                             pedidoBanco.Itens[i].ValorIcmsSubst = itemTela.ValorIcmsSubst;
                             pedidoBanco.Itens[i].ValorIPI = itemTela.ValorIPI;
                             pedidoBanco.Itens[i].TabelaPrecoID = itemTela.TabelaPrecoID;
+                            pedidoBanco.Itens[i].CorID = itemTela.CorID;
+                            pedidoBanco.Itens[i].LoteID = itemTela.LoteID;
 
                             Produto produto = db.Produtoes.Include(t => t.Tributacao).FirstOrDefault(it => it.ProdutoID == itemTela.ProdutoID);
                             Tributacao trib = tributacao.EscolheTributacao(cadastro, produto, filial, operacao);
@@ -668,6 +672,14 @@ namespace PedidoWeb.Controllers
                 else
                 {
                     ViewBag.TemTabelaPreco = false;
+                }                
+
+                if (pedidoHelper.BuscaEmpresa().CodEmpresa == "DALLMOVEIS")
+                {
+                    ViewBag.CorID = new SelectList(db.Cors.Where(c => c.CodEmpresa == usuario.CodEmpresa).OrderBy(o => o.Descricao)
+                        , "CorID", "Descricao");
+                    ViewBag.LoteID = new SelectList(db.Lotes.Where(l => l.CodEmpresa == usuario.CodEmpresa && l.Situacao == "ATIVO").OrderBy(o => o.Descricao)
+                        , "LoteID", "Descricao");
                 }
 
                 return View(pedido);

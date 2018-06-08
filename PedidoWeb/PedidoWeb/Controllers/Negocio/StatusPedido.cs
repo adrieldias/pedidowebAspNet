@@ -26,7 +26,7 @@ namespace PedidoWeb.Controllers.Negocio
                 if (!empresa.AlteraValorUnitario)
                 {
                     var produtoPadrao = db.Produtoes.Find(item.ProdutoID);
-                    if (item.PercentualDesconto > produtoPadrao.PercDescontoMaximo && cadastro.CodEmpresa != "LACTOMIL")
+                    if (item.PercentualDesconto > produtoPadrao.PercDescontoMaximo && !("LACTOMIL,DALLMOVEIS".Contains(cadastro.CodEmpresa)))
                     {
                         if(item.Produto != null)
                             MotivoStatus.Add(string.Format("{0} - {1}"
@@ -51,7 +51,7 @@ namespace PedidoWeb.Controllers.Negocio
                         var percDesc = 100 - (item.ValorUnitario * 100 / produtoPadrao.PrecoVarejo);
                         if (item.PercentualDesconto != null && item.PercentualDesconto > 0)
                             percDesc += Convert.ToDecimal(item.PercentualDesconto);
-                        if (percDesc > produtoPadrao.PercDescontoMaximo && cadastro.CodEmpresa != "LACTOMIL")
+                        if ((percDesc > produtoPadrao.PercDescontoMaximo) && !("LACTOMIL,DALLMOVEIS".Contains(cadastro.CodEmpresa)))
                         {
                             if (item.Produto != null)
                                 MotivoStatus.Add(string.Format("{0} - {1}"

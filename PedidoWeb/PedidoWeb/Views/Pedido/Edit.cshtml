@@ -6,7 +6,7 @@
 
 
 @Html.AntiForgeryToken()
-    
+
 <div class="principal1coluna">
     <h3>Editar Pedido</h3>
     <hr />
@@ -21,18 +21,18 @@
     </div>
 
     @*<div class="form-group">
-        * @Html.LabelFor(model => model.CadastroID, "Cliente")
-        @Html.DropDownList("CadastroID", null, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.CadastroID)
-    </div>*@
+            * @Html.LabelFor(model => model.CadastroID, "Cliente")
+            @Html.DropDownList("CadastroID", null, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CadastroID)
+        </div>*@
 
     <div class="form-group">
         * @Html.Label("Filial")
-        @Html.DropDownList("FilialID", null, string.Empty, new { @class="form-control"})
+        @Html.DropDownList("FilialID", null, string.Empty, new { @class = "form-control" })
         <span class="error" style="visibility: hidden">Filial é obrigatória</span>
     </div>
 
-    @if(ViewBag.TipoConsulta == "LISTAGEM")
+    @if (ViewBag.TipoConsulta == "LISTAGEM")
     {
         <div class="form-group">
             * @Html.Label("Cliente")
@@ -66,16 +66,16 @@
         @Html.DropDownList("PrazoVencimentoID", null, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.PrazoVencimentoID)
     </div>
-    
+
     <div class="form-group">
         @Html.LabelFor(model => model.Status)
         @Html.TextBoxFor(model => model.Status, new { @readonly = "readonly", @class = "form-control" })
         @Html.ValidationMessageFor(model => model.Status)
-    </div>       
+    </div>
     <br />
     <button type="button" style="min-width:160px" id="btOpcionais" class="btn btn-default btn-sm" onclick="toggleDiv('opcionais')">
         <span id="testeglyph1" class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span id="testeglyph2" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>    
+        <span id="testeglyph2" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
         Mais Informações
     </button>
 
@@ -97,7 +97,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.TipoFrete, "Tipo de Frete (opcional)")
             @Html.DropDownListFor(model => model.TipoFrete,
-        new List<SelectListItem>() {
+             new List<SelectListItem>() {
             new SelectListItem(){Text="", Value=""},
             new SelectListItem(){Text="CIF", Value="CIF"},
             new SelectListItem(){Text="FOB", Value="FOB" }}, new { @class = "form-control" })
@@ -116,75 +116,100 @@
             @Html.ValidationMessageFor(model => model.Observacao)
         </div>
     </div>
-    
+
     <br />
-    <br/>
+    <br />
     <div class="details">
         <h2>Itens do Pedido</h2>
         <hr />
         <br />
+
+        <div class="form-group" style="text-align: right">
+            <button type="button" id="del" class="btn btn-warning btn-sm">
+                <span class="glyphicon glyphicon-remove"></span>
+                Limpar Campos
+            </button>
+        </div>
 
         <div id="MsgAddItem" class="alert alert-success">
             <p>Item adicionado com sucesso. Você pode adicionar mais itens ao pedido.</p>
         </div>
 
         @if (ViewBag.TemTabelaPreco)
+    {
+        <div class="form-group">
+            @Html.Label("Tabela de Preço")
+            @Html.DropDownList("TabelaPrecoID", null, string.Empty, new { @class = "form-control" })
+        </div>
+}
+
+        @if (ViewBag.TipoConsulta == "LISTAGEM")
+    {
+        AjaxOptions ajaxOptions = new AjaxOptions()
         {
-            <div class="form-group">
-                @Html.Label("Tabela de Preço")
-                @Html.DropDownList("TabelaPrecoID", null, string.Empty, new { @class = "form-control" })            
+            UpdateTargetId = "ValorUnitario",
+            OnSuccess = "SuccessRequest",
+            OnFailure = "FailureRequest",
+            HttpMethod = "POST"
+        };
+
+
+        //using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
+        //{
+        <div class="form-group">
+            * @Html.Label("Produto")
+            @Html.DropDownList("ProdutoID", null, string.Empty, new { @class = "form-control", onchange = "buscaValor()" })
+            <span class="error" style="visibility: hidden">Produto é obrigatório</span>
+        </div>
+
+        @*<script type="text/javascript">
+            function buscaValor() {
+                bloqueiaOperacoes(true);
+                $("#ProdutoID").submit();
+            }
+
+            function SuccessRequest(response) {
+                //alert(response);
+                $('#ValorUnitario').val(response);
+                bloqueiaOperacoes(false);
+            }
+
+            function FailureRequest(response) {
+                alert("Não foi possível buscar o preço do produto");
+                bloqueiaOperacoes(false);
+            }
+
+            function bloqueiaOperacoes(bloqueio) {
+                $('#add').prop('disabled', bloqueio);
+                $('#submit').prop('disabled', bloqueio);
+            }
+        </script>*@
+    //}
+}
+else
+{
+    <div class="form-group">
+        @Html.Label("* Produto")
+        @Html.TextBox("ProdutoAux", null, string.Empty, new { @class = "form-control" })
+        <span class="error" style="visibility: hidden">Produto é obrigatório</span>
+    </div>
+}
+
+        @if (ViewBag.Empresa.CodEmpresa == "DALLMOVEIS")
+    {
+        <div class="form-group btn-group-justified" role="group" aria-label="...">
+            <div class="btn-group" style="padding: 0px 10px 0px 0px" role="group">
+                @Html.Label("* Cor")
+                @Html.DropDownList("CorID", null, string.Empty, new { @class = "form-control" })
+                <span class="error" style="visibility: hidden">Cor é obrigatória</span>
             </div>
-        }
-
-        @if (ViewBag.TipoConsulta == "LISTAGEM") {
-            AjaxOptions ajaxOptions = new AjaxOptions()
-                {
-                    UpdateTargetId = "ValorUnitario",
-                    OnSuccess = "SuccessRequest",
-                    OnFailure = "FailureRequest",
-                    HttpMethod = "POST"
-                };
-            
-
-            //using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
-            //{
-                <div class="form-group">
-                    * @Html.Label("Produto")
-                    @Html.DropDownList("ProdutoID", null, string.Empty, new { @class = "form-control", onchange = "buscaValor()" })
-                    <span class="error" style="visibility: hidden">Produto é obrigatório</span>
-                </div>
-
-                @*<script type="text/javascript">
-                    function buscaValor() {
-                        bloqueiaOperacoes(true);
-                        $("#ProdutoID").submit();
-                    }
-
-                    function SuccessRequest(response) {
-                        //alert(response);
-                        $('#ValorUnitario').val(response);
-                        bloqueiaOperacoes(false);
-                    }
-
-                    function FailureRequest(response) {
-                        alert("Não foi possível buscar o preço do produto");
-                        bloqueiaOperacoes(false);
-                    }
-
-                    function bloqueiaOperacoes(bloqueio) {
-                        $('#add').prop('disabled', bloqueio);
-                        $('#submit').prop('disabled', bloqueio);                            
-                    }
-                </script>*@
-            //}
-        }
-        else { 
-            <div class="form-group">
-                @Html.Label("* Produto")
-                @Html.TextBox("ProdutoAux", null, string.Empty, new { @class = "form-control" })
-                <span class="error" style="visibility: hidden">Produto é obrigatório</span>
+            <div class="btn-group" role="group" style="padding: 0px 0px 0px 10px">
+                @Html.Label("* Tecido")
+                @Html.DropDownList("LoteID", null, string.Empty, new { @class = "form-control" })
+                <span class="error" style="visibility: hidden">Tecido é obrigatório</span>
             </div>
-        }
+        </div>
+}
 
         <div class="form-group">
             * @Html.Label("Quantidade")
@@ -208,37 +233,31 @@
 
         </div>
         @if (ViewBag.Empresa.CodEmpresa != "BISSOLOTTI")
-        {
-            <div class="form-group col-md-5" style="padding: 0 0 0 0">
-                @Html.Label("Valor de Desconto")
-                <input type="text" id="ValorDesconto" name="ValorDesconto" class="form-control" />
-                <span class="error" style="visibility: hidden">Valor de desconto inválido</span>
-            </div>
+    {
+        <div class="form-group col-md-5" style="padding: 0 0 0 0">
+            @Html.Label("Valor de Desconto")
+            <input type="text" id="ValorDesconto" name="ValorDesconto" class="form-control" />
+            <span class="error" style="visibility: hidden">Valor de desconto inválido</span>
+        </div>
 
-            <div class="clearfix"></div>
+        <div class="clearfix"></div>
 
-            <div class="form-group">
-                @Html.Label("Observação do Item (opcional)")
-                <textarea id="ObservacaoItem" class="form-control"></textarea>
-                <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>
-            </div>
-        }
+        <div class="form-group">
+            @Html.Label("Observação do Item (opcional)")
+            <textarea id="ObservacaoItem" class="form-control"></textarea>
+            <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>
+        </div>
+}
         @Html.Hidden("ItemIndex")
         <div class="clearfix"></div>
 
         <div class="btn-group btn-group-justified" role="group" aria-label="...">
             <div class="btn-group" role="group">
                 <button type="button" id="add" class="btn btn-default">
-                <span class="glyphicon glyphicon-ok"></span>
-                Salvar Item
-            </button>
-        </div>
-            <div class="btn-group" role="group">
-                <button type="button" id="del" class="btn btn-warning">
-                <span class="glyphicon glyphicon-remove"></span>
-                    Limpar Campos
-            </button>
-        </div>
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Salvar Item
+                </button>
+            </div>            
         </div>
         <br />
         <div id="pedidoItens"></div>
@@ -249,41 +268,42 @@
     <div class="btn-group btn-group-justified" role="group" aria-label="...">
         <div class="btn-group" role="group">
             <button type="button" id="submit" class="btn btn-primary">
-            <span class="glyphicon glyphicon-floppy-disk"></span>
-            Salvar Pedido
-        </button>
-    </div>
+                <span class="glyphicon glyphicon-floppy-disk"></span>
+                Salvar Pedido
+            </button>
+        </div>
         <div class="btn-group" role="group">
             <a href="@Url.Action("Index")" type="button" class="btn btn-warning">
                 <span class=" glyphicon glyphicon-share-alt"></span>
-            Sair sem Salvar
-        </a>
-    </div>
+                Sair sem Salvar
+            </a>
+        </div>
     </div>
 </div>
 
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")    
+    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryui")
-        
-    <script>
-        
+    @Scripts.Render("~/bundles/jqueryui/stylesheet")
+
+<script>
+
         function toggleDiv(divid) {
             var div = document.getElementById(divid);
             var disp = div.style.display;
             div.style.display = disp == 'none' ? 'block' : 'none';
-            
+
             //var glyph = document.getElementById('testeglyph1');
-            //var glyph2 = document.getElementById('testeglyph2');            
-            
+            //var glyph2 = document.getElementById('testeglyph2');
+
             //glyph.style.display = disp == 'none' ? 'none' : 'block';
             //glyph2.style.display = disp == 'none' ? 'block' : 'none';
-            
+
             //var bt = document.getElementById('btOpcionais');
-            
-            if (disp == 'none') {                
+
+            if (disp == 'none') {
                 //$("#btOpcionais").text('Menos Informações');
                 $("#testeglyph2").show();
                 $("#testeglyph1").hide();
@@ -291,19 +311,20 @@
             if (disp == 'block') {
                 //$("#btOpcionais").text('Mais Informações');
                 $("#testeglyph2").hide();
-                $("#testeglyph1").show();                
+                $("#testeglyph1").show();
             }
         };
 
         $("document").ready(function () {
-            
+
             var produtoSelecionado = 0;
             var cadastroSelecionado = 0;
             var descProdutoSelecionado = '';
             var totalST = 0;
             var totalIPI = 0;
-            var emOperacao = false;            
+            var emOperacao = false;
             var tpCons = '@(ViewBag.TipoConsulta)';
+            var codEmpresa = '@(ViewBag.Empresa.CodEmpresa)';
             var indexEdicao;
 
             $('#ProdutoAux').autocomplete({
@@ -323,11 +344,11 @@
                             , filialID: $('#FilialID').val()
                             , tabelaPrecoID: $('#TabelaPrecoID').val()
                         }),
-                        success: function (json) {                            
+                        success: function (json) {
                             var autoc = [];
-                            $.each(json, function (id, data) {                                
+                            $.each(json, function (id, data) {
                                 autoc.push({
-                                    label: data.Descricao,                                                                   
+                                    label: data.Descricao,
                                     value: data.ProdutoID,
                                     valor: data.PrecoVarejo
                                 });
@@ -340,16 +361,16 @@
                     });
                 },
                 minLength: 0,
-                select: function (event, ui, json) {                    
+                select: function (event, ui, json) {
                     //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value + 'Valor ' + ui.item.valor );
-                    
+
                     $('#ProdutoAux').val(ui.item.label);
                     $('#ValorUnitario').val(ui.item.valor.toFixed(2).replace(".",","));
                     descProdutoSelecionado = ui.item.label;
-                    produtoSelecionado = ui.item.value;                    
+                    produtoSelecionado = ui.item.value;
                     return false;
                 }
-            });           
+            });
 
             $('#CadastroAux').autocomplete({
                 source: function (request, response) {
@@ -365,7 +386,7 @@
                             $.each(json, function (id, data) {
                                 autoc.push({
                                     label: data.Nome,
-                                    value: data.CadastroID                                    
+                                    value: data.CadastroID
                                 });
                             });
                             response(autoc);
@@ -379,21 +400,21 @@
                 select: function (event, ui, json) {
                     //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value);
                     $('#CadastroAux').val(ui.item.label);
-                    cadastroSelecionado = ui.item.value;                    
+                    cadastroSelecionado = ui.item.value;
                     return false;
                 }
             });
 
             $("#VendedorID").prop("disabled", true);
             $("#DataEmissao").prop("disabled", true);
-            $("#Status").prop("disabled", true);    
-            $('#ValorDesconto').prop('disabled', true);            
+            $("#Status").prop("disabled", true);
+            $('#ValorDesconto').prop('disabled', true);
             $("#MsgAddItem").hide();
             $("#testeglyph2").hide();
 
             var valorUnitario = '@(ViewBag.Empresa.AlteraValorUnitario)';
-            var percDesconto = '@(ViewBag.Empresa.DescontoInformado)'; 
-            
+            var percDesconto = '@(ViewBag.Empresa.DescontoInformado)';
+
             if(valorUnitario.toString() === 'True')
                 $("#ValorUnitario").prop("disabled", false);
             else
@@ -402,8 +423,8 @@
                 $("#PercDesconto").prop("disabled", false);
             else
                 $("#PercDesconto").prop("disabled", true);
-           
-            var itens = @Html.Raw(Json.Encode(@Model.Itens));            
+
+            var itens = @Html.Raw(Json.Encode(@Model.Itens));
             var produtos = @Html.Raw(Json.Encode(@ViewBag.ProdutoID));
 
             if(tpCons == 'FILTRO') {
@@ -417,10 +438,10 @@
                 for(var j = 0; j < itens.length; j++)
                 {
                     if(produtos[i].Value == itens[j].ProdutoID){
-                        itens[j].DescProduto = produtos[i].Text;                        
-                    }                    
-                }                
-            }                       
+                        itens[j].DescProduto = produtos[i].Text;
+                    }
+                }
+            }
 
             var pedidoItens = itens;
             var totalPedido = 0;
@@ -433,19 +454,19 @@
                 for(var i = 0; i < itens.length; i++)
                 {
                     var d = 0;
-                    
+
                     totalST += Number(String(pedidoItens[i].ValorIcmsSubst == undefined ? 0 : pedidoItens[i].ValorIcmsSubst).replace(',', '.'));
                     //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
 
                     totalIPI += Number(String(pedidoItens[i].ValorIPI + 0).replace(',', '.'));
-                        //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'));                    
-                    
+                        //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
+
                     if(!isNaN(Number(String(itens[i].ValorDesconto).replace(',','.'))))
-                        d = Number(String(itens[i].ValorDesconto).replace(',','.')) 
+                        d = Number(String(itens[i].ValorDesconto).replace(',','.'))
                             * Number(String(itens[i].Quantidade).replace(',','.'));
-                                        
+
                     totalPedido += Number(
-                        Number(String(itens[i].Quantidade).replace(',','.')) 
+                        Number(String(itens[i].Quantidade).replace(',','.'))
                         * Number(String(itens[i].ValorUnitario).replace(',','.'))
                         // Desconto
                         - Number(d)
@@ -455,28 +476,55 @@
                         // IPI
                         + Number(String(pedidoItens[i].ValorIPI).replace(',', '.'))
                             //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'))
-                    );                    
+                    );
                 }
             };
 
-            GeneratedItemsTable(); 
+            GeneratedItemsTable();
 
-            // Add desconto change function        
+            // Add PercDesconto change function
             $('#PercDesconto').change(function () {
-                var percDesconto = Number($('#PercDesconto').val().replace(',','.'));
-                var valUnitario = Number($('#ValorUnitario').val().replace(',','.'));
-                                
-                if (isNaN(percDesconto)) {
-                    $('#PercDesconto').siblings('span.error').css('visibility', 'visible');
-                }
-                else {
-                    $('#ValorDesconto').val(parseFloat(percDesconto * valUnitario / 100).toFixed(2).replace('.', ','));
-                }
-            })
+                var percDesconto = Number($('#PercDesconto').val().replace(',', '.'));
+                var valUnitario = Number($('#ValorUnitario').val().replace(",", "."));
+
+                if (isNaN(valUnitario) || valUnitario == 0 || valUnitario.toString() === '') {
+                    $('#ValorUnitario').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    $('#PercDesconto').val('');
+                    $('#ValorDesconto').val('');
+                    $('#ValorUnitario').focus();
+                } else
+                    if (isNaN(percDesconto)) {
+                        $('#PercDesconto').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                        $('#PercDesconto').focus();
+                    }
+                    else {
+                        $('#ValorDesconto').val(parseFloat(percDesconto * valUnitario / 100).toFixed(2).replace('.', ','));
+                    }
+            });
+
+            // Add ValorDesconto change function
+            $('#ValorDesconto').change(function () {
+                var valorDesconto = Number($('#ValorDesconto').val().replace(',', '.'));
+                var valUnitario = Number($('#ValorUnitario').val().replace(",", "."));
+
+                if (isNaN(valUnitario) || valUnitario == 0 || valUnitario.toString() === '') {
+                    $('#ValorUnitario').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    $('#PercDesconto').val('');
+                    $('#ValorDesconto').val('');
+                    $('#ValorUnitario').focus();
+                } else
+                    if (isNaN(valorDesconto)) {
+                        $('#ValorDesconto').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                        $('#ValorDesconto').focus();
+                    }
+                    else {
+                        $('#PercDesconto').val(parseFloat(valorDesconto * 100 / valUnitario).toFixed(2).replace('.', ','));
+                    }
+            });
 
             // Add  CancelaItem change function
             $('#del').click(function () {
-                if(tpCons == 'LISTAGEM') 
+                if(tpCons == 'LISTAGEM')
                     $('#ProdutoID').val('').focus();
                 else
                     $('#ProdutoAux').val('').focus();
@@ -486,6 +534,8 @@
                 $('#PercDesconto').val('');
                 $('#ValorDesconto').val('');
                 $('#ItemIndex').val('');
+                $('#CorID').val(0);
+                $('#LoteID').val(0);
             });
 
             // Add ValorUnitario change function
@@ -494,8 +544,15 @@
             });
 
             // Add TabelaPreco change function
-            $('#TabelaPrecoID').change(function(){
-                buscaValorUnitario();
+            $('#TabelaPrecoID').change(function () {
+                if (($('#ProdutoID').val() != '' || produtoSelecionado > 0) && ($('#CadastroID').val() != '' || cadastroSelecionado > 0)
+                    && ($('#PrazoVencimentoID').val() != '') && ($('#FilialID').val() != ''))
+                    buscaValorUnitario();
+            });
+
+            // Add CadastroID change function
+            $('#CadastroID').change(function () {
+                buscaTabelaPreco();
             });
 
             // Add button click function
@@ -551,19 +608,35 @@
                 } else {
                     $('#PercDesconto').siblings('span.error').css('visibility', 'hidden');
                 }
-                
-                // Add item to list if valid                
+
+                // Validações de lote e cor para dallmoveis
+                if (codEmpresa == 'DALLMOVEIS') {
+                    if ($('#CorID').val().trim() == '') {
+                        isValidItem = false;
+                        $('#CorID').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    } else {
+                        $('#CorID').siblings('span.error').css('visibility', 'hidden');
+                    }
+                    if ($('#LoteID').val().trim() == '') {
+                        isValidItem = false;
+                        $('#LoteID').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    } else {
+                        $('#LoteID').siblings('span.error').css('visibility', 'hidden');
+                    }
+                }
+
+                // Add item to list if valid
                 if (isValidItem) {
                     //var el = document.getElementById('ProdutoID');
-                    
+
                     bloqueiaOperacoes(true);
-                    
+
                     if(tpCons == "LISTAGEM"){
                         produtoSelecionado = parseInt($('#ProdutoID').val().trim(), 10);
                         descProdutoSelecionado = $('#ProdutoID option:selected').text();
                         cadastroSelecionado = parseInt($('#CadastroID').val().trim());
-                    }       
-                    
+                    }
+
                     // Cálculo de ST
                     $.ajax({
                         url: '/Pedido/CalculaImpostos',
@@ -573,17 +646,17 @@
                             , produtoID: produtoSelecionado
                             , valUnitario: $('#ValorUnitario').val().trim().replace('.', ',')
                             , valDesconto: $('#ValorDesconto').val() == undefined ? '0' : $('#ValorDesconto').val().trim().replace('.', ',')
-                            , quantidade: $('#Quantidade').val().trim().replace('.', ',')                            
+                            , quantidade: $('#Quantidade').val().trim().replace('.', ',')
                             , filialID: $('#FilialID').val().trim()
                             , operacaoID : $('#OperacaoID').val().trim()
                         }),
                         datatype: "JSON",
                         //contentType: "application/json",
                         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-                        success: function (d) {                            
+                        success: function (d) {
                             if (d.status == true) {
-                                //window.location.href = '/Pedido/Index';                                
-                                //totalST += d.valor;                                
+                                //window.location.href = '/Pedido/Index';
+                                //totalST += d.valor;
                                 var i = indexEdicao == undefined ? 0 : indexEdicao;
                                 pedidoItens[i].ValorIcmsSubst = d.valor;
                                 pedidoItens[i].ValorIPI = d.ipi;
@@ -603,7 +676,7 @@
                         }
                     })
 
-                    if($('#ItemIndex').val() == '') {//adição de itens                        
+                    if($('#ItemIndex').val() == '') {//adição de itens
                         pedidoItens.push({
                             //ProdutoID: $('#ProdutoID').val().trim(),
                             ProdutoID: produtoSelecionado,
@@ -616,9 +689,11 @@
                             PercentualDesconto: $('#PercDesconto').val().trim().replace('.',','),
                             ValorImcsSubst: '0,00',
                             ValorIPI: '0,00',
-                            TabelaPrecoID: $('#TabelaPrecoID').val()
+                            TabelaPrecoID: $('#TabelaPrecoID').val(),
+                            CorID: $('#CorID').val(),
+                            LoteID: $('#LoteID').val()
                         });
-                    } else { //edição de itens                    
+                    } else { //edição de itens
                         var i = $('#ItemIndex').val();
                         pedidoItens[i].ProdutoID = produtoSelecionado;
                         pedidoItens[i].Quantidade = $('#Quantidade').val().trim().replace('.',',');
@@ -630,6 +705,8 @@
                         pedidoItens[i].ValorIcmsSubst = '0,00';
                         pedidoItens[i].ValorIPI = '0,00';
                         pedidoItens[i].TabelaPrecoID = $('#TabelaPrecoID').val();
+                        pedidoItens[i].CorID = $('#CorID').val();
+                        pedidoItens[i].LoteID = $('#LoteID').val();
                     }
 
                     // Chama novamente para garantir que botões não fiquem desabilitados
@@ -645,8 +722,10 @@
                     $('#PercDesconto').val('');
                     $('#ValorDesconto').val('');
                     $('#ItemIndex').val('');
+                    $('#CorID').val('');
+                    $('#LoteID').val('');
                     produtoSelecionado = 0;
-                    $("#MsgAddItem").show();                    
+                    $("#MsgAddItem").show();
                     setTimeout("$('#MsgAddItem').hide()", 3500);
                 }
                 GeneratedItemsTable();
@@ -704,18 +783,18 @@
 
                 if ($('#OperacaoID').val().trim() == '') {
                     isValidOrder = false;
-                    $('#OperacaoID').siblings('span.error').css('visibility', 'visible');                    
+                    $('#OperacaoID').siblings('span.error').css('visibility', 'visible');
                 } else {
                     $('#OperacaoID').siblings('span.error').css('visibility', 'hidden');
                 }
 
                 // Salvar
                 if (isValidOrder) {
-                    if (tpCons == 'LISTAGEM') {                    
-                        cadastroSelecionado = parseInt($('#CadastroID').val().trim());                        
+                    if (tpCons == 'LISTAGEM') {
+                        cadastroSelecionado = parseInt($('#CadastroID').val().trim());
                     }
                     var data = {
-                        PedidoID: $('#PedidoID').val().trim(),                        
+                        PedidoID: $('#PedidoID').val().trim(),
                         CadastroID: cadastroSelecionado,
                         PrazoVencimentoID: $('#PrazoVencimentoID').val().trim(),
                         VendedorID: $('#VendedorID').val().trim(),
@@ -770,14 +849,14 @@
                         var $row = $('<tr/>');
                         $row.append($('<td/>').html(val.ProdutoID));
                         $row.append($('<td/>').html(val.DescProduto));
-                        $row.append($('<td/>').html(val.Quantidade));            
-                        
+                        $row.append($('<td/>').html(val.Quantidade));
+
                         $row.append($('<td/>').html(parseFloat(val.ValorDesconto == '' || val.ValorDesconto == null || val.ValorDesconto == undefined ? 0 : val.ValorDesconto.toString().replace(',', '.')).toFixed(2).toString().replace('.', ',')));
-                        
+
                         $row.append($('<td/>').html(parseFloat(val.ValorUnitario.toString().replace(',','.')).toFixed(2).toString().replace('.', ',')));
                         $row.append($('<td/>').html(parseFloat(val.ValorIcmsSubst == null || val.ValorIcmsSubst == undefined ? 0 : val.ValorIcmsSubst.toString().replace(',','.')).toFixed(2).toString().replace('.', ',')));
                         $row.append($('<td/>').html(parseFloat(val.ValorIPI == undefined ? 0 : val.ValorIPI.toString().replace(',','.')).toFixed(2).toString().replace('.', ',')));
-                        
+
                         var $span = $('<span class="input-group-btn btn-group-sm" style="width:50px"/>');
                         $span.append($('<button id=editarItem class="btn btn-primary">' +
                                 '<span class="glyphicon glyphicon-pencil" aria-hidden="true">' +
@@ -790,11 +869,13 @@
                                     $('#ValorUnitario').val(parseFloat(val.ValorUnitario == null || val.ValorUnitario == undefined ? 0 : val.ValorUnitario.toString().replace(',','.')).toFixed(2).toString().replace('.', ','));
                                     $('#ObservacaoItem').val(val.Observacao);
                                     $('#PercDesconto').val(parseFloat(val.percDesconto == null || val.percDesconto == undefined ? 0 : val.percDesconto.toString().replace(',','.')).toFixed(2).toString().replace('.', ','));
-                                    
+
                                     $('#ValorDesconto').val(parseFloat(val.ValorDesconto == '' || val.ValorDesconto == null || val.ValorDesconto == undefined ? 0 : val.ValorDesconto.toString().replace(',','.')).toFixed(2).toString().replace('.', ','));
-                                    
+
                                     $('#ItemIndex').val(i);
                                     $('#TabelaPrecoID').val(val.TabelaPrecoID);
+                                    $('#CorID').val(val.CorID);
+                                    $('#LoteID').val(val.LoteID);
                                     produtoSelecionado = val.ProdutoID;
                                     descProdutoSelecionado = val.DescProduto;
                                     indexEdicao = i;
@@ -802,7 +883,7 @@
                         $span.append($('<button id=excluir class="btn btn-danger">'+
                     '<span class="glyphicon glyphicon-remove" aria-hidden="true">'+
                                 '</span></button>').click(function(){
-                                    pedidoItens.splice(i, 1);                                    
+                                    pedidoItens.splice(i, 1);
                                     GeneratedItemsTable();
                                     habilitaSubmit();
                                 }));
@@ -827,28 +908,28 @@
                         + 'Total do Pedido R$: 0,00'
                         + '</p>'
                         );
-                    
+
                 } else {
                     var htmlST = '';
                     if (totalST != 0)
                         htmlST = "<p style='font-size: small'>ICMS ST R$: " + parseFloat(totalST).toFixed(2).trim().replace('.', ',') + "</p>";
-                    else 
-                        htmlST = '';     
-                    
+                    else
+                        htmlST = '';
+
                     var htmlIPI = '';
                     if (totalIPI != 0)
                         htmlIPI = "<p style='font-size: small'>IPI R$: " + parseFloat(totalIPI).toFixed(2).trim().replace('.', ',') + "</p>";
                     else
                         htmlIPI = '';
 
-                    $('#totalPedido').html(                        
+                    $('#totalPedido').html(
                     htmlST
                     + htmlIPI
                     + '<p>'
                     + 'Total do Pedido R$: '
                     + parseFloat(totalPedido).toFixed(2).trim().replace('.', ',')
-                    + '</p>'                        
-                    );                    
+                    + '</p>'
+                    );
                 }
                 totalPedido = 0;
             };
@@ -865,7 +946,7 @@
 
             // Habilita/Desabilita botão para salvar pedido
             function habilitaSubmit() {
-                $('#submit').prop('disabled', (pedidoItens.length === 0))                
+                $('#submit').prop('disabled', (pedidoItens.length === 0))
             };
 
             function buscaValorUnitario(){
@@ -892,8 +973,8 @@
                     datatype: "JSON",
                     //contentType: "application/json",
                     contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-                    success: function (d) {                        
-                        if (d.status == true) {                            
+                    success: function (d) {
+                        if (d.status == true) {
                             $('#ValorUnitario').val(d.valor.toFixed(2).replace(".",","));
                             bloqueiaOperacoes(false);
                         }
@@ -909,5 +990,5 @@
                 })
             };
         });
-    </script>
+</script>
 }
