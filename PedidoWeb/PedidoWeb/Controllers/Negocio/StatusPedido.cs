@@ -82,6 +82,14 @@ namespace PedidoWeb.Controllers.Negocio
                 analise = true;
                 //return "EM ANALISE";
             }
+
+
+            // Para empresas que querem que caia tudo em análise
+            if(("DALLMOVEIS".Contains(cadastro.CodEmpresa)))
+            {
+                analise = true;
+            }
+
             if (analise)
                 return "EM ANALISE";
             else
