@@ -557,6 +557,12 @@ namespace PedidoWeb.Controllers
                 {
                     ipi = (valorUnitario * Convert.ToDouble(produto.PercIPI) / 100) * qtQuantidade;
                 }
+
+                // IPI para DallMoveis
+                if (idFilial == 1063)  // Dall Ilumini
+                {
+                    ipi = (valorUnitario * Convert.ToDouble(produto.PercIPI) / 100) * qtQuantidade;
+                }
             }
             return new JsonResult { Data = new { status = status, valor = valor, ipi = ipi ,errorMessage = errorMessage } };
         }

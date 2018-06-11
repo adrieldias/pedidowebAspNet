@@ -408,12 +408,10 @@
                 for (var i = 0; i < pedidoItens.length; i++) {
                     var d = 0;
 
-                    totalST += Number(String(pedidoItens[i].ValorIcmsSubst).replace(',', '.'));
-                        //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
+                    totalST += Number(String(pedidoItens[i].ValorIcmsSubst).replace(',', '.'));                        
 
                     totalIPI += Number(String(pedidoItens[i].ValorIPI).replace(',', '.'));
-                        //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
-
+                        
                     if (!isNaN(Number(String(pedidoItens[i].ValorDesconto).replace(',', '.'))))
                         d = Number(String(pedidoItens[i].ValorDesconto).replace(',', '.'))
                             * Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
@@ -536,7 +534,7 @@
                     $('#Quantidade').siblings('span.error').css('visibility', 'hidden');
                 }
                 $('#ValorUnitario').val($('#ValorUnitario').val().trim().replace(',', '.'));
-                if ($('#ValorUnitario').val().trim() == '' || isNaN($('#ValorUnitario').val().trim().replace(',', '.'))) {
+                if ($('#ValorUnitario').val().trim() == '' || isNaN($('#ValorUnitario').val().trim().replace(',', '.')) || $('#ValorUnitario').val().trim() == '0.00') {
                     isValidItem = false;
                     $('#ValorUnitario').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
                 }
