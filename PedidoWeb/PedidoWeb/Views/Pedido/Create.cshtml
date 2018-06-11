@@ -108,69 +108,69 @@
             </div>
 
             @if (ViewBag.TemTabelaPreco)
-    {
-        <div class="form-group">
-            @Html.Label("Tabela de Preço")
-            @Html.DropDownList("TabelaPrecoID", null, string.Empty, new { @class = "form-control" })
-        </div>
-}
+            {
+                <div class="form-group">
+                    @Html.Label("Tabela de Preço")
+                    @Html.DropDownList("TabelaPrecoID", null, string.Empty, new { @class = "form-control" })
+                </div>
+            }
 
             @if (ViewBag.TipoConsulta == "LISTAGEM")
-    {
+            {
 
-        AjaxOptions ajaxOptions = new AjaxOptions()
-        {
-            UpdateTargetId = "ValorUnitario",
-            OnSuccess = "SuccessRequest",
-            OnFailure = "FailureRequest",
-            HttpMethod = "POST"
-        };
+                AjaxOptions ajaxOptions = new AjaxOptions()
+                {
+                    UpdateTargetId = "ValorUnitario",
+                    OnSuccess = "SuccessRequest",
+                    OnFailure = "FailureRequest",
+                    HttpMethod = "POST"
+                };
 
-        //using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
-        //{
-        <div class="form-group">
-            * @Html.Label("Produto")
-            @Html.DropDownList("ProdutoID", null, string.Empty, new
-    {
-        @class = "form-control"@*, onchange = "buscaValor()"*@})
-            <span class="error" style="visibility: hidden">Produto é obrigatório</span>
-        </div>
+                //using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
+                //{
+                <div class="form-group">
+                    * @Html.Label("Produto")
+                    @Html.DropDownList("ProdutoID", null, string.Empty, new
+            {
+                @class = "form-control"@*, onchange = "buscaValor()"*@})
+                    <span class="error" style="visibility: hidden">Produto é obrigatório</span>
+                </div>
 
-        @*<script type="text/javascript">
-        function buscaValor() {
-            bloqueiaOperacoes(true);
-            $("#ProdutoID").submit();
-        }
+                @*<script type="text/javascript">
+                function buscaValor() {
+                    bloqueiaOperacoes(true);
+                    $("#ProdutoID").submit();
+                }
 
-        function SuccessRequest(response) {
-            //alert(response);
-            $('#ValorUnitario').val(response);
-            bloqueiaOperacoes(false);
-        }
+                function SuccessRequest(response) {
+                    //alert(response);
+                    $('#ValorUnitario').val(response);
+                    bloqueiaOperacoes(false);
+                }
 
-        function FailureRequest(response) {
-            alert("Não foi possível buscar o preço do produto");
-            bloqueiaOperacoes(false);
-        }
+                function FailureRequest(response) {
+                    alert("Não foi possível buscar o preço do produto");
+                    bloqueiaOperacoes(false);
+                }
 
-        function bloqueiaOperacoes(bloqueio) {
-            $('#add').prop('disabled', bloqueio);
-            $('#submit').prop('disabled', bloqueio);
-        }
-    </script>*@
-//}
+                function bloqueiaOperacoes(bloqueio) {
+                    $('#add').prop('disabled', bloqueio);
+                    $('#submit').prop('disabled', bloqueio);
+                }
+            </script>*@
+        //}
 
-    }
-    else
-    {
+            }
+            else
+            {
 
-        <div class="form-group">
-            @Html.Label("* Produto")
-            @Html.TextBox("ProdutoAux", null, string.Empty, new { @class = "form-control", @placeholder = "Digite o nome ou código do produto" })
-            <span class="error" style="visibility: hidden">Produto é obrigatório</span>
-        </div>
+                <div class="form-group">
+                    @Html.Label("* Produto")
+                    @Html.TextBox("ProdutoAux", null, string.Empty, new { @class = "form-control", @placeholder = "Digite o nome ou código do produto" })
+                    <span class="error" style="visibility: hidden">Produto é obrigatório</span>
+                </div>
 
-    }
+            }
 
             @if (ViewBag.Empresa.CodEmpresa == "DALLMOVEIS")
             {
@@ -471,16 +471,20 @@
             });
 
             // Add  CancelaItem change function
-            $('#del').click(function () {
-                $('#ProdutoAux').val('').focus();
+            $('#del').click(function () {  
+                if (tpCons == 'LISTAGEM')
+                    $('#ProdutoID').val(0).focus();
+                else
+                    $('#ProdutoAux').val('').focus();
                 $('#Quantidade').val('');
                 $('#ValorUnitario').val('');
                 $('#ObservacaoItem').val('');
                 $('#PercDesconto').val('');
                 $('#ValorDesconto').val('');
                 $('#ItemIndex').val('');
+                $('#ProdutoID').val(0);
                 $('#CorID').val(0);
-                $('#LoteID').val(0);
+                $('#LoteID').val(0);       
             });
 
             // Add ValorUnitario change function
