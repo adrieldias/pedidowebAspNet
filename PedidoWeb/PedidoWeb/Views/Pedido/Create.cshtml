@@ -737,6 +737,11 @@
                     produtoSelecionado = 0;
                     $("#MsgAddItem").show();
                     setTimeout("$('#MsgAddItem').hide()", 3500);
+
+                    // Bloqueia a filial de ser alterada após ser inserido algum item no pedido
+                    if (pedidoItens.length > 0) {
+                        $("#FilialID").prop("disabled", true);
+                    }
                 }
 
                 GeneratedItemsTable();
@@ -894,7 +899,11 @@
                                 '</span></button>').click(function () {
                             pedidoItens.splice(i, 1);
                             GeneratedItemsTable();
-                            habilitaSubmit();
+                            // Se não houver mais itens no pedido, habilita alteração da filial
+                            if (pedidoItens.length === 0) {
+                                $("#FilialID").prop("disabled", false);
+                            }
+                            habilitaSubmit();                            
                         }));
                         var $col = $('<td style="text-align:right"/>');
                         $col.append($span);
