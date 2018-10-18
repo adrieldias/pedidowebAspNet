@@ -1073,7 +1073,10 @@ namespace PedidoWeb.Controllers
                     email.Ssl = pedidoHelper.UsuarioCorrente.SSL;
                     email.Senha = pedidoHelper.UsuarioCorrente.SenhaEmail;
                 }
-                email.Destinatario = pedido.Cadastro.Email;                
+                if (pedido.CodEmpresa.Equals("DALLMOVEIS"))
+                    email.Destinatario = pedidoHelper.UsuarioCorrente.Email;
+                else
+                    email.Destinatario = pedido.Cadastro.Email;                
                 email.Assunto = string.Format("{0} - Pedido nº {1}"
                     , pedido.Filial.DescFilial, pedido.NumeroPedido.ToString());
                 email.TemImagem = false;
