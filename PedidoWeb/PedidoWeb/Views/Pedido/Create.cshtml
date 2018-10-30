@@ -31,7 +31,7 @@
         { 
             <div class="form-group">
                 * @Html.Label("Cliente")
-            @Html.TextBox("CadastroAux", null, string.Empty, new { @class = "form-control" })
+            @Html.TextBox("CadastroAux", null, string.Empty, new { @class = "form-control", @placeholder = "Digite o nome ou código do cliente" })
                 <span class="error" style="visibility: hidden">Cliente é obrigatório</span>
             </div>
         }
@@ -96,6 +96,13 @@
             <hr />
             <br />
 
+            <div class="form-group" style="text-align: right">
+                <button type="button" id="del" class="btn btn-warning btn-sm">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Limpar Campos
+                </button>
+            </div>
+
             <div id="MsgAddItem" class="alert alert-success">
                 <p>Item adicionado com sucesso. Você pode adicionar mais itens ao pedido.</p>
             </div>
@@ -108,57 +115,79 @@
                 </div>
             }
 
-            @if (ViewBag.TipoConsulta == "LISTAGEM") { 
-                
-                AjaxOptions ajaxOptions = new AjaxOptions() {
-                        UpdateTargetId = "ValorUnitario",
-                        OnSuccess = "SuccessRequest",
-                        OnFailure = "FailureRequest",
-                        HttpMethod = "POST"
-                    };
+            @if (ViewBag.TipoConsulta == "LISTAGEM")
+            {
+
+                AjaxOptions ajaxOptions = new AjaxOptions()
+                {
+                    UpdateTargetId = "ValorUnitario",
+                    OnSuccess = "SuccessRequest",
+                    OnFailure = "FailureRequest",
+                    HttpMethod = "POST"
+                };
 
                 //using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
-                //{                    
-                    <div class="form-group">
-                        * @Html.Label("Produto")
-                        @Html.DropDownList("ProdutoID", null, string.Empty, new { @class = "form-control" @*, onchange = "buscaValor()"*@ })
-                        <span class="error" style="visibility: hidden">Produto é obrigatório</span>                                
-                    </div>
-                
-                    @*<script type="text/javascript">
-                        function buscaValor() {
-                            bloqueiaOperacoes(true);
-                            $("#ProdutoID").submit();                        
-                        }
-
-                        function SuccessRequest(response) {
-                            //alert(response);
-                            $('#ValorUnitario').val(response);
-                            bloqueiaOperacoes(false);
-                        }
-
-                        function FailureRequest(response) {
-                            alert("Não foi possível buscar o preço do produto");
-                            bloqueiaOperacoes(false);
-                        }
-
-                        function bloqueiaOperacoes(bloqueio) {
-                            $('#add').prop('disabled', bloqueio);
-                            $('#submit').prop('disabled', bloqueio);                            
-                        }
-                    </script>*@    
-                //}
-
-            }
-            else { 
-            
+                //{
                 <div class="form-group">
-                    @Html.Label("* Produto")
-                @Html.TextBox("ProdutoAux", null, string.Empty, new { @class = "form-control" })
+                    * @Html.Label("Produto")
+                    @Html.DropDownList("ProdutoID", null, string.Empty, new
+            {
+                @class = "form-control"@*, onchange = "buscaValor()"*@})
                     <span class="error" style="visibility: hidden">Produto é obrigatório</span>
                 </div>
-                            
+
+                @*<script type="text/javascript">
+                function buscaValor() {
+                    bloqueiaOperacoes(true);
+                    $("#ProdutoID").submit();
+                }
+
+                function SuccessRequest(response) {
+                    //alert(response);
+                    $('#ValorUnitario').val(response);
+                    bloqueiaOperacoes(false);
+                }
+
+                function FailureRequest(response) {
+                    alert("Não foi possível buscar o preço do produto");
+                    bloqueiaOperacoes(false);
+                }
+
+                function bloqueiaOperacoes(bloqueio) {
+                    $('#add').prop('disabled', bloqueio);
+                    $('#submit').prop('disabled', bloqueio);
+                }
+            </script>*@
+        //}
+
             }
+            else
+            {
+
+                <div class="form-group">
+                    @Html.Label("* Produto")
+                    @Html.TextBox("ProdutoAux", null, string.Empty, new { @class = "form-control", @placeholder = "Digite o nome ou código do produto" })
+                    <span class="error" style="visibility: hidden">Produto é obrigatório</span>
+                </div>
+
+            }
+
+            @if (ViewBag.Empresa.CodEmpresa == "DALLMOVEIS")
+            {
+                <div class="form-group btn-group-justified" role="group" aria-label="...">
+                    <div class="btn-group" style="padding: 0px 10px 0px 0px" role="group">
+                        @Html.Label("* Cor")
+                        @Html.DropDownList("CorID", null, string.Empty, new { @class = "form-control" })
+                        <span class="error" style="visibility: hidden">Cor é obrigatória</span>
+                    </div>
+                    <div class="btn-group" role="group" style="padding: 0px 0px 0px 10px">
+                        @Html.Label("* Tecido")
+                        @Html.DropDownList("LoteID", null, string.Empty, new { @class = "form-control" })
+                        <span class="error" style="visibility: hidden">Tecido é obrigatório</span>
+                    </div>
+                </div>
+            }
+
             <div class="form-group">
                 * @Html.Label("Quantidade")
                 <input type="text" id="Quantidade" class="form-control" />
@@ -169,53 +198,50 @@
                 * @Html.Label("Valor Unitário")
                 <input type="text" id="ValorUnitario" class="form-control" />
                 <span class="error" style="visibility: hidden">Valor Unitário é obrigatório</span>
-            </div>  
+            </div>
 
-            <div class="form-group col-md-5" style="padding: 0 0 0 0">                
+
+            <div class="form-group col-md-5" style="padding: 0px 0px 0px 0px">
                 @Html.Label("Percentual de Desconto")
                 <input type="text" id="PercDesconto" name="PercDesconto" class="form-control" />
                 <span class="error" style="visibility: hidden">Percentual de desconto inválido</span>
             </div>
-            <div class="form-group col-md-2">
-                
-            </div>
-            @if (ViewBag.Empresa.CodEmpresa != "BISSOLOTTI")
-            {
-                <div class="form-group col-md-5" style="padding: 0 0 0 0">                
-                    @Html.Label("Valor de Desconto")
-                    <input type="text" id="ValorDesconto" name="ValorDesconto" class="form-control" />
-                    <span class="error" style="visibility: hidden">Valor de desconto inválido</span>
-                </div>  
-                <div class="clearfix"></div>
 
-                <div class="form-group">
-                    @Html.Label("Observação do Item (opcional)")
-                    <textarea id="ObservacaoItem" class="form-control"></textarea>
-                    <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>               
-                </div>  
-            }      
+            <div class="form-group col-md-2"></div>
+
+
+            <div class="form-group col-md-5" style="padding: 0px 0px 0px 0px">
+                @Html.Label("Valor de Desconto")
+                <input type="text" id="ValorDesconto" name="ValorDesconto" class="form-control" />
+                <span class="error" style="visibility: hidden">Valor de desconto inválido</span>
+            </div>
+
+
+            @*<div class="clearfix"></div>*@
+
+            <div class="form-group">
+                @Html.Label("Observação do Item (opcional)")
+                <textarea id="ObservacaoItem" class="form-control"></textarea>
+                <span class="error" style="visibility: hidden">Observação não pode ter mais de 30 caracteres</span>
+            </div>
+
+
             @Html.Hidden("ItemIndex")
-            <div class="clearfix"></div>      
-            
-        <div class="btn-group btn-group-justified" role="group" aria-label="...">
-            <div class="btn-group" role="group">
-                <button type="button" id="add" class="btn btn-default">
-                    <span class="glyphicon glyphicon-ok"></span>
-                    Salvar Item
-                </button>
+            <div class="clearfix"></div>
+
+            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                <div class="btn-group" role="group">
+                    <button type="button" id="add" class="btn btn-default">
+                        <span class="glyphicon glyphicon-ok"></span>
+                        Salvar Item
+                    </button>
+                </div>                
             </div>
-            <div class="btn-group" role="group">
-                <button type="button" id="del" class="btn btn-warning">
-                    <span class="glyphicon glyphicon-remove"></span>
-                    Limpar Campos
-                </button>
-            </div>
-        </div>
-            <br />        
-            <div id="pedidoItens"></div>  
-            <div id="totalPedido" class="gridRodape"></div>        
             <br />
-            
+            <div id="pedidoItens"></div>
+            <div id="totalPedido" class="gridRodape"></div>
+            <br />
+
         </div>
 
 
@@ -240,24 +266,25 @@
     @Scripts.Render("~/bundles/jqueryui")   
     @Scripts.Render("~/bundles/jqueryui/stylesheet")
         
-    <script>       
-        
+    <script>
+
+
         function toggleDiv(divid) {
             var div = document.getElementById(divid);
             var disp = div.style.display;
             div.style.display = disp == 'none' ? 'block' : 'none';
-            
+
             if (disp == 'none') {
                 $("#testeglyph2").show();
                 $("#testeglyph1").hide();
             }
-            if (disp == 'block') {                
+            if (disp == 'block') {
                 $("#testeglyph2").hide();
-                $("#testeglyph1").show();                
+                $("#testeglyph1").show();
             }
         };
-        
-        $("document").ready(function () {           
+
+        $("document").ready(function () {
 
             var produtoSelecionado = 0;
             var cadastroSelecionado = 0;
@@ -267,9 +294,10 @@
             var stItem = 0;
             var emOperacao = false;
             var tpCons = '@(ViewBag.TipoConsulta)';
+            var codEmpresa = '@(ViewBag.Empresa.CodEmpresa)';
 
             $('#submit').prop('disabled', true);
-            
+
             $('#ProdutoAux').autocomplete({
                 source: function (request, response) {
                     // prepare url : for example '/api/artistapi?query=sonu
@@ -287,11 +315,11 @@
                             , filialID: $('#FilialID').val()
                             , tabelaPrecoID: $('#TabelaPrecoID').val()
                         }),
-                        success: function (json) {                            
+                        success: function (json) {
                             var autoc = [];
-                            $.each(json, function (id, data) {                                
+                            $.each(json, function (id, data) {
                                 autoc.push({
-                                    label: data.Descricao,                                                                   
+                                    label: data.Descricao,
                                     value: data.ProdutoID,
                                     valor: data.PrecoVarejo
                                 });
@@ -304,15 +332,15 @@
                     });
                 },
                 minLength: 0,
-                select: function (event, ui, json) {                    
-                    //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value + 'Valor ' + ui.item.valor );   
+                select: function (event, ui, json) {
+                    //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value + 'Valor ' + ui.item.valor );
                     $('#ProdutoAux').val(ui.item.label);
                     $('#ValorUnitario').val(ui.item.valor.toFixed(2).replace(".",","));
                     descProdutoSelecionado = ui.item.label;
                     produtoSelecionado = ui.item.value;
                     return false;
                 }
-            });           
+            });
 
             $('#CadastroAux').autocomplete({
                 source: function (request, response) {
@@ -328,9 +356,9 @@
                             $.each(json, function (id, data) {
                                 autoc.push({
                                     label: data.Nome,
-                                    value: data.CadastroID                                    
+                                    value: data.CadastroID
                                 });
-                            });                            
+                            });
                             response(autoc);
                         },
                         error: function (xmlHttpRequest, textStatus, errorThrown) {
@@ -347,16 +375,16 @@
                     return false;
                 }
             });
-            
+
             $("#VendedorID").prop("disabled", true);
-            $("#ValorDesconto").prop("disabled", true);            
+            
             $("#MsgAddItem").hide();
             $("#testeglyph2").hide();
             $('#totalPedido').hide();
-            
+
             var valorUnitario = '@(ViewBag.Empresa.AlteraValorUnitario)';
-            var percDesconto = '@(ViewBag.Empresa.DescontoInformado)'; 
-            
+            var percDesconto = '@(ViewBag.Empresa.DescontoInformado)';
+
             if(valorUnitario.toString() === 'True')
                 $("#ValorUnitario").prop("disabled", false);
             else
@@ -365,9 +393,13 @@
                 $("#PercDesconto").prop("disabled", false);
             else
                 $("#PercDesconto").prop("disabled", true);
+            if (percDesconto.toString() === 'True')
+                $("#ValorDesconto").prop("disabled", false);
+            else
+                $("#ValorDesconto").prop("disabled", true);
 
             var pedidoItens = [];
-            var totalPedido = 0;           
+            var totalPedido = 0;
 
             var calulaTotal = function () {
                 totalST = 0;
@@ -376,12 +408,10 @@
                 for (var i = 0; i < pedidoItens.length; i++) {
                     var d = 0;
 
-                    totalST += Number(String(pedidoItens[i].ValorIcmsSubst).replace(',', '.'));
-                        //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
+                    totalST += Number(String(pedidoItens[i].ValorIcmsSubst).replace(',', '.'));                        
 
                     totalIPI += Number(String(pedidoItens[i].ValorIPI).replace(',', '.'));
-                        //* Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
-
+                        
                     if (!isNaN(Number(String(pedidoItens[i].ValorDesconto).replace(',', '.'))))
                         d = Number(String(pedidoItens[i].ValorDesconto).replace(',', '.'))
                             * Number(String(pedidoItens[i].Quantidade).replace(',', '.'));
@@ -399,39 +429,74 @@
                     );
                 }
             };
-            
-            // Add desconto change function        
+
+            // Add PercDesconto change function
             $('#PercDesconto').change(function () {
                 var percDesconto = Number($('#PercDesconto').val().replace(',', '.'));
-                var valUnitario = Number($('#ValorUnitario').val().replace(",","."));
+                var valUnitario = Number($('#ValorUnitario').val().replace(",", "."));
 
-                if (isNaN(percDesconto)) {
-                    $('#PercDesconto').siblings('span.error').css('visibility', 'visible');
-                }
-                else {
-                    $('#ValorDesconto').val(parseFloat(percDesconto * valUnitario / 100).toFixed(2).replace('.', ','));
-                }
-            })
-            
+                if (isNaN(valUnitario) || valUnitario == 0 || valUnitario.toString() === '') {
+                    $('#ValorUnitario').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    $('#PercDesconto').val('');
+                    $('#ValorDesconto').val('');
+                    $('#ValorUnitario').focus();
+                } else
+                    if (isNaN(percDesconto)) {
+                        $('#PercDesconto').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                        $('#PercDesconto').focus();
+                    }
+                    else {
+                        $('#ValorDesconto').val(parseFloat(percDesconto * valUnitario / 100).toFixed(2).replace('.', ','));
+                    }
+            });
+
+            // Add ValorDesconto change function
+            $('#ValorDesconto').change(function () {
+                var valorDesconto = Number($('#ValorDesconto').val().replace(',', '.'));
+                var valUnitario = Number($('#ValorUnitario').val().replace(",", "."));
+
+                if (isNaN(valUnitario) || valUnitario == 0 || valUnitario.toString() === '') {
+                    $('#ValorUnitario').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    $('#PercDesconto').val('');
+                    $('#ValorDesconto').val('');
+                    $('#ValorUnitario').focus();
+                } else
+                    if (isNaN(valorDesconto)) {
+                        $('#ValorDesconto').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');                        
+                        $('#ValorDesconto').focus();
+                    }
+                    else {
+                        $('#PercDesconto').val(parseFloat(valorDesconto * 100 / valUnitario).toFixed(2).replace('.', ','));
+                    }
+            });
+
             // Add  CancelaItem change function
-            $('#del').click(function () {
-                $('#ProdutoAux').val('').focus();
+            $('#del').click(function () {  
+                if (tpCons == 'LISTAGEM')
+                    $('#ProdutoID').val(0).focus();
+                else
+                    $('#ProdutoAux').val('').focus();
                 $('#Quantidade').val('');
                 $('#ValorUnitario').val('');
                 $('#ObservacaoItem').val('');
                 $('#PercDesconto').val('');
                 $('#ValorDesconto').val('');
                 $('#ItemIndex').val('');
+                $('#ProdutoID').val(0);
+                $('#CorID').val(0);
+                $('#LoteID').val(0);       
             });
 
             // Add ValorUnitario change function
-            $('#ProdutoID').change(function () {                
+            $('#ProdutoID').change(function () {
                 buscaValorUnitario();
             });
 
             // Add TabelaPreco change function
             $('#TabelaPrecoID').change(function () {
-                buscaValorUnitario();
+                if (($('#ProdutoID').val() != '' || produtoSelecionado > 0) && ($('#CadastroID').val() != '' || cadastroSelecionado > 0)
+                    && ($('#PrazoVencimentoID').val() != '') && ($('#FilialID').val() != '')) 
+                    buscaValorUnitario();
             });
 
             // Add CadastroID change function
@@ -441,7 +506,7 @@
 
             // Add button click function
             $('#add').click(function () {
-                // Validações                
+                // Validações
                 var isValidItem = true;
 
                 if (emOperacao)
@@ -463,7 +528,7 @@
                     else {
                         $('#ProdutoAux').siblings('span.error').css('visibility', 'hidden');
                     }
-                }                
+                }
 
                 if ($('#Quantidade').val().trim() == '' || isNaN($('#Quantidade').val().trim().replace(',', '.'))) {
                     isValidItem = false;
@@ -473,13 +538,14 @@
                     $('#Quantidade').siblings('span.error').css('visibility', 'hidden');
                 }
                 $('#ValorUnitario').val($('#ValorUnitario').val().trim().replace(',', '.'));
-                if ($('#ValorUnitario').val().trim() == '' || isNaN($('#ValorUnitario').val().trim().replace(',', '.'))) {
+                if ($('#ValorUnitario').val().trim() == '' || isNaN($('#ValorUnitario').val().trim().replace(',', '.')) || $('#ValorUnitario').val().trim() == '0.00') {
                     isValidItem = false;
                     $('#ValorUnitario').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
                 }
                 else {
                     $('#ValorUnitario').siblings('span.error').css('visibility', 'hidden');
                 }
+
                 if ($('#ObservacaoItem').val() != undefined) {
                     if ($('#ObservacaoItem').val().length > 30) {
                         isValidItem = false;
@@ -489,7 +555,7 @@
                         $('#ObservacaoItem').siblings('span.error').css('visibility', 'hidden');
                     }
                 }
-                
+
                 if (isNaN($('#PercDesconto').val().trim().replace(',', '.'))) {
                     isValidItem = false;
                     $('#PercDesconto').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
@@ -554,9 +620,25 @@
                     $('#PrazoVencimentoID').siblings('span.error').css('visibility', 'hidden');
                 }
 
+                // Validações de lote e cor para dallmoveis
+                if (codEmpresa == 'DALLMOVEIS') {
+                    if ($('#CorID').val().trim() == '') {
+                        isValidItem = false;
+                        $('#CorID').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    } else {
+                        $('#CorID').siblings('span.error').css('visibility', 'hidden');
+                    }
+                    if ($('#LoteID').val().trim() == '') {
+                        isValidItem = false;
+                        $('#LoteID').siblings('span.error').css('visibility', 'visible').addClass('label label-danger');
+                    } else {
+                        $('#LoteID').siblings('span.error').css('visibility', 'hidden');
+                    }
+                }
+
 
                 // Add item to list if valid
-                if (isValidItem) {                    
+                if (isValidItem) {
                     //var el = document.getElementById('ProdutoAux');
 
                     bloqueiaOperacoes(true);
@@ -566,7 +648,7 @@
                         descProdutoSelecionado = $('#ProdutoID option:selected').text();
                         cadastroSelecionado = parseInt($('#CadastroID').val().trim());
                     }
-                    
+
                     // Cálculo de ST
                     $.ajax({
                         url: '/Pedido/CalculaImpostos',
@@ -587,7 +669,7 @@
                             // Checa se o pedido foi salvo no banco de dados
 
                             if (d.status == true) {
-                                //window.location.href = '/Pedido/Index';                                
+                                //window.location.href = '/Pedido/Index';
                                 //totalST += d.valor;
 
                                 var i = pedidoItens.length - 1;
@@ -608,9 +690,9 @@
                             alert('Erro ao calcular impostos. Por favor tente novamente.');
                         }
                     });
-                    
-                    if ($('#ItemIndex').val() == '') { //adição de itens       
-                        pedidoItens.push({                            
+
+                    if ($('#ItemIndex').val() == '') { //adição de itens
+                        pedidoItens.push({
                             ProdutoID: produtoSelecionado,
                             Quantidade: $('#Quantidade').val().trim().replace('.',','),
                             ValorUnitario: $('#ValorUnitario').val().trim().replace(".", ","),
@@ -621,9 +703,11 @@
                             PercentualDesconto: $('#PercDesconto').val().trim().replace(".", ","),
                             ValorImcsSubst: '0,00',
                             ValorIPI: '0,00',
-                            tabelaPrecoID: $('#TabelaPrecoID').val()
+                            tabelaPrecoID: $('#TabelaPrecoID').val(),
+                            CorID: $('#CorID').val(),
+                            LoteID: $('#LoteID').val()
                         });
-                    } else { //edição de itens                    
+                    } else { //edição de itens
                         var i = $('#ItemIndex').val();
                         pedidoItens[i].ProdutoID = produtoSelecionado;
                         pedidoItens[i].Quantidade = $('#Quantidade').val().trim().replace('.', ',');
@@ -635,6 +719,8 @@
                         pedidoItens[i].ValorIcmsSubst = '0,00';
                         pedidoItens[i].ValorIPI = '0,00';
                         pedidoItens[i].TabelaPrecoID = $('#TabelaPrecoID').val();
+                        pedidoItens[i].CorID = $('#CorID').val();
+                        pedidoItens[i].LoteID = $('#LoteID').val();
                     }
                     if (tpCons == 'LISTAGEM')
                         $('#ProdutoID').val('').focus();
@@ -646,19 +732,26 @@
                     $('#PercDesconto').val('');
                     $('#ValorDesconto').val('');
                     $('#ItemIndex').val('');
+                    $('#CorID').val('');
+                    $('#LoteID').val('');
                     produtoSelecionado = 0;
-                    $("#MsgAddItem").show();                    
+                    $("#MsgAddItem").show();
                     setTimeout("$('#MsgAddItem').hide()", 3500);
+
+                    // Bloqueia a filial de ser alterada após ser inserido algum item no pedido
+                    if (pedidoItens.length > 0) {
+                        $("#FilialID").prop("disabled", true);
+                    }
                 }
 
-                GeneratedItemsTable();                
+                GeneratedItemsTable();
             });
 
             // Save button click function
             $('#submit').click(function () {
 
                 // Validação do pedido
-                var isValidOrder = true;                                
+                var isValidOrder = true;
                 if (tpCons == 'FILTRO') {
                     if ($('#CadastroAux').val().trim() == '' || cadastroSelecionado == 0) {
                         isValidOrder = false;
@@ -668,12 +761,12 @@
                     else {
                         $('#CadastroAux').siblings('span.error').css('visibility', 'hidden');
                     }
-                } else {                    
+                } else {
                     if ($('#CadastroID').val().trim() == '') {
-                        isValidOrder = false;                        
+                        isValidOrder = false;
                         $('#CadastroID').siblings('span.error').css('visibility', 'visible');
                         $('#CadastroID').focus();
-                    }                    
+                    }
                 }
 
                 if ($('#PrazoVencimentoID').val().trim() == '') {
@@ -708,14 +801,14 @@
                 } else {
                     $('#FilialID').siblings('span.error').css('visibility', 'hidden');
                 }
-                
+
                 // Salvar
-                if (isValidOrder) {                    
+                if (isValidOrder) {
                     if (tpCons == 'LISTAGEM')
                     {
-                        cadastroSelecionado = parseInt($('#CadastroID').val().trim());                        
+                        cadastroSelecionado = parseInt($('#CadastroID').val().trim());
                     }
-                    var data = {                        
+                    var data = {
                         CadastroID: cadastroSelecionado,
                         PrazoVencimentoID: $('#PrazoVencimentoID').val().trim(),
                         VendedorID: $('#VendedorID').val().trim(),
@@ -804,9 +897,13 @@
                         $span.append($('<button id=excluir class="btn btn-danger">' +
                                 '<span class="glyphicon glyphicon-remove" aria-hidden="true">' +
                                 '</span></button>').click(function () {
-                            pedidoItens.splice(i, 1);                            
+                            pedidoItens.splice(i, 1);
                             GeneratedItemsTable();
-                            habilitaSubmit();
+                            // Se não houver mais itens no pedido, habilita alteração da filial
+                            if (pedidoItens.length === 0) {
+                                $("#FilialID").prop("disabled", false);
+                            }
+                            habilitaSubmit();                            
                         }));
                         var $col = $('<td style="text-align:right"/>');
                         $col.append($span);
@@ -829,30 +926,30 @@
                         + 'Total do Pedido R$: 0,00'
                         + '</p>'
                         );
-                    
+
                 } else {
                     var htmlST = '';
                     if (totalST != 0)
                         htmlST = "<p style='font-size: small'>ICMS ST R$: " + parseFloat(totalST).toFixed(2).trim().replace('.', ',') + "</p>";
-                    else 
-                        htmlST = '';     
-                    
+                    else
+                        htmlST = '';
+
                     var htmlIPI = '';
                     if (totalIPI != 0)
                         htmlIPI = "<p style='font-size: small'>IPI R$: " + parseFloat(totalIPI).toFixed(2).trim().replace('.', ',') + "</p>";
                     else
                         htmlIPI = '';
 
-                        $('#totalPedido').html(                        
+                        $('#totalPedido').html(
                         htmlST
                         + htmlIPI
                         + '<p>'
                         + 'Total do Pedido R$: '
                         + parseFloat(totalPedido).toFixed(2).trim().replace('.', ',')
-                        + '</p>'                        
-                        );                    
+                        + '</p>'
+                        );
                 }
-                totalPedido = 0;               
+                totalPedido = 0;
             };
 
             // Mantém uma flag e desabilita botões enquanto
@@ -864,15 +961,15 @@
 
                 habilitaSubmit();
             };
-            
+
             // Habilita/Desabilita botão para salvar pedido
             function habilitaSubmit() {
-                $('#submit').prop('disabled', (pedidoItens.length === 0))                
+                $('#submit').prop('disabled', (pedidoItens.length === 0))
             };
 
             // Busca valor unitário
             function buscaValorUnitario() {
-                
+
                 bloqueiaOperacoes(true);
 
                 $.ajax({
@@ -906,7 +1003,7 @@
             }
 
             // Busca Tabela de Preço
-            function buscaTabelaPreco() {                
+            function buscaTabelaPreco() {
                 $.ajax({
                     url: '/Pedido/TabelaPreco',
                     type: 'POST',
@@ -930,6 +1027,6 @@
                     }
                 });
             };
-        });        
+        });
     </script>
 }
