@@ -777,14 +777,14 @@ namespace PedidoWeb.Controllers
                 {
                     produtos = db.Produtoes.Where(c => (c.Descricao.Contains(term) || c.CodProduto == codigo) &&
                         c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa && c.Situacao == "ATIVO")
-                        .OrderBy(m => m.Descricao.StartsWith(term) ? (m.Descricao == term ? 0 : 1) : 2)
+                        .OrderBy(m => m.Descricao.StartsWith(term) ? (m.Descricao == term ? " " : "!") : m.Descricao)
                         .Take(100).ToList();
                 }
                 else
                 {
                     produtos = db.Produtoes.Where(c => c.Descricao.Contains(term) &&
                         c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa && c.Situacao == "ATIVO")
-                        .OrderBy(m => m.Descricao.StartsWith(term) ? (m.Descricao == term ? 0 : 1) : 2)
+                        .OrderBy(m => m.Descricao.StartsWith(term) ? (m.Descricao == term ? " " : "!") : m.Descricao)
                         .Take(100).ToList();
                 }
             }
