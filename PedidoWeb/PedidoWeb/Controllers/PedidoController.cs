@@ -834,7 +834,7 @@ namespace PedidoWeb.Controllers
                 cadastros = db.Cadastroes.Where(c => (c.Fantasia.Contains(term) || c.Nome.Contains(term) || c.CodCadastro == codigo) &&
                     c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa &&
                     (c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID || pedidoHelper.UsuarioCorrente.CodEmpresa == "NUTRIVET"))
-                    .OrderBy(m => m.Nome.StartsWith(term)?(m.Nome == term?0:1):2)
+                    .OrderBy(m => m.Nome.StartsWith(term)?(m.Nome == term? " " : "!") : m.Nome)
                     .Take(100).ToList();
             }
             else
@@ -842,7 +842,7 @@ namespace PedidoWeb.Controllers
                 cadastros = db.Cadastroes.Where(c => (c.Fantasia.Contains(term) || c.Nome.Contains(term)) &&
                     c.CodEmpresa == pedidoHelper.UsuarioCorrente.CodEmpresa &&
                     (c.VendedorID == pedidoHelper.UsuarioCorrente.VendedorID || pedidoHelper.UsuarioCorrente.CodEmpresa == "NUTRIVET"))
-                    .OrderBy(m => m.Nome.StartsWith(term) ? (m.Nome == term ? 0 : 1) : 2)
+                    .OrderBy(m => m.Nome.StartsWith(term) ? (m.Nome == term ? " " : "!") : m.Nome)
                     .Take(100).ToList();
             }
 
