@@ -28,6 +28,18 @@ namespace PedidoWeb.Models
         [DisplayFormat(DataFormatString = "{0:n2}")]
         public decimal PrecoVarejo { get; set; }
 
+        [DisplayName("Preço Atacado")]
+        [DisplayFormat(DataFormatString = "{0:n2}")]
+        public decimal PrecoAtacado { get; set; }
+
+        [DisplayName("Custo")]
+        [DisplayFormat(DataFormatString = "{0:n2}")]
+        public decimal PrecoCusto { get; set; }
+
+        [DisplayName("Estoque")]
+        [DisplayFormat(DataFormatString = "{0:n2}")]
+        public decimal Estoque { get; set; }
+
         [DisplayName("Situação")]
         public string Situacao { get; set; }
 

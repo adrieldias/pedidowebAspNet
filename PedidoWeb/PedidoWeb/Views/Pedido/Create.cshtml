@@ -108,85 +108,85 @@
             </div>
 
             @if (ViewBag.TemTabelaPreco)
-            {
-                <div class="form-group">
-                    @Html.Label("Tabela de Preço")
-                    @Html.DropDownList("TabelaPrecoID", null, string.Empty, new { @class = "form-control" })
-                </div>
-            }
+    {
+        <div class="form-group">
+            @Html.Label("Tabela de Preço")
+            @Html.DropDownList("TabelaPrecoID", null, string.Empty, new { @class = "form-control" })
+        </div>
+}
 
             @if (ViewBag.TipoConsulta == "LISTAGEM")
-            {
+    {
 
-                AjaxOptions ajaxOptions = new AjaxOptions()
-                {
-                    UpdateTargetId = "ValorUnitario",
-                    OnSuccess = "SuccessRequest",
-                    OnFailure = "FailureRequest",
-                    HttpMethod = "POST"
-                };
+        AjaxOptions ajaxOptions = new AjaxOptions()
+        {
+            UpdateTargetId = "ValorUnitario",
+            OnSuccess = "SuccessRequest",
+            OnFailure = "FailureRequest",
+            HttpMethod = "POST"
+        };
 
-                //using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
-                //{
-                <div class="form-group">
-                    * @Html.Label("Produto")
-                    @Html.DropDownList("ProdutoID", null, string.Empty, new
-            {
-                @class = "form-control"@*, onchange = "buscaValor()"*@})
-                    <span class="error" style="visibility: hidden">Produto é obrigatório</span>
-                </div>
+        //using (Ajax.BeginForm("ValorUnitario", "Pedido", ajaxOptions))
+        //{
+        <div class="form-group">
+            * @Html.Label("Produto")
+            @Html.DropDownList("ProdutoID", null, string.Empty, new
+    {
+        @class = "form-control"@*, onchange = "buscaValor()"*@})
+            <span class="error" style="visibility: hidden">Produto é obrigatório</span>
+        </div>
 
-                @*<script type="text/javascript">
-                function buscaValor() {
-                    bloqueiaOperacoes(true);
-                    $("#ProdutoID").submit();
-                }
+        @*<script type="text/javascript">
+        function buscaValor() {
+            bloqueiaOperacoes(true);
+            $("#ProdutoID").submit();
+        }
 
-                function SuccessRequest(response) {
-                    //alert(response);
-                    $('#ValorUnitario').val(response);
-                    bloqueiaOperacoes(false);
-                }
+        function SuccessRequest(response) {
+            //alert(response);
+            $('#ValorUnitario').val(response);
+            bloqueiaOperacoes(false);
+        }
 
-                function FailureRequest(response) {
-                    alert("Não foi possível buscar o preço do produto");
-                    bloqueiaOperacoes(false);
-                }
+        function FailureRequest(response) {
+            alert("Não foi possível buscar o preço do produto");
+            bloqueiaOperacoes(false);
+        }
 
-                function bloqueiaOperacoes(bloqueio) {
-                    $('#add').prop('disabled', bloqueio);
-                    $('#submit').prop('disabled', bloqueio);
-                }
-            </script>*@
-        //}
+        function bloqueiaOperacoes(bloqueio) {
+            $('#add').prop('disabled', bloqueio);
+            $('#submit').prop('disabled', bloqueio);
+        }
+    </script>*@
+//}
 
-            }
-            else
-            {
+}
+else
+{
 
-                <div class="form-group">
-                    @Html.Label("* Produto")
-                    @Html.TextBox("ProdutoAux", null, string.Empty, new { @class = "form-control", @placeholder = "Digite o nome ou código do produto" })
-                    <span class="error" style="visibility: hidden">Produto é obrigatório</span>
-                </div>
+        <div class="form-group">
+            @Html.Label("* Produto")
+            @Html.TextBox("ProdutoAux", null, string.Empty, new { @class = "form-control", @placeholder = "Digite o nome ou código do produto" })
+            <span class="error" style="visibility: hidden">Produto é obrigatório</span>
+        </div>
 
-            }
+}
 
             @if (ViewBag.Empresa.CodEmpresa == "DALLMOVEIS")
-            {
-                <div class="form-group btn-group-justified" role="group" aria-label="...">
-                    <div class="btn-group" style="padding: 0px 10px 0px 0px" role="group">
-                        @Html.Label("* Cor")
-                        @Html.DropDownList("CorID", null, string.Empty, new { @class = "form-control" })
-                        <span class="error" style="visibility: hidden">Cor é obrigatória</span>
-                    </div>
-                    <div class="btn-group" role="group" style="padding: 0px 0px 0px 10px">
-                        @Html.Label("* Tecido")
-                        @Html.DropDownList("LoteID", null, string.Empty, new { @class = "form-control" })
-                        <span class="error" style="visibility: hidden">Tecido é obrigatório</span>
-                    </div>
-                </div>
-            }
+    {
+        <div class="form-group btn-group-justified" role="group" aria-label="...">
+            <div class="btn-group" style="padding: 0px 10px 0px 0px" role="group">
+                @Html.Label("* Cor")
+                @Html.DropDownList("CorID", null, string.Empty, new { @class = "form-control" })
+                <span class="error" style="visibility: hidden">Cor é obrigatória</span>
+            </div>
+            <div class="btn-group" role="group" style="padding: 0px 0px 0px 10px">
+                @Html.Label("* Tecido")
+                @Html.DropDownList("LoteID", null, string.Empty, new { @class = "form-control" })
+                <span class="error" style="visibility: hidden">Tecido é obrigatório</span>
+            </div>
+        </div>
+}
 
             <div class="form-group">
                 * @Html.Label("Quantidade")
@@ -196,9 +196,21 @@
 
             <div class="form-group">
                 * @Html.Label("Valor Unitário")
-                <input type="text" id="ValorUnitario" class="form-control" />
-                <span class="error" style="visibility: hidden">Valor Unitário é obrigatório</span>
+
+
+                @if (ViewBag.Empresa.CodEmpresa == "FERRAGMED")
+    {
+            <input type="text" id="ValorUnitario" class="form-control" style="padding-bottom: 0px" />
+            <div style="padding: 0px 0px 0px 0px">
+                <label id="InformacoesExtras" />
             </div>
+}
+else
+{
+            <input type="text" id="ValorUnitario" class="form-control" />
+}
+                <span class="error" style="visibility: hidden">Valor Unitário é obrigatório</span>
+            </div>           
 
 
             <div class="form-group col-md-5" style="padding: 0px 0px 0px 0px">
@@ -235,7 +247,7 @@
                         <span class="glyphicon glyphicon-ok"></span>
                         Salvar Item
                     </button>
-                </div>                
+                </div>
             </div>
             <br />
             <div id="pedidoItens"></div>
@@ -245,21 +257,21 @@
         </div>
 
 
-    <div class="btn-group btn-group-justified" role="group" aria-label="...">
-        <div class="btn-group" role="group">
-            <button type="button" id="submit" class="btn btn-primary">
-                <span class="glyphicon glyphicon-floppy-disk"></span>
-                Salvar Pedido
-            </button>
+        <div class="btn-group btn-group-justified" role="group" aria-label="...">
+            <div class="btn-group" role="group">
+                <button type="button" id="submit" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                    Salvar Pedido
+                </button>
+            </div>
+            <div class="btn-group" role="group">
+                <a href="@Url.Action("Index")" type="button" class="btn btn-warning">
+                    <span class=" glyphicon glyphicon-share-alt"></span>
+                    Sair sem Salvar
+                </a>
+            </div>
         </div>
-        <div class="btn-group" role="group">
-            <a href="@Url.Action("Index")" type="button" class="btn btn-warning">
-                <span class=" glyphicon glyphicon-share-alt"></span>
-                Sair sem Salvar
-            </a>
         </div>
-    </div>
-    </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -320,8 +332,7 @@
                             $.each(json, function (id, data) {
                                 autoc.push({
                                     label: data.Descricao,
-                                    value: data.ProdutoID,
-                                    valor: data.PrecoVarejo
+                                    value: data.ProdutoID
                                 });
                             });
                             response(autoc);
@@ -335,9 +346,9 @@
                 select: function (event, ui, json) {
                     //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value + 'Valor ' + ui.item.valor );
                     $('#ProdutoAux').val(ui.item.label);
-                    $('#ValorUnitario').val(ui.item.valor.toFixed(2).replace(".",","));
                     descProdutoSelecionado = ui.item.label;
                     produtoSelecionado = ui.item.value;
+                    buscaValorUnitario();
                     return false;
                 }
             });
@@ -484,7 +495,8 @@
                 $('#ItemIndex').val('');
                 $('#ProdutoID').val(0);
                 $('#CorID').val(0);
-                $('#LoteID').val(0);       
+                $('#LoteID').val(0);
+                $('#InformacoesExtras').text("");
             });
 
             // Add ValorUnitario change function
@@ -734,6 +746,7 @@
                     $('#ItemIndex').val('');
                     $('#CorID').val('');
                     $('#LoteID').val('');
+                    $('#InformacoesExtras').text("");
                     produtoSelecionado = 0;
                     $("#MsgAddItem").show();
                     setTimeout("$('#MsgAddItem').hide()", 3500);
@@ -987,7 +1000,11 @@
                     contentType: "application/x-www-form-urlencoded; charset=UTF-8",
                     success: function (d) {
                         if (d.status == true) {
-                            $('#ValorUnitario').val(d.valor.toFixed(2).replace(".",","));
+                            $('#ValorUnitario').val(d.valorVarejo.toFixed(2).replace(".", ","));
+                            $('#InformacoesExtras').text("Atacado: " + d.valorAtacado.toFixed(2).replace(".", ",") +
+                                " | Custo: " + d.valorCusto.toFixed(2).replace(".", ",") +
+                                " | Estoque: " + d.estoque.toFixed(2).replace(".", ",") +
+                                " | Vendido: " + d.naoAtendido.toFixed(2).replace(".", ","));
                             bloqueiaOperacoes(false);
                         }
                         else {

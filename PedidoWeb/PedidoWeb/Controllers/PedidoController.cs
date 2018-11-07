@@ -262,12 +262,16 @@ namespace PedidoWeb.Controllers
         {
             var status = true;
             string errorMessage = string.Empty;
-            decimal valor = 0;
+            decimal valorVarejo = 0;
+            decimal ValorAtacado = 0;
+            decimal valorCusto = 0;
+            decimal estoque = 0;
+            decimal naoAtendido = 0;
 
             if(produtoID == null || produtoID == 0) // Assume que não foi informado nenhum produto
             {
                 status = true;
-                return new JsonResult { Data = new { status = status, valor = 0, errorMessage = errorMessage } };
+                return new JsonResult { Data = new { status = status, valorVarejo = 0, valorAtacado = 0, valorCusto = 0, estoque = 0, naoAtendido = 0, errorMessage = errorMessage } };
             }
             if(prazoVencimentoID == 0)
             {
@@ -290,18 +294,30 @@ namespace PedidoWeb.Controllers
                 ValorUnitario v = new ValorUnitario();
                 try
                 {
-                    valor = v.BuscaValor(produtoID.GetValueOrDefault(), prazoVencimentoID, cadastroID, filialID
+                    valorVarejo = v.BuscaValor(produtoID.GetValueOrDefault(), prazoVencimentoID, cadastroID, filialID
                         , tabelaPrecoID);
+                    var produto = db.Produtoes.Find(produtoID);
+                    ValorAtacado = produto.PrecoAtacado;
+                    valorCusto = produto.PrecoCusto;
+                    estoque = produto.Estoque;
+                    try
+                    {
+                        naoAtendido = db.PedidoItems.Include(p => p.Pedido).First(pi => pi.ProdutoID == produtoID && pi.Pedido.Status != "FATURADO").Quantidade;
+                    }
+                    catch { }
+
                 }
                 catch (Exception ex)
                 {
                     status = false;
                     errorMessage = string.Format("{0} - {1}", ex.Message, ex.InnerException);
                 }
-                return new JsonResult { Data = new { status = status, valor = valor, errorMessage = errorMessage } };
+                return new JsonResult { Data = new { status = status, valorVarejo = valorVarejo, valorAtacado = ValorAtacado,
+                        valorCusto = valorCusto, naoAtendido = naoAtendido, estoque = estoque, errorMessage = errorMessage } };
             }
 
-            return new JsonResult { Data = new { status = status, valor = 0, errorMessage = errorMessage } };
+            return new JsonResult { Data = new { status = status, valorVarejo = 0, valorAtacado = 0, valorCusto = 0, estoque = 0,
+                 naoAtendido = 0, errorMessage = errorMessage } };
         }
 
         [HttpPost]
@@ -829,22 +845,22 @@ namespace PedidoWeb.Controllers
                     string.Format("{0} - {1}", p.CodProduto, p.Descricao) :
                     string.Format("{0} - {1}", p.NumFabricante, p.Descricao);
 
-                // Buscar valor unitário
-                int prazo = 0;
-                int cadastro = 0;
-                int filial = 0;
-                int tabelaPrecoAux = 0;
-                int.TryParse(prazoVencimentoID, out prazo);
-                int.TryParse(cadastroID, out cadastro);
-                int.TryParse(filialID, out filial);
-                int.TryParse(tabelaPrecoID, out tabelaPrecoAux);
-                int? tabelaPreco = null;
-                if (tabelaPrecoAux > 0)
-                    tabelaPreco = tabelaPrecoAux;
-                if (prazo > 0 && cadastro > 0)
-                {
-                    p.PrecoVarejo = v.BuscaValor(p.ProdutoID, prazo, cadastro, filial, tabelaPreco);
-                }
+                //// Buscar valor unitário
+                //int prazo = 0;
+                //int cadastro = 0;
+                //int filial = 0;
+                //int tabelaPrecoAux = 0;
+                //int.TryParse(prazoVencimentoID, out prazo);
+                //int.TryParse(cadastroID, out cadastro);
+                //int.TryParse(filialID, out filial);
+                //int.TryParse(tabelaPrecoID, out tabelaPrecoAux);
+                //int? tabelaPreco = null;
+                //if (tabelaPrecoAux > 0)
+                //    tabelaPreco = tabelaPrecoAux;
+                //if (prazo > 0 && cadastro > 0)
+                //{
+                //    p.PrecoVarejo = v.BuscaValor(p.ProdutoID, prazo, cadastro, filial, tabelaPreco);
+                //}
             }
             return Json(produtos, JsonRequestBehavior.AllowGet);
         }

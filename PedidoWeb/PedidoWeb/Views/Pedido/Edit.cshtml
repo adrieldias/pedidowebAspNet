@@ -219,7 +219,18 @@ else
 
         <div class="form-group">
             * @Html.Label("Valor Unitário")
-            <input type="text" id="ValorUnitario" name="ValorUnitario" class="form-control" />
+
+            @if (ViewBag.Empresa.CodEmpresa == "FERRAGMED")
+            {
+                <input type="text" id="ValorUnitario" class="form-control" style="padding-bottom: 0px" />
+                <div style="padding: 0px 0px 0px 0px">
+                    <label id="InformacoesExtras" />
+                </div>
+            }
+            else
+            {
+                <input type="text" id="ValorUnitario" class="form-control" />
+            }
             <span class="error" style="visibility: hidden">Valor Unitário é obrigatório</span>
         </div>
 
@@ -349,8 +360,7 @@ else
                             $.each(json, function (id, data) {
                                 autoc.push({
                                     label: data.Descricao,
-                                    value: data.ProdutoID,
-                                    valor: data.PrecoVarejo
+                                    value: data.ProdutoID
                                 });
                             });
                             response(autoc);
@@ -364,10 +374,10 @@ else
                 select: function (event, ui, json) {
                     //alert('you have selected ' + ui.item.label + ' ID: ' + ui.item.value + 'Valor ' + ui.item.valor );
 
-                    $('#ProdutoAux').val(ui.item.label);
-                    $('#ValorUnitario').val(ui.item.valor.toFixed(2).replace(".",","));
+                    $('#ProdutoAux').val(ui.item.label);                    
                     descProdutoSelecionado = ui.item.label;
                     produtoSelecionado = ui.item.value;
+                    buscaValorUnitario();
                     return false;
                 }
             });
@@ -536,6 +546,7 @@ else
                 $('#ItemIndex').val('');
                 $('#CorID').val(0);
                 $('#LoteID').val(0);
+                $('#InformacoesExtras').text("");
             });
 
             // Add ValorUnitario change function
@@ -724,6 +735,7 @@ else
                     $('#ItemIndex').val('');
                     $('#CorID').val('');
                     $('#LoteID').val('');
+                    $('#InformacoesExtras').text("");
                     produtoSelecionado = 0;
                     $("#MsgAddItem").show();
                     setTimeout("$('#MsgAddItem').hide()", 3500);
@@ -975,7 +987,11 @@ else
                     contentType: "application/x-www-form-urlencoded; charset=UTF-8",
                     success: function (d) {
                         if (d.status == true) {
-                            $('#ValorUnitario').val(d.valor.toFixed(2).replace(".",","));
+                            $('#ValorUnitario').val(d.valorVarejo.toFixed(2).replace(".", ","));
+                            $('#InformacoesExtras').text("Atacado: " + d.valorAtacado.toFixed(2).replace(".", ",") +
+                                " | Custo: " + d.valorCusto.toFixed(2).replace(".", ",") +
+                                " | Estoque: " + d.estoque.toFixed(2).replace(".", ",") +
+                                " | Vendido: " + d.naoAtendido.toFixed(2).replace(".", ","));
                             bloqueiaOperacoes(false);
                         }
                         else {

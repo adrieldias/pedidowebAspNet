@@ -419,6 +419,14 @@
     <Compile Include="Migrations\201806041354034_adicaoModelsCorLote.Designer.cs">
       <DependentUpon>201806041354034_adicaoModelsCorLote.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810311335299_precoAtacado.cs" />
+    <Compile Include="Migrations\201810311335299_precoAtacado.Designer.cs">
+      <DependentUpon>201810311335299_precoAtacado.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811061143135_custoEstoque.cs" />
+    <Compile Include="Migrations\201811061143135_custoEstoque.Designer.cs">
+      <DependentUpon>201811061143135_custoEstoque.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Lote.cs" />
@@ -768,6 +776,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201806041354034_adicaoModelsCorLote.resx">
       <DependentUpon>201806041354034_adicaoModelsCorLote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810311335299_precoAtacado.resx">
+      <DependentUpon>201810311335299_precoAtacado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811061143135_custoEstoque.resx">
+      <DependentUpon>201811061143135_custoEstoque.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
