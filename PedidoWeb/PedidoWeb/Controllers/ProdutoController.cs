@@ -23,6 +23,7 @@ namespace PedidoWeb.Controllers
             ViewBag.NomeParam = sortOrder == "Descricao" ? "Descricao_desc" : "Descricao";
             var pedidoHelper = new PedidoHelper(HttpContext.User.Identity.Name);
             ViewBag.TipoUsuario = pedidoHelper.UsuarioCorrente.TipoUsuario;
+            ViewBag.CodEmpresa = pedidoHelper.UsuarioCorrente.CodEmpresa;
             if (ViewBag.TipoUsuario == "ADMINISTRADOR")
             {
                 ViewBag.UrlConfEmpresa = "/Empresa/Edit/" + pedidoHelper.UsuarioCorrente.CodEmpresa;

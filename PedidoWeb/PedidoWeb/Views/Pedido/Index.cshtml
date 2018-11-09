@@ -132,34 +132,42 @@
             </div>
             <div class="opcionais" id="opcionais">
                 <h4 style="text-align:center">Mais Opções de Pesquisa</h4>
-                
+
                 @if (ViewBag.TipoUsuario != "VENDEDOR")
-                {
-                    <h3>Vendedor</h3>
-                    @Html.TextBox("Vendedor", null, new
-                    {
-                        placeholder = "Nome do vendedor",
-                        @class = "form-control"
-                    })
-                }
-                <br />                
+    {
+            <h3>Vendedor</h3>
+            @Html.TextBox("Vendedor", null, new
+{
+    placeholder = "Nome do vendedor",
+    @class = "form-control"
+})
+}
+                <br />
                 @if (ViewBag.TipoUsuario == "MASTER")
                 {
-                    <h3>Empresa</h3>
-                    @Html.TextBox("Empresa", null, new
-                    {
-                        placeholder = "Código da Empresa",
-                        @class = "form-control"
-                    })
+            <h3>Empresa</h3>
+            @Html.TextBox("Empresa", null, new
+       {
+           placeholder = "Código da Empresa",
+           @class = "form-control"
+       })
                 }
+                <br />
+                <h4>Produto</h4>
+
+                @Html.TextBox("ProdutoPedido", null, new
+           {
+               placeholder = "Produto",
+               @class = "form-control"
+           })
                 <br />
                 <h4>Cidade do cliente</h4>
 
                 @Html.TextBox("CidadeCliente", null, new
-                    {
-                        placeholder = "Cidade do cliente",
-                        @class = "form-control"
-                    })
+    {
+        placeholder = "Cidade do cliente",
+        @class = "form-control"
+    })
                 <br />
                 <h4>Situação do pedido</h4>
                 <div style="display: block" class="radio form-control">
@@ -174,10 +182,10 @@
                 <div style="display: block" class="radio form-control">
                     <label><input type="radio" name="status" value="Faturado" />FATURADO</label>
                 </div>
-                <br />                
+                <br />
                 <h4>Período</h4>
                 <div class="col-md-2 margem-zero">
-                    @Html.TextBox("DataIni", null, new { @class = "form-control" }) 
+                    @Html.TextBox("DataIni", null, new { @class = "form-control" })
                 </div>
                 <div class="col-md-1 margem-zero" style="text-align:center">
                     até
@@ -185,9 +193,9 @@
                 <div class="col-md-2 margem-zero">
                     @Html.TextBox("DataFin", null, new { @class = "form-control" })
                 </div>
-            
+
                 <div class="clearfix"></div>
-            
+
                 <div class="col-md-5 margem-zero" style="text-align:center">
                     <br />
                     @*<input type="submit" value="Procurar" onclick="mostraMsgAguarde()" class="btn btn-primary" style="width:100%" />*@
@@ -198,7 +206,7 @@
                 </div>
 
                 <div class="clearfix"></div>
-            
+
                 <div id="MsgAguarde">
                     <h3>Aguarde...</h3>
                 </div>
@@ -223,42 +231,49 @@
             <h3>Filtrando por</h3>
             <ul>
                 @if (!string.IsNullOrEmpty(ViewBag.Status))
-                {
-                    <li>
-                        Status
-                        @ViewBag.Status
-                    </li>
-                }
+    {
+            <li>
+                Status
+                @ViewBag.Status
+            </li>
+}
                 @if (!string.IsNullOrEmpty(ViewBag.Vendedor))
-                {
-                   <li>
-                        Vendedor
-                        @ViewBag.Vendedor
-                    </li> 
-                }
+    {
+            <li>
+                Vendedor
+                @ViewBag.Vendedor
+            </li>
+}
                 @if (!string.IsNullOrEmpty(ViewBag.Empresa))
-                {
-                    <li>
-                        Empresa
-                        @ViewBag.Empresa
-                    </li>
-                }
+    {
+            <li>
+                Empresa
+                @ViewBag.Empresa
+            </li>
+}
+                @if (!string.IsNullOrEmpty(ViewBag.ProdutoPedido))
+    {
+            <li>
+                Produto
+                @ViewBag.ProdutoPedido
+            </li>
+}
                 @if (!string.IsNullOrEmpty(ViewBag.CidadeCliente))
-                {
-                    <li>
-                        Cidade do cliente
-                        @ViewBag.CidadeCliente
-                    </li>
-                }
+    {
+            <li>
+                Cidade do cliente
+                @ViewBag.CidadeCliente
+            </li>
+}
                 @if (!string.IsNullOrEmpty(ViewBag.DataInicial) && !string.IsNullOrEmpty(ViewBag.DataFinal))
-                {
-                    <li>
-                        Período
-                        @ViewBag.DataInicial
-                        até
-                        @ViewBag.DataFinal
-                    </li>
-                }
+    {
+            <li>
+                Período
+                @ViewBag.DataInicial
+                até
+                @ViewBag.DataFinal
+            </li>
+}
             </ul>
             @using(Html.BeginForm("Index", "Pedido", FormMethod.Get))
             {
@@ -417,6 +432,7 @@
                     , Vendedor = ViewBag.Vendedor
                     , Empresa = ViewBag.Empresa
                     , CidadeCliente = ViewBag.CidadeCliente
+                    , ProdutoPedido = ViewBag.ProdutoPedido
               }
     ))
 </div>
@@ -527,8 +543,9 @@
             var filtroVendedor = '@ViewBag.Vendedor';
             var filtroEmpresa = '@ViewBag.Empresa';
             var filtroCidadeCliente = '@ViewBag.CidadeCliente';
+            var filtroProdutoPedido = '@ViewBag.ProdutoPedido'
             if (filtroStatus != '' || (filtroDtIni != '' && filtroDtFin != '') || filtroVendedor != '' || filtroEmpresa != '' ||
-                filtroCidadeCliente != '') {
+                filtroCidadeCliente != '' || filtroProdutoPedido != '') {
                 $('#mensagemFiltro').show();                
             }
             else {

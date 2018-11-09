@@ -95,42 +95,64 @@
                 <th>
                     @Html.DisplayNameFor(model => model[0].Descricao)
                 </th>
-                
+
                 <th>
                     @Html.DisplayNameFor(model => model[0].UnidadeMedida)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model[0].PrecoVarejo)
-                </th>            
+                </th>
                 <th>
                     @Html.DisplayNameFor(model => model[0].Situacao)
-                </th>    
-                
+                </th>
+                @if (ViewBag.CodEmpresa == "FERRAGMED")
+                {
+                <th>
+                    @Html.DisplayNameFor(model => model[0].PrecoAtacado)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].PrecoCusto)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Estoque)
+                </th>
+                }
                 <th></th>
             </tr>
 
             @foreach (var item in Model)
 {
-    <tr class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Produto", new { id = item.ProdutoID }))'">
-        <td>
-            @Html.DisplayFor(modelItem => item.Descricao)
-        </td>
+            <tr class="cursor-hover" onclick="location.href = '@(Url.Action("Details", "Produto", new { id = item.ProdutoID }))'">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descricao)
+                </td>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.UnidadeMedida)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PrecoVarejo)
-        </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnidadeMedida)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrecoVarejo)
+                </td>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.Situacao)
-        </td>
-
-        <td>
-            @Html.ActionLink(" ", "Details", new { id = item.ProdutoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
-        </td>
-    </tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Situacao)
+                </td>
+                @if (ViewBag.CodEmpresa == "FERRAGMED")
+                {
+                    <td>
+                        @Html.DisplayFor(model => model[0].PrecoAtacado)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model[0].PrecoCusto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model[0].Estoque)
+                    </td>
+                }
+                <td>
+                    @Html.ActionLink(" ", "Details", new { id = item.ProdutoID }, new { @class = "btn btn-info glyphicon glyphicon-info-sign" })
+                </td>
+            </tr>
 }
 
         </table>
