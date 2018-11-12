@@ -140,13 +140,13 @@
                 @if (ViewBag.CodEmpresa == "FERRAGMED")
                 {
                     <td>
-                        @Html.DisplayFor(model => model[0].PrecoAtacado)
+                        @Html.DisplayFor(modelItem => item.PrecoAtacado)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => model[0].PrecoCusto)
+                        @Html.DisplayFor(modelItem => item.PrecoCusto)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => model[0].Estoque)
+                        @Html.DisplayFor(modelItem => item.Estoque)
                     </td>
                 }
                 <td>
