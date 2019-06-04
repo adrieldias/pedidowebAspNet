@@ -29,5 +29,7 @@ namespace PedidoWeb.Models
         public string CodEstado { get; set; }
 
         public virtual Estado Estado { get; set; }
+
+        public bool IndIPI { get; set; }
     }
 }

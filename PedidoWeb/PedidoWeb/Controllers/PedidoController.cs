@@ -572,7 +572,7 @@ namespace PedidoWeb.Controllers
                 valor = st.CalculaSubstituicaoTributaria(cadastro, produto, valorUnitario, desconto, qtQuantidade, filial, operacao);
 
                 // IPI                
-                if(produto.PercIPI != null && produto.PercIPI > 0)
+                if(produto.PercIPI != null && produto.PercIPI > 0 && filial.IndIPI)
                 {
                     ipi = (valorUnitario * Convert.ToDouble(produto.PercIPI) / 100) * qtQuantidade;
                 }

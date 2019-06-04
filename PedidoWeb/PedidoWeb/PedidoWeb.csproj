@@ -427,6 +427,14 @@
     <Compile Include="Migrations\201811061143135_custoEstoque.Designer.cs">
       <DependentUpon>201811061143135_custoEstoque.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906041311162_correcao.cs" />
+    <Compile Include="Migrations\201906041311162_correcao.Designer.cs">
+      <DependentUpon>201906041311162_correcao.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906041314126_FilialIndIPI.cs" />
+    <Compile Include="Migrations\201906041314126_FilialIndIPI.Designer.cs">
+      <DependentUpon>201906041314126_FilialIndIPI.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Lote.cs" />
@@ -782,6 +790,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811061143135_custoEstoque.resx">
       <DependentUpon>201811061143135_custoEstoque.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906041311162_correcao.resx">
+      <DependentUpon>201906041311162_correcao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906041314126_FilialIndIPI.resx">
+      <DependentUpon>201906041314126_FilialIndIPI.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
